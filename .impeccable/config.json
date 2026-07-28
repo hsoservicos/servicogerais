@@ -1,0 +1,17 @@
+{
+  "project": {
+    "name": "ServiceSaaS",
+    "type": "product",
+    "description": "Plataforma SaaS multi-tenant para gestão de serviços, propostas e pagamentos"
+  },
+  "design": {
+    "primary": "#10B981",
+    "primaryDark": "#006c49",
+    "font": "Poppins",
+    "implementation": "tailwind"
+  },
+  "detector": {
+    "scope": ["type", "layout", "color", "a11y"],
+    "advisory": true
+  }
+}

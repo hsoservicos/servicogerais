@@ -1,0 +1,72 @@
+services:
+  # 1. Túnel Cloudflare (Acesso seguro sem abertura de portas)
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: flex_cloudflared
+    restart: always
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - flex-network
+    depends_on:
+      - nginx
+
+  # 2. Servidor Web Nginx (Gateway Interno)
+  nginx:
+    image: nginx:alpine
+    container_name: flex_nginx
+    restart: always
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./web-frontend/public:/var/www/html:ro
+    depends_on:
+      - web-app
+      - api
+    networks:
+      - flex-network
+
+  # 3. Frontend PHP-FPM (Unidade Isolada)
+  web-app:
+    build: ./web-frontend
+    container_name: flex_frontend_php
+    restart: always
+    environment:
+      - API_URL=http://api:3000/api/v1
+    volumes:
+      - ./web-frontend/public:/var/www/html
+    networks:
+      - flex-network
+
+  # 4. API REST Node.js / Express (Unidade Isolada)
+  api:
+    build: ./api-backend
+    container_name: flex_api_node
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_HOST=172.17.0.1
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_NAME=${DB_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - flex-network
+
+  # 5. phpMyAdmin (Gerenciador do BD Isolado)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: flex_phpmyadmin
+    restart: always
+    ports:
+      - "8080:80" # Acesso local/VPN para administração
+    environment:
+      PMA_HOST: 172.17.0.1
+      PMA_PORT: 3306
+    networks:
+      - flex-network
+
+networks:
+  flex-network:
+    driver: bridge

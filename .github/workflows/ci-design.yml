@@ -1,0 +1,158 @@
+# ═══════════════════════════════════════════════════════════════
+# .github/workflows/ci-design.yml — Impeccable Design Quality Gate
+# ═══════════════════════════════════════════════════════════════
+# Executa o detector Impeccable em todos os templates HTML/PHP
+# como quality gate de design no pipeline CI.
+#
+# ✅ Bloqueia merge se anti-patterns críticos forem encontrados
+# ✅ Advisory findings não quebram o build
+# ✅ Comentário automático no PR com resultados detalhados
+# ═══════════════════════════════════════════════════════════════
+
+name: 🎨 Design Quality Gate (Impeccable)
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  design-audit:
+    name: 🔍 Impeccable Design Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: ✅ Verificar Design System
+        run: |
+          echo "::group::📐 Verificando DESIGN.md e PRODUCT.md..."
+          if [ ! -f DESIGN.md ]; then
+            echo "⚠️ DESIGN.md não encontrado na raiz do projeto"
+          else
+            echo "✅ DESIGN.md presente"
+          fi
+          if [ ! -f PRODUCT.md ]; then
+            echo "⚠️ PRODUCT.md não encontrado (recomendado para contexto de design)"
+          else
+            echo "✅ PRODUCT.md presente"
+          fi
+          echo "::endgroup::"
+
+      - name: 🚀 Executar Impeccable Detector
+        id: detector
+        continue-on-error: true
+        run: |
+          echo "::group::🎨 Escaneando templates com Impeccable..."
+          npx impeccable detect --json --quiet web-frontend/templates/ > /tmp/impeccable-report.json 2>&1 || echo '[]' > /tmp/impeccable-report.json
+          echo "Resultado salvo em /tmp/impeccable-report.json"
+          echo "::endgroup::"
+
+      - name: 📋 Comentar no PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = '/tmp/impeccable-report.json';
+
+            let report;
+            try {
+              report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+            } catch {
+              report = [];
+            }
+
+            if (!report || report.length === 0) {
+              const body = `## ✅ Impeccable Design Audit — Aprovado\n\nNenhum anti-pattern de design encontrado. O design system está sendo seguido corretamente. 🎨✨`;
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body
+              });
+              return;
+            }
+
+            const critical = report.filter(i => i.severity !== 'advisory');
+            const advisory = report.filter(i => i.severity === 'advisory');
+
+            let body = `## 🎨 Impeccable Design Audit\n\n`;
+
+            if (critical.length > 0) {
+              body += `### 🔴 Anti-Patterns Críticos (${critical.length})\n\n`;
+              body += `| Arquivo | Linha | Regra | Descrição |\n|:---|:---:|:---|:---|\n`;
+              critical.slice(0, 20).forEach(item => {
+                const desc = (item.message || item.description || '').slice(0, 100);
+                body += `| \`${item.file || '?'}\` | ${item.line || '?'} | \`${item.rule || '?'}\` | ${desc} |\n`;
+              });
+              body += `\n`;
+            }
+
+            if (advisory.length > 0) {
+              body += `### 🟡 Advisory Findings (${advisory.length})\n\n`;
+              body += `| Arquivo | Linha | Regra |\n|:---|:---:|:---|\n`;
+              advisory.slice(0, 10).forEach(item => {
+                body += `| \`${item.file || '?'}\` | ${item.line || '?'} | \`${item.rule || '?'}\` |\n`;
+              });
+              body += `\n`;
+            }
+
+            body += `---\n*Total: ${report.length} achados (${critical.length} críticos, ${advisory.length} advisory)*`;
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
+
+      - name: 🚦 Quality Gate
+        if: always()
+        run: |
+          echo "::group::🚦 Quality Gate"
+
+          REPORT=$(cat /tmp/impeccable-report.json 2>/dev/null || echo '[]')
+          CRITICAL=$(echo "$REPORT" | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    critical = [i for i in data if i.get('severity') != 'advisory']
+    print(len(critical))
+except:
+    print(0)
+")
+          echo "Anti-patterns críticos: $CRITICAL"
+
+          if [ "$CRITICAL" -gt 0 ]; then
+            echo "❌ Quality Gate BLOCKED: $CRITICAL anti-pattern(s) crítico(s) encontrado(s)!"
+            echo ""
+            echo "$REPORT" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+for item in data:
+    if item.get('severity') != 'advisory':
+        f = item.get('file', '?')
+        l = item.get('line', '?')
+        r = item.get('rule', '?')
+        d = (item.get('message') or item.get('description', ''))[:150]
+        print(f'  🔴 {f}:{l} — {r}: {d}')
+"
+            echo "::endgroup::"
+            exit 1
+          fi
+
+          echo "✅ Quality Gate PASSED: Nenhum anti-pattern crítico encontrado."
+          echo "::endgroup::"

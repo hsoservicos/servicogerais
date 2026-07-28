@@ -1,0 +1,5 @@
+CLOUDFLARE_TUNNEL_TOKEN=seu_token_gerado_no_cloudflare_aqui
+DB_USER=flex_user
+DB_PASS=sua_senha_mysql
+DB_NAME=servicos_flex
+JWT_SECRET=sua_chave_secreta_jwt_super_segura

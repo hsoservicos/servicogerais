@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Serviços Flex - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#6ffbbe",
+                    "surface-container-high": "#e2e7ff",
+                    "tertiary-fixed": "#66ff8e",
+                    "primary": "#10B981",
+                    "primary-600": "#059669",
+                    "primary-700": "#006c49",
+                    "on-tertiary-container": "#00431a",
+                    "inverse-on-surface": "#eef0ff",
+                    "text-main": "#1F2937",
+                    "status-draft": "#94A3B8",
+                    "status-viewed": "#8B5CF6",
+                    "status-rejected": "#EF4444",
+                    "surface-dim": "#d2d9f4",
+                    "surface-bright": "#faf8ff",
+                    "on-background": "#131b2e",
+                    "status-approved": "#10B981",
+                    "primary-fixed-dim": "#4edea3",
+                    "on-surface": "#131b2e",
+                    "on-secondary-container": "#5e656c",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "inverse-surface": "#283044",
+                    "on-primary-fixed-variant": "#005236",
+                    "surface-container-low": "#f2f3ff",
+                    "on-secondary-fixed": "#151c22",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#eaedff",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#002113",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#6c7a71",
+                    "tertiary-container": "#00bb56",
+                    "on-primary-container": "#00422b",
+                    "background": "#faf8ff",
+                    "inverse-primary": "#4edea3",
+                    "surface-variant": "#dae2fd",
+                    "secondary-fixed": "#dce3eb",
+                    "on-error": "#ffffff",
+                    "outline-variant": "#bbcabf",
+                    "secondary": "#585f66",
+                    "surface-tint": "#006c49",
+                    "secondary-fixed-dim": "#c0c7cf",
+                    "on-surface-variant": "#3c4a42",
+                    "on-tertiary-fixed-variant": "#005322",
+                    "secondary-container": "#dce3eb",
+                    "on-tertiary-fixed": "#002109",
+                    "status-sent": "#3B82F6",
+                    "on-secondary-fixed-variant": "#40484e",
+                    "status-cancelled": "#64748B",
+                    "surface-container-highest": "#dae2fd",
+                    "surface-light": "#F3F4F6",
+                    "primary-container": "#10b981",
+                    "status-paid": "#25D366",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#006d2f",
+                    "tertiary-fixed-dim": "#3de273",
+                    "surface": "#faf8ff",
+                    "on-secondary": "#ffffff",
+                    "whatsapp": "#25D366"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "stack-md": "16px",
+                    "stack-sm": "8px",
+                    "card-padding": "20px",
+                    "gutter": "16px",
+                    "section-gap": "64px",
+                    "container-margin": "24px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Poppins"],
+                    "code-table": ["monospace"],
+                    "headline-lg": ["Poppins"],
+                    "body-md": ["Poppins"],
+                    "body-sm": ["Poppins"],
+                    "label-md": ["Poppins"],
+                    "headline-lg-mobile": ["Poppins"],
+                    "body-lg": ["Poppins"],
+                    "label-sm": ["Poppins"],
+                    "headline-sm": ["Poppins"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "code-table": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f0f7ff; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .card-hover { transition: all 0.2s ease-in-out; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.08); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar Shell -->
+<aside class="hidden md:flex flex-col fixed left-0 top-0 h-full z-40 py-6 bg-surface-container-lowest border-r border-outline-variant w-64">
+<div class="px-6 mb-8">
+<h1 class="font-headline-sm text-headline-sm font-black text-primary">Serviços Flex</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Painel do Prestador</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<!-- Active: Dashboard -->
+<a class="bg-primary-container text-on-primary-container rounded-lg mx-2 px-4 py-3 flex items-center gap-3 Active: translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="text-on-surface-variant mx-2 px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Clientes</span>
+</a>
+<a class="text-on-surface-variant mx-2 px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">handyman</span>
+<span class="font-label-md text-label-md">Serviços</span>
+</a>
+<a class="text-on-surface-variant mx-2 px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">Propostas</span>
+</a>
+<a class="text-on-surface-variant mx-2 px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configurações</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-primary text-on-primary py-3 rounded-xl font-label-md flex items-center justify-center gap-2 shadow-sm hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined">add</span>
+                Nova Proposta
+            </button>
+<div class="mt-6 pt-6 border-t border-outline-variant">
+<a class="text-on-surface-variant px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Sair</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-64 min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-gutter h-14 bg-surface border-b border-outline-variant sticky top-0 z-30">
+<div class="md:hidden">
+<span class="material-symbols-outlined text-primary cursor-pointer">menu</span>
+</div>
+<div class="hidden md:block">
+<p class="font-body-sm text-body-sm text-on-surface-variant">Bem-vindo de volta, <span class="font-bold text-on-surface">Ricardo Silva</span></p>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-low p-2 rounded-full relative Active: opacity-80">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="flex items-center gap-2 cursor-pointer group">
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a smiling male service provider in his 30s wearing a clean dark polo shirt. The lighting is bright and airy with a soft blue studio background that matches the tech-oriented design system. The photo is crisp, high-resolution, and projects an image of reliability and professional success." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWch0aNXymGMld5pV94u-nuEm7eRo0aJPsbV_J8P7UU3sAnG6jEf67bO03rLNjOC_OsFeg-An9Qdv8gvx25kzlmkiQx79PDnTL74VVA4OM2GjUpjViG-uOo9_PJyk_AIV0_M3LXE2z3tuPZsTHwFfsm-aXrcxanpf1CWbPnUz7Vkdx-pIfpJiEgFBNDkMXl_BzHGS88X_aYaprHe3pbCtMmb-6yWpVLdlaZ2ZzO0IqWjOLipi5UcSD6w"/>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<div class="p-container-margin md:p-10 space-y-8">
+<!-- Dashboard Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background">Visão Geral</h2>
+<p class="text-on-surface-variant font-body-md text-body-md">Mantenha seu negócio sob controle.</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-lowest border border-outline-variant px-4 py-2 rounded-lg font-label-md text-on-surface-variant flex items-center gap-2 hover:bg-surface-container-low">
+<span class="material-symbols-outlined">calendar_today</span>
+                        Este Mês
+                    </button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md flex items-center gap-2 hover:opacity-90">
+<span class="material-symbols-outlined">file_download</span>
+                        Relatório
+                    </button>
+</div>
+</div>
+<!-- KPI Bento Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-stack-md">
+<div class="bg-surface-container-lowest p-card-padding rounded-xl border border-outline-variant card-hover">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary p-2 bg-primary/10 rounded-lg">group</span>
+<span class="material-symbols-outlined text-status-approved text-sm">trending_up</span>
+</div>
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-1">Total Clientes</p>
+<h3 class="font-headline-md text-headline-md text-on-background">124</h3>
+</div>
+<div class="bg-surface-container-lowest p-card-padding rounded-xl border border-outline-variant card-hover">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-status-sent p-2 bg-blue-50 rounded-lg">description</span>
+</div>
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-1">Propostas (Mês)</p>
+<h3 class="font-headline-md text-headline-md text-on-background">48</h3>
+</div>
+<div class="bg-surface-container-lowest p-card-padding rounded-xl border border-outline-variant card-hover">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-status-approved p-2 bg-emerald-50 rounded-lg">task_alt</span>
+</div>
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-1">Aprovadas</p>
+<h3 class="font-headline-md text-headline-md text-on-background">32</h3>
+</div>
+<div class="bg-surface-container-lowest p-card-padding rounded-xl border border-outline-variant card-hover">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-status-draft p-2 bg-slate-100 rounded-lg">hourglass_empty</span>
+</div>
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-1">Pendentes</p>
+<h3 class="font-headline-md text-headline-md text-on-background">12</h3>
+</div>
+<div class="bg-surface-container-lowest p-card-padding rounded-xl border border-outline-variant card-hover lg:col-span-1">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary p-2 bg-primary/10 rounded-lg">payments</span>
+</div>
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-1">Valor Total (R$)</p>
+<h3 class="font-headline-md text-headline-md text-on-background">24.5k</h3>
+</div>
+</div>
+<!-- Middle Section: Revenue Chart & Follow-up -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Financial Chart -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-xl border border-outline-variant p-card-padding shadow-sm">
+<div class="flex justify-between items-center mb-8">
+<h4 class="font-headline-sm text-headline-sm text-on-background">Receita Mensal</h4>
+<select class="bg-surface-container-low border-none rounded-lg font-label-sm text-on-surface-variant px-3 py-1 focus:ring-primary">
+<option>2024</option>
+<option>2023</option>
+</select>
+</div>
+<div class="h-64 relative overflow-hidden flex items-end justify-between gap-4 px-4">
+<!-- Simulated Chart Bars -->
+<div class="flex flex-col items-center gap-2 group w-full">
+<div class="w-full bg-primary/20 rounded-t-lg transition-all duration-500 hover:bg-primary" style="height: 40%;"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Jan</span>
+</div>
+<div class="flex flex-col items-center gap-2 group w-full">
+<div class="w-full bg-primary/20 rounded-t-lg transition-all duration-500 hover:bg-primary" style="height: 60%;"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Fev</span>
+</div>
+<div class="flex flex-col items-center gap-2 group w-full">
+<div class="w-full bg-primary/20 rounded-t-lg transition-all duration-500 hover:bg-primary" style="height: 55%;"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Mar</span>
+</div>
+<div class="flex flex-col items-center gap-2 group w-full">
+<div class="w-full bg-primary/20 rounded-t-lg transition-all duration-500 hover:bg-primary" style="height: 85%;"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Abr</span>
+</div>
+<div class="flex flex-col items-center gap-2 group w-full">
+<div class="w-full bg-primary rounded-t-lg transition-all duration-500" style="height: 95%;"></div>
+<span class="font-label-sm text-label-sm text-primary font-bold">Mai</span>
+</div>
+<div class="flex flex-col items-center gap-2 group w-full">
+<div class="w-full bg-primary/20 rounded-t-lg transition-all duration-500 hover:bg-primary" style="height: 70%;"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Jun</span>
+</div>
+</div>
+</div>
+<!-- Follow-up List -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant flex flex-col shadow-sm">
+<div class="p-card-padding border-b border-outline-variant flex justify-between items-center">
+<h4 class="font-headline-sm text-headline-sm text-on-background">Follow-up do Dia</h4>
+<span class="bg-primary/10 text-primary px-2 py-1 rounded text-xs font-bold">3 Pendentes</span>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4 max-h-[320px]">
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">AC</div>
+<div>
+<p class="font-label-md text-label-md text-on-background">Ana Cavalcanti</p>
+<p class="text-xs text-on-surface-variant">Há 2 dias s/ retorno</p>
+</div>
+</div>
+<button class="w-8 h-8 bg-whatsapp text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-sm">chat</span>
+</button>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors group border border-transparent border-l-primary bg-primary/5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">MB</div>
+<div>
+<p class="font-label-md text-label-md text-on-background">Marcos Bezerra</p>
+<p class="text-xs text-primary font-bold">Aprovação pendente</p>
+</div>
+</div>
+<button class="w-8 h-8 bg-whatsapp text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-sm">chat</span>
+</button>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">LS</div>
+<div>
+<p class="font-label-md text-label-md text-on-background">Lucas Souza</p>
+<p class="text-xs text-on-surface-variant">Reunião agendada</p>
+</div>
+</div>
+<button class="w-8 h-8 bg-whatsapp text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-sm">chat</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Proposals Table -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+<div class="p-card-padding border-b border-outline-variant flex justify-between items-center">
+<h4 class="font-headline-sm text-headline-sm text-on-background">Propostas Recentes</h4>
+<a class="text-primary font-label-sm text-label-sm hover:underline" href="#">Ver todas</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-left">
+<th class="px-6 py-4 font-label-md text-on-surface-variant">Cliente</th>
+<th class="px-6 py-4 font-label-md text-on-surface-variant">Serviço</th>
+<th class="px-6 py-4 font-label-md text-on-surface-variant text-right">Valor</th>
+<th class="px-6 py-4 font-label-md text-on-surface-variant">Status</th>
+<th class="px-6 py-4 font-label-md text-on-surface-variant">Data</th>
+<th class="px-6 py-4 font-label-md text-on-surface-variant"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-dim overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean and professional circular avatar representing a female client. Soft, warm lighting, minimalist background. The style is consistent with high-end corporate fintech applications, focusing on clarity and approachability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDF5rR0G6SvEkphm2a8N-R4c62RCbmB6eXDZHrsVgkqarB02-iwEqSDTOfZO63hqVQGYBM2q2mkzPxXMMLisCWfQStfVUePGGT4E_Hc6S_7AaX96hATu6wwuHyWLFx-cXdspodxetyMwg1rMqAt3FiARx7LhCThCSyMoWqFplf3jB8EKLNSg1j1mSagTBMBYycUf1PsGtUtStLF9h9RcPKHhsVSo8qV4rsHf7QkX5X3LZMD0pr1ZS05fQ"/>
+</div>
+<span class="font-body-sm text-on-background">Beatriz Rocha</span>
+</div>
+</td>
+<td class="px-6 py-4 font-body-sm text-on-surface-variant">Consultoria Digital</td>
+<td class="px-6 py-4 font-body-sm text-on-background text-right font-bold">R$ 2.450,00</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-status-approved/20 text-status-approved">Approved</span>
+</td>
+<td class="px-6 py-4 font-body-sm text-on-surface-variant">Hoje, 14:20</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary">more_vert</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-dim overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean and professional circular avatar representing a male client with glasses. Professional lighting, neutral gray background. Designed for a sleek modern UI dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAenlCrek3OlQxyaelQXFUnXf4pl5memfT5b2S1yw9vc3G9QwbdPYlxxmkMduVp9NI_eGRPAWA2ZlGFdTeMMBiEiDLcQ8M0XCkDdIDgz6iw9vIidK9bmo6HqXnLEPyM7yRrZFqnCOQFpLJIsuLMeA6nHvonpjNEe4S3kw4iH_Ui1FL-1pJSBFII8R48dhyloRiNQXFGbknp9co61XkGeAkbQgQyM0hYyXm0jfpUVscZC7FSpnwgSJb2yA"/>
+</div>
+<span class="font-body-sm text-on-background">Gustavo Lima</span>
+</div>
+</td>
+<td class="px-6 py-4 font-body-sm text-on-surface-variant">Desenvolvimento Web</td>
+<td class="px-6 py-4 font-body-sm text-on-background text-right font-bold">R$ 8.900,00</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-status-sent/20 text-status-sent">Sent</span>
+</td>
+<td class="px-6 py-4 font-body-sm text-on-surface-variant">Ontem</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary">more_vert</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-dim overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Generic professional avatar icon for a client in a modern SaaS interface. High contrast, clean outlines, emerald and blue color scheme integration." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW7YBM5iLmT_C-C02U6JjgJ-hALvquwbFc0YZ4mmMyU0kYHHiQYEZQJyJn8LowpZ6ZJYa3olG19p4u0nawju2nu9K92K_Xj0xlom_h-07Op_xZoONm1YspIRbrex_K7SL9wRBNLagfw6b_1er0x6FZtuMflN84CqICeF8fUyw4PIud390S0mlAZJeCmS8fCAQMgzGWz9F5lhSxGDkMtklibfzEs-xx0aHFvWuMKPk8FJ9gIuQ_qD2pGw"/>
+</div>
+<span class="font-body-sm text-on-background">Clínica Sorriso</span>
+</div>
+</td>
+<td class="px-6 py-4 font-body-sm text-on-surface-variant">Social Media (Mensal)</td>
+<td class="px-6 py-4 font-body-sm text-on-background text-right font-bold">R$ 1.200,00</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-status-draft/20 text-status-draft">Draft</span>
+</td>
+<td class="px-6 py-4 font-body-sm text-on-surface-variant">12 Mai 2024</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Footer Shell -->
+<footer class="w-full py-12 px-container-margin grid grid-cols-1 md:grid-cols-2 gap-stack-md bg-inverse-surface text-on-primary">
+<div class="space-y-4">
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary-fixed">Serviços Flex</h3>
+<p class="font-label-sm text-label-sm text-surface-variant">A plataforma completa para prestadores de serviços de alto nível no Brasil.</p>
+<div class="flex gap-4">
+<a class="text-surface-variant hover:text-primary-fixed transition-colors" href="#">Termos de Uso</a>
+<a class="text-surface-variant hover:text-primary-fixed transition-colors" href="#">Privacidade</a>
+<a class="text-surface-variant hover:text-primary-fixed transition-colors" href="#">Contato</a>
+</div>
+</div>
+<div class="flex md:justify-end items-center">
+<p class="font-label-sm text-label-sm text-surface-variant">© 2024 Serviços Flex. Todos os direitos reservados.</p>
+</div>
+</footer>
+</main>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-outline-variant flex justify-around items-center h-16 z-50">
+<button class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-bold">Dashboard</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px]">Clientes</span>
+</button>
+<button class="bg-primary text-white p-3 rounded-full -mt-8 shadow-lg">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">description</span>
+<span class="text-[10px]">Propostas</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px]">Config</span>
+</button>
+</nav>
+<script>
+        // Micro-interaction for KPI cards
+        document.querySelectorAll('.card-hover').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.borderColor = 'rgba(0, 108, 73, 0.2)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.borderColor = '';
+            });
+        });
+
+        // Simple mock revenue chart animation
+        window.addEventListener('load', () => {
+            const bars = document.querySelectorAll('.bg-primary, .bg-primary\\/20');
+            bars.forEach(bar => {
+                const finalHeight = bar.style.height;
+                bar.style.height = '0';
+                setTimeout(() => {
+                    bar.style.height = finalHeight;
+                }, 100);
+            });
+        });
+    </script>
+</body></html>

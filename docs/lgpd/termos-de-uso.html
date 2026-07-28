@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Termos de Uso — ServiceSaaS</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#10B981",
+                        "primary-600": "#059669",
+                        "primary-700": "#006c49",
+                        "primary-fixed": "#6ffbbe",
+                        "primary-fixed-dim": "#4edea3",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#002113",
+                        "on-primary-fixed-variant": "#005236",
+                        "on-background": "#131b2e",
+                        "on-surface": "#131b2e",
+                        "on-surface-variant": "#3c4a42",
+                        "surface": "#faf8ff",
+                        "surface-dim": "#d2d9f4",
+                        "surface-bright": "#faf8ff",
+                        "surface-container": "#eaedff",
+                        "surface-container-low": "#f2f3ff",
+                        "surface-container-high": "#e2e7ff",
+                        "surface-container-highest": "#dae2fd",
+                        "surface-variant": "#dae2fd",
+                        "background": "#faf8ff",
+                        "outline": "#6c7a71",
+                        "outline-variant": "#bbcabf",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                    },
+                    fontFamily: {
+                        sans: ["Poppins", "sans-serif"],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            scroll-behavior: smooth;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .toc-link {
+            transition: all 0.2s ease;
+        }
+        .toc-link:hover {
+            color: #10b981;
+            transform: translateX(4px);
+        }
+        .section-anchor {
+            scroll-margin-top: 100px;
+        }
+        @media print {
+            .no-print { display: none; }
+            body { font-size: 11pt; }
+
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+
+    <!-- ── Top Navigation ── -->
+    <header class="no-print fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-surface/90 backdrop-blur-md border-b border-outline-variant shadow-sm">
+        <div class="flex items-center gap-4">
+            <span class="material-symbols-outlined text-primary" data-icon="description">description</span>
+            <h1 class="font-bold text-lg text-primary">Termos de Uso</h1>
+        </div>
+        <div class="flex items-center gap-3">
+            <span class="text-xs text-on-surface-variant bg-surface-container-high px-3 py-1 rounded-full font-medium">
+                v1.0 · Julho/2026
+            </span>
+            <button onclick="window.print()" class="flex items-center gap-1.5 px-4 py-2 bg-primary text-white rounded-full text-sm font-medium hover:bg-primary-600 transition-all hover:scale-105 active:scale-95">
+                <span class="material-symbols-outlined text-sm" data-icon="print">print</span>
+                Imprimir
+            </button>
+        </div>
+    </header>
+
+    <!-- ── Hero Banner ── -->
+    <section class="pt-24 pb-12 md:pb-16 bg-gradient-to-br from-primary via-primary-600 to-primary-700 text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-10 left-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        </div>
+        <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+            <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-medium mb-6">
+                <span class="material-symbols-outlined text-sm" data-icon="verified">verified</span>
+                Documento Oficial · Lei nº 13.709/2018 (LGPD)
+            </div>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">
+                Termos de Uso &amp; <br/>
+                <span class="text-primary-fixed">Acordo de Processamento de Dados</span>
+            </h1>
+            <p class="text-lg text-white/80 max-w-2xl mx-auto mb-6">
+                ServiceSaaS — Plataforma de Gestão de Propostas e Orçamentos
+            </p>
+            <div class="flex flex-wrap justify-center gap-4 text-sm">
+                <div class="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-full">
+                    <span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span>
+                    Vigência: 28 de Julho de 2026
+                </div>
+                <div class="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-full">
+                    <span class="material-symbols-outlined text-sm" data-icon="mail">mail</span>
+                    privacidade@seudominio.com.br
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="max-w-6xl mx-auto px-6 py-8 md:py-12 flex flex-col lg:flex-row gap-8">
+
+        <!-- ── Sidebar / Table of Contents ── -->
+        <aside class="no-print lg:w-72 flex-shrink-0">
+            <div class="lg:sticky lg:top-28 glass-card rounded-2xl p-5 shadow-sm border border-outline-variant">
+                <h2 class="font-bold text-sm uppercase tracking-wider text-on-surface-variant mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-sm" data-icon="list_alt">list_alt</span>
+                    Navegação
+                </h2>
+                <nav class="space-y-0.5 text-sm">
+                    <a href="#sec1" class="toc-link block py-1.5 px-2 rounded-lg text-on-surface-variant hover:bg-primary/5">1. Aceitação</a>
+                    <a href="#sec2" class="toc-link block py-1.5 px-2 rounded-lg text-on-surface-variant hover:bg-primary/5">2. Definições</a>
+                    <a href="#sec3" class="toc-link block py-1.5 px-2 rounded-lg text-on-surface-variant hover:bg-primary/5">3. Serviços</a>
+                    <a href="#sec4" class="toc-link block py-1.5 px-2 rounded-lg text-on-surface-variant hover:bg-primary/5">4. Obrigações do Usuário</a>
+                    <a href="#sec5" class="toc-link block py-1.5 px-2 rounded-lg text-on-surface-variant hover:bg-primary/5">5. Obrigações da Plataforma</a>
+                    <a href="#sec6" class="toc-link block py-1.5 px-2 rounded-lg bg-primary/10 text-primary font-semibold">6. DPA — Acordo de Processamento</a>
+                    <a href="#sec7" class="toc-link block py-1.5 px-2 rounded-lg text-on-surface-variant hover:bg-primary/5">7. Direitos do Titular</a>
+                    <a href="#sec8" class="toc-link block py-1.5 px-2 rounded-lg text-on-surface-variant hover:bg-primary/5">8. Propriedade Intelectual</a>
+                    <a href="#sec9" class="toc-link block py-1.5 px-2 rounded-lg text-on-surface-variant hover:bg-primary/5">9. Limitação de Responsabilidade</a>
+                    <a href="#sec10" class="toc-link block py-1.5 px-2 rounded-lg text-on-surface-variant hover:bg-primary/5">10. Prazo e Rescisão</a>
+                    <a href="#sec11" class="toc-link block py-1.5 px-2 rounded-lg text-on-surface-variant hover:bg-primary/5">11. Lei Aplicável</a>
+                    <a href="#sec12" class="toc-link block py-1.5 px-2 rounded-lg text-on-surface-variant hover:bg-primary/5">12. Contato</a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- ── Main Content ── -->
+        <article class="flex-1 min-w-0 max-w-4xl">
+
+            <!-- Intro -->
+            <div class="bg-surface-container-low rounded-2xl p-6 md:p-8 mb-8 border border-outline-variant">
+                <p class="text-on-surface-variant leading-relaxed">
+                    Bem-vindo ao <strong class="text-on-surface">ServiceSaaS</strong>. Ao criar uma conta e utilizar nossa plataforma,
+                    você declara ter lido, compreendido e aceitado integralmente os presentes
+                    <strong class="text-on-surface">Termos de Uso</strong> e a
+                    <a href="politica-privacidade.md" target="_blank" rel="noopener" class="text-primary hover:underline font-medium">Política de Privacidade</a>.
+                </p>
+                <p class="text-on-surface-variant leading-relaxed mt-4">
+                    Este documento incorpora o <strong class="text-on-surface">Acordo de Processamento de Dados (DPA)</strong>
+                    nos termos do <strong class="text-on-surface">Art. 42 da Lei nº 13.709/2018 (LGPD)</strong>,
+                    estabelecendo os direitos e obrigações entre o <strong>Controlador</strong> (Usuário/Prestador)
+                    e o <strong>Operador</strong> (ServiceSaaS).
+                </p>
+            </div>
+
+            <!-- ── Section 1 ── -->
+            <section id="sec1" class="section-anchor mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-on-surface">Aceitação</h2>
+                </div>
+                <div class="pl-11 space-y-3 text-on-surface-variant leading-relaxed">
+                    <p>Ao criar uma conta no ServiceSaaS, você declara ter lido, compreendido e aceitado estes Termos de Uso e a Política de Privacidade.</p>
+                    <p>Caso não concorde com qualquer cláusula, você não deve utilizar a plataforma. O uso continuado constitui aceitação tácita de eventuais atualizações, as quais serão comunicadas com antecedência mínima de 30 dias.</p>
+                    <p>O usuário declara ser maior de 18 anos ou estar devidamente representado.</p>
+                </div>
+            </section>
+
+            <!-- ── Section 2 ── -->
+            <section id="sec2" class="section-anchor mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-on-surface">Definições</h2>
+                </div>
+                <div class="pl-11">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm border-collapse">
+                            <thead>
+                                <tr class="bg-surface-container-high">
+                                    <th class="text-left p-3 font-semibold text-on-surface border-b border-outline-variant">Termo</th>
+                                    <th class="text-left p-3 font-semibold text-on-surface border-b border-outline-variant">Significado</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-on-surface-variant">
+                                <tr class="hover:bg-surface-container-low transition-colors">
+                                    <td class="p-3 border-b border-outline-variant font-medium text-on-surface">Plataforma</td>
+                                    <td class="p-3 border-b border-outline-variant">Sistema web ServiceSaaS, incluindo API e interface de usuário</td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-low transition-colors">
+                                    <td class="p-3 border-b border-outline-variant font-medium text-on-surface">Usuário / Prestador</td>
+                                    <td class="p-3 border-b border-outline-variant">Pessoa física ou jurídica contratante dos serviços da plataforma</td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-low transition-colors">
+                                    <td class="p-3 border-b border-outline-variant font-medium text-on-surface">Cliente Final</td>
+                                    <td class="p-3 border-b border-outline-variant">Pessoa física ou jurídica cadastrada pelo Usuário para recebimento de propostas</td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-low transition-colors">
+                                    <td class="p-3 border-b border-outline-variant font-medium text-on-surface">Dados Pessoais</td>
+                                    <td class="p-3 border-b border-outline-variant">Conforme definição do Art. 5º da Lei nº 13.709/2018 (LGPD)</td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-low transition-colors">
+                                    <td class="p-3 border-b border-outline-variant font-medium text-on-surface">Controlador</td>
+                                    <td class="p-3 border-b border-outline-variant">Usuário/Prestador — decide sobre o tratamento dos dados (Art. 5º, VI)</td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-low transition-colors">
+                                    <td class="p-3 border-b border-outline-variant font-medium text-on-surface">Operador</td>
+                                    <td class="p-3 border-b border-outline-variant">ServiceSaaS — processa dados em nome do Controlador (Art. 5º, VII)</td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-low transition-colors">
+                                    <td class="p-3 border-b border-outline-variant font-medium text-on-surface">DPO / Encarregado</td>
+                                    <td class="p-3 border-b border-outline-variant">Pessoa responsável pelo canal de contato LGPD (Art. 41)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── Section 3 ── -->
+            <section id="sec3" class="section-anchor mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-on-surface">Serviços</h2>
+                </div>
+                <div class="pl-11">
+                    <p class="text-on-surface-variant leading-relaxed mb-4">A plataforma oferece as seguintes funcionalidades:</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="flex items-start gap-3 p-4 bg-surface-container-low rounded-xl border border-outline-variant">
+                            <span class="material-symbols-outlined text-primary flex-shrink-0" data-icon="group_add">group_add</span>
+                            <span class="text-sm">Cadastro e gestão de clientes</span>
+                        </div>
+                        <div class="flex items-start gap-3 p-4 bg-surface-container-low rounded-xl border border-outline-variant">
+                            <span class="material-symbols-outlined text-primary flex-shrink-0" data-icon="description">description</span>
+                            <span class="text-sm">Criação e envio de propostas comerciais</span>
+                        </div>
+                        <div class="flex items-start gap-3 p-4 bg-surface-container-low rounded-xl border border-outline-variant">
+                            <span class="material-symbols-outlined text-primary flex-shrink-0" data-icon="how_to_vote">how_to_vote</span>
+                            <span class="text-sm">Aprovação digital de propostas</span>
+                        </div>
+                        <div class="flex items-start gap-3 p-4 bg-surface-container-low rounded-xl border border-outline-variant">
+                            <span class="material-symbols-outlined text-primary flex-shrink-0" data-icon="payments">payments</span>
+                            <span class="text-sm">Processamento de pagamentos via Mercado Pago</span>
+                        </div>
+                        <div class="flex items-start gap-3 p-4 bg-surface-container-low rounded-xl border border-outline-variant">
+                            <span class="material-symbols-outlined text-primary flex-shrink-0" data-icon="dashboard">dashboard</span>
+                            <span class="text-sm">Geração de relatórios e dashboard</span>
+                        </div>
+                        <div class="flex items-start gap-3 p-4 bg-surface-container-low rounded-xl border border-outline-variant">
+                            <span class="material-symbols-outlined text-primary flex-shrink-0" data-icon="whatsapp">whatsapp</span>
+                            <span class="text-sm">Envio de propostas via WhatsApp</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── Section 4 ── -->
+            <section id="sec4" class="section-anchor mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">4</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-on-surface">Obrigações do Usuário</h2>
+                </div>
+                <div class="pl-11 space-y-3">
+                    <ul class="space-y-2">
+                        <li class="flex items-start gap-3 text-on-surface-variant">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5 flex-shrink-0" data-icon="check_circle">check_circle</span>
+                            <span>Fornecer dados cadastrais verdadeiros, precisos e atualizados</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-on-surface-variant">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5 flex-shrink-0" data-icon="check_circle">check_circle</span>
+                            <span>Responder pela veracidade e legalidade dos dados de seus clientes finais</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-on-surface-variant">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5 flex-shrink-0" data-icon="check_circle">check_circle</span>
+                            <span>Obter consentimento ou base legal adequada para cadastrar dados de terceiros na plataforma</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-on-surface-variant">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5 flex-shrink-0" data-icon="check_circle">check_circle</span>
+                            <span>Manter a confidencialidade de sua senha e credenciais de acesso</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-on-surface-variant">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5 flex-shrink-0" data-icon="check_circle">check_circle</span>
+                            <span>Utilizar a plataforma de acordo com a legislação brasileira e estes Termos</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-on-surface-variant">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5 flex-shrink-0" data-icon="check_circle">check_circle</span>
+                            <span>Notificar imediatamente a plataforma sobre qualquer uso não autorizado de sua conta</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-on-surface-variant">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5 flex-shrink-0" data-icon="check_circle">check_circle</span>
+                            <span>Não utilizar a plataforma para atividades ilícitas ou que violem direitos de terceiros</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ── Section 5 ── -->
+            <section id="sec5" class="section-anchor mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">5</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-on-surface">Obrigações da Plataforma</h2>
+                </div>
+                <div class="pl-11 space-y-3">
+                    <ul class="space-y-2">
+                        <li class="flex items-start gap-3 text-on-surface-variant">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5 flex-shrink-0" data-icon="verified">verified</span>
+                            <span>Proteger os dados pessoais com medidas de segurança técnicas e administrativas adequadas</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-on-surface-variant">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5 flex-shrink-0" data-icon="verified">verified</span>
+                            <span>Processar os dados exclusivamente de acordo com as instruções documentadas do Controlador</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-on-surface-variant">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5 flex-shrink-0" data-icon="verified">verified</span>
+                            <span>Notificar o Controlador em até 48h sobre qualquer incidente de segurança</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-on-surface-variant">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5 flex-shrink-0" data-icon="verified">verified</span>
+                            <span>Atender aos direitos dos titulares previstos nos Arts. 17 a 22 da LGPD</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-on-surface-variant">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5 flex-shrink-0" data-icon="verified">verified</span>
+                            <span>Manter registro das operações de tratamento de dados pessoais (Art. 37)</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-on-surface-variant">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5 flex-shrink-0" data-icon="verified">verified</span>
+                            <span>Garantir disponibilidade mínima de 99,5% (salvo manutenções programadas)</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ── Section 6 — DPA ── -->
+            <section id="sec6" class="section-anchor mb-12">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="w-8 h-8 bg-primary-700 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">6</span>
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold text-on-surface">Acordo de Processamento de Dados (DPA)</h2>
+                        <p class="text-sm text-on-surface-variant mt-0.5">Data Processing Addendum — Art. 42 da LGPD</p>
+                    </div>
+                </div>
+
+                <div class="pl-11 space-y-8">
+
+                    <!-- 6.1 -->
+                    <div class="bg-surface-container-low rounded-xl p-5 border border-outline-variant">
+                        <h3 class="font-bold text-lg text-on-surface mb-3 flex items-center gap-2">
+                            <span class="w-6 h-6 bg-primary/20 text-primary rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">6.1</span>
+                            Partes
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-on-surface-variant">
+                            <div class="p-3 bg-white rounded-lg border border-outline-variant">
+                                <span class="font-semibold text-primary block mb-1">OPERADOR</span>
+                                <span class="text-on-surface">ServiceSaaS (Bueno Tecnologia Ltda.)</span>
+                                <p class="text-xs mt-1">CNPJ: a definir · Responsável pelo processamento dos dados na plataforma</p>
+                            </div>
+                            <div class="p-3 bg-white rounded-lg border border-outline-variant">
+                                <span class="font-semibold text-primary block mb-1">CONTROLADOR</span>
+                                <span class="text-on-surface">Usuário / Prestador de Serviço</span>
+                                <p class="text-xs mt-1">Pessoa física ou jurídica que determina as finalidades do tratamento</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6.2 -->
+                    <div>
+                        <h3 class="font-bold text-lg text-on-surface mb-3 flex items-center gap-2">
+                            <span class="w-6 h-6 bg-primary/20 text-primary rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">6.2</span>
+                            Finalidade do Tratamento
+                        </h3>
+                        <p class="text-on-surface-variant leading-relaxed">Execução dos serviços contratados de gestão de propostas, orçamentos e clientes, incluindo:</p>
+                        <ul class="mt-2 space-y-1 text-sm text-on-surface-variant">
+                            <li class="flex items-center gap-2">• Cadastro e autenticação de usuários</li>
+                            <li class="flex items-center gap-2">• Criação, envio e aprovação de propostas comerciais</li>
+                            <li class="flex items-center gap-2">• Processamento de pagamentos via Mercado Pago</li>
+                            <li class="flex items-center gap-2">• Comunicação com clientes finais via WhatsApp</li>
+                            <li class="flex items-center gap-2">• Geração de relatórios e dashboards gerenciais</li>
+                            <li class="flex items-center gap-2">• Auditoria e segurança da informação (logs)</li>
+                        </ul>
+                    </div>
+
+                    <!-- 6.3 -->
+                    <div>
+                        <h3 class="font-bold text-lg text-on-surface mb-3 flex items-center gap-2">
+                            <span class="w-6 h-6 bg-primary/20 text-primary rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">6.3</span>
+                            Categorias de Dados Tratados
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm border-collapse">
+                                <thead>
+                                    <tr class="bg-surface-container-high">
+                                        <th class="text-left p-3 font-semibold text-on-surface border-b border-outline-variant">Categoria</th>
+                                        <th class="text-left p-3 font-semibold text-on-surface border-b border-outline-variant">Dados</th>
+                                        <th class="text-left p-3 font-semibold text-on-surface border-b border-outline-variant">Base Legal</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-on-surface-variant">
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Identificação</td>
+                                        <td class="p-3 border-b border-outline-variant">Nome completo, CPF, CNPJ</td>
+                                        <td class="p-3 border-b border-outline-variant">Art. 7°, V (execução de contrato)</td>
+                                    </tr>
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Contato</td>
+                                        <td class="p-3 border-b border-outline-variant">E-mail, telefone, WhatsApp</td>
+                                        <td class="p-3 border-b border-outline-variant">Art. 7°, V (execução de contrato)</td>
+                                    </tr>
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Financeiro</td>
+                                        <td class="p-3 border-b border-outline-variant">Dados bancários, histórico de transações</td>
+                                        <td class="p-3 border-b border-outline-variant">Art. 7°, V + Art. 11, II</td>
+                                    </tr>
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Segurança</td>
+                                        <td class="p-3 border-b border-outline-variant">Logs de acesso, endereço IP, user-agent</td>
+                                        <td class="p-3 border-b border-outline-variant">Art. 7°, IX (legítimo interesse)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 6.4 -->
+                    <div>
+                        <h3 class="font-bold text-lg text-on-surface mb-3 flex items-center gap-2">
+                            <span class="w-6 h-6 bg-primary/20 text-primary rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">6.4</span>
+                            Bases Legais Aplicáveis
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                            <div class="p-3 bg-white rounded-lg border border-outline-variant">
+                                <span class="font-semibold text-primary">Execução de contrato</span>
+                                <p class="text-on-surface-variant text-xs mt-1">Art. 7°, V — operações essenciais ao funcionamento da plataforma</p>
+                            </div>
+                            <div class="p-3 bg-white rounded-lg border border-outline-variant">
+                                <span class="font-semibold text-primary">Legítimo interesse</span>
+                                <p class="text-on-surface-variant text-xs mt-1">Art. 7°, IX — logs de auditoria e segurança</p>
+                            </div>
+                            <div class="p-3 bg-white rounded-lg border border-outline-variant">
+                                <span class="font-semibold text-primary">Obrigação legal</span>
+                                <p class="text-on-surface-variant text-xs mt-1">Art. 7°, II + Art. 11, II — retenção fiscal de 5 anos</p>
+                            </div>
+                            <div class="p-3 bg-white rounded-lg border border-outline-variant">
+                                <span class="font-semibold text-primary">Consentimento</span>
+                                <p class="text-on-surface-variant text-xs mt-1">Art. 7°, I — comunicações de marketing (opt-in)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6.5 -->
+                    <div>
+                        <h3 class="font-bold text-lg text-on-surface mb-3 flex items-center gap-2">
+                            <span class="w-6 h-6 bg-primary/20 text-primary rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">6.5</span>
+                            Medidas de Segurança Técnicas e Administrativas
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm border-collapse">
+                                <thead>
+                                    <tr class="bg-surface-container-high">
+                                        <th class="text-left p-3 font-semibold text-on-surface border-b border-outline-variant">Medida</th>
+                                        <th class="text-left p-3 font-semibold text-on-surface border-b border-outline-variant">Descrição</th>
+                                        <th class="text-center p-3 font-semibold text-on-surface border-b border-outline-variant">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-on-surface-variant">
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Criptografia em trânsito</td>
+                                        <td class="p-3 border-b border-outline-variant">TLS 1.3 via Cloudflare SSL/TLS</td>
+                                        <td class="p-3 border-b border-outline-variant text-center"><span class="text-primary font-bold">✅</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Hash de senhas</td>
+                                        <td class="p-3 border-b border-outline-variant">bcrypt com salt rounds = 12</td>
+                                        <td class="p-3 border-b border-outline-variant text-center"><span class="text-primary font-bold">✅</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Autenticação JWT</td>
+                                        <td class="p-3 border-b border-outline-variant">Token Bearer com expiração de 24h</td>
+                                        <td class="p-3 border-b border-outline-variant text-center"><span class="text-primary font-bold">✅</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">SQL Injection</td>
+                                        <td class="p-3 border-b border-outline-variant">Prepared Statements (mysql2 `?` params)</td>
+                                        <td class="p-3 border-b border-outline-variant text-center"><span class="text-primary font-bold">✅</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Cross-Site Scripting (XSS)</td>
+                                        <td class="p-3 border-b border-outline-variant">Output escaping com htmlspecialchars</td>
+                                        <td class="p-3 border-b border-outline-variant text-center"><span class="text-primary font-bold">✅</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Rate Limiting</td>
+                                        <td class="p-3 border-b border-outline-variant">express-rate-limit na API</td>
+                                        <td class="p-3 border-b border-outline-variant text-center"><span class="text-primary font-bold">✅</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Isolamento Multi-Tenant</td>
+                                        <td class="p-3 border-b border-outline-variant">tenant_id injetado via middleware</td>
+                                        <td class="p-3 border-b border-outline-variant text-center"><span class="text-primary font-bold">✅</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Audit Logging</td>
+                                        <td class="p-3 border-b border-outline-variant">Registro de operações sensíveis</td>
+                                        <td class="p-3 border-b border-outline-variant text-center"><span class="text-primary font-bold">✅</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Criptografia em repouso</td>
+                                        <td class="p-3 border-b border-outline-variant">MySQL TDE (Transparent Data Encryption)</td>
+                                        <td class="p-3 border-b border-outline-variant text-center"><span class="text-amber-600 font-bold">⏳</span> v1.1</td>
+                                    </tr>
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Backup criptografado</td>
+                                        <td class="p-3 border-b border-outline-variant">Backups diários com PITR</td>
+                                        <td class="p-3 border-b border-outline-variant text-center"><span class="text-amber-600 font-bold">⏳</span> v1.1</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 6.6 -->
+                    <div>
+                        <h3 class="font-bold text-lg text-on-surface mb-3 flex items-center gap-2">
+                            <span class="w-6 h-6 bg-primary/20 text-primary rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">6.6</span>
+                            Sub-operadores Autorizados
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm border-collapse">
+                                <thead>
+                                    <tr class="bg-surface-container-high">
+                                        <th class="text-left p-3 font-semibold text-on-surface border-b border-outline-variant">Sub-operador</th>
+                                        <th class="text-left p-3 font-semibold text-on-surface border-b border-outline-variant">Finalidade</th>
+                                        <th class="text-left p-3 font-semibold text-on-surface border-b border-outline-variant">Jurisdição</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-on-surface-variant">
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Mercado Pago</td>
+                                        <td class="p-3 border-b border-outline-variant">Processamento de pagamentos (Pix, cartão, boleto)</td>
+                                        <td class="p-3 border-b border-outline-variant">Brasil</td>
+                                    </tr>
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Cloudflare</td>
+                                        <td class="p-3 border-b border-outline-variant">CDN, segurança DDoS, SSL/TLS</td>
+                                        <td class="p-3 border-b border-outline-variant">Global (EUA)</td>
+                                    </tr>
+                                    <tr class="hover:bg-surface-container-low transition-colors">
+                                        <td class="p-3 border-b border-outline-variant font-medium">Meta (WhatsApp)</td>
+                                        <td class="p-3 border-b border-outline-variant">Envio de mensagens e propostas</td>
+                                        <td class="p-3 border-b border-outline-variant">Brasil</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-xs text-on-surface-variant mt-3">
+                            O Operador notificará o Controlador com antecedência mínima de 30 dias sobre qualquer alteração na lista de sub-operadores.
+                        </p>
+                    </div>
+
+                    <!-- 6.7 -->
+                    <div>
+                        <h3 class="font-bold text-lg text-on-surface mb-3 flex items-center gap-2">
+                            <span class="w-6 h-6 bg-primary/20 text-primary rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">6.7</span>
+                            Notificação de Incidentes
+                        </h3>
+                        <div class="p-4 bg-white rounded-xl border border-outline-variant text-sm space-y-2">
+                            <div class="flex items-start gap-3">
+                                <span class="text-primary font-bold mt-0.5">1.</span>
+                                <span class="text-on-surface-variant">Notificação ao <strong class="text-on-surface">Controlador</strong> em até <strong class="text-primary">48h</strong> da confirmação do incidente</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="text-primary font-bold mt-0.5">2.</span>
+                                <span class="text-on-surface-variant">Notificação à <strong class="text-on-surface">ANPD</strong> em até <strong class="text-primary">72h</strong> (quando aplicável — Resolução ANPD nº 15/2024)</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="text-primary font-bold mt-0.5">3.</span>
+                                <span class="text-on-surface-variant">Comunicação aos <strong class="text-on-surface">Titulares afetados</strong> com descrição do incidente e medidas de mitigação</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="text-primary font-bold mt-0.5">4.</span>
+                                <span class="text-on-surface-variant">Relatório <strong class="text-on-surface">post-mortem</strong> completo em até 7 dias, incluindo causa raiz e ações corretivas</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6.8 -->
+                    <div>
+                        <h3 class="font-bold text-lg text-on-surface mb-3 flex items-center gap-2">
+                            <span class="w-6 h-6 bg-primary/20 text-primary rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">6.8</span>
+                            Exclusão e Retenção após Término
+                        </h3>
+                        <div class="space-y-2 text-sm text-on-surface-variant">
+                            <p>Ao término do contrato por qualquer motivo:</p>
+                            <ul class="space-y-1">
+                                <li class="flex items-start gap-2"><span class="text-primary mt-1">•</span> Os dados serão exportados em formato <strong>JSON</strong> e disponibilizados por <strong>30 dias</strong> para download</li>
+                                <li class="flex items-start gap-2"><span class="text-primary mt-1">•</span> Após o prazo, os dados serão <strong>anonimizados</strong> ou <strong>excluídos</strong>, exceto quando houver obrigação legal de retenção</li>
+                                <li class="flex items-start gap-2"><span class="text-primary mt-1">•</span> Dados fiscais (notas fiscais, transações) serão retidos por <strong>5 anos</strong> conforme Código Tributário Nacional</li>
+                                <li class="flex items-start gap-2"><span class="text-primary mt-1">•</span> Logs de auditoria serão retidos por <strong>5 anos</strong> conforme Art. 37 da LGPD</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 6.9 -->
+                    <div>
+                        <h3 class="font-bold text-lg text-on-surface mb-3 flex items-center gap-2">
+                            <span class="w-6 h-6 bg-primary/20 text-primary rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">6.9</span>
+                            Assistência ao Controlador
+                        </h3>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">
+                            O Operador se compromete a auxiliar o Controlador no cumprimento de suas obrigações legais, incluindo:
+                        </p>
+                        <ul class="mt-2 space-y-1 text-sm text-on-surface-variant">
+                            <li class="flex items-center gap-2">• Resposta a solicitações de titulares (Art. 18-22 LGPD)</li>
+                            <li class="flex items-center gap-2">• Realização de Relatório de Impacto à Proteção de Dados (RIPD) — Art. 38</li>
+                            <li class="flex items-center gap-2">• Demonstração de conformidade perante a ANPD</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ── Section 7 ── -->
+            <section id="sec7" class="section-anchor mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">7</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-on-surface">Direitos do Titular</h2>
+                </div>
+                <div class="pl-11">
+                    <p class="text-on-surface-variant leading-relaxed mb-4">
+                        O Usuário reconhece e garante que seus clientes finais têm os seguintes direitos, nos termos dos Arts. 17 a 22 da LGPD:
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="flex items-start gap-3 p-3 bg-surface-container-low rounded-xl border border-outline-variant">
+                            <span class="material-symbols-outlined text-primary text-sm flex-shrink-0 mt-0.5" data-icon="search">search</span>
+                            <div>
+                                <span class="font-medium text-on-surface block">Confirmação de tratamento</span>
+                                <span class="text-xs text-on-surface-variant">Saber se seus dados estão sendo tratados</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-surface-container-low rounded-xl border border-outline-variant">
+                            <span class="material-symbols-outlined text-primary text-sm flex-shrink-0 mt-0.5" data-icon="visibility">visibility</span>
+                            <div>
+                                <span class="font-medium text-on-surface block">Acesso aos dados</span>
+                                <span class="text-xs text-on-surface-variant">Solicitar cópia dos dados pessoais</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-surface-container-low rounded-xl border border-outline-variant">
+                            <span class="material-symbols-outlined text-primary text-sm flex-shrink-0 mt-0.5" data-icon="edit">edit</span>
+                            <div>
+                                <span class="font-medium text-on-surface block">Correção</span>
+                                <span class="text-xs text-on-surface-variant">Retificar dados incompletos ou desatualizados</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-surface-container-low rounded-xl border border-outline-variant">
+                            <span class="material-symbols-outlined text-primary text-sm flex-shrink-0 mt-0.5" data-icon="delete">delete</span>
+                            <div>
+                                <span class="font-medium text-on-surface block">Exclusão / Anonimização</span>
+                                <span class="text-xs text-on-surface-variant">Solicitar eliminação ou anonimização dos dados</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-surface-container-low rounded-xl border border-outline-variant">
+                            <span class="material-symbols-outlined text-primary text-sm flex-shrink-0 mt-0.5" data-icon="download">download</span>
+                            <div>
+                                <span class="font-medium text-on-surface block">Portabilidade</span>
+                                <span class="text-xs text-on-surface-variant">Exportar dados para outro fornecedor</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-surface-container-low rounded-xl border border-outline-variant">
+                            <span class="material-symbols-outlined text-primary text-sm flex-shrink-0 mt-0.5" data-icon="block">block</span>
+                            <div>
+                                <span class="font-medium text-on-surface block">Revogação de consentimento</span>
+                                <span class="text-xs text-on-surface-variant">Retirar consentimento a qualquer momento</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-on-surface-variant mt-4 bg-surface-container-high rounded-xl p-3 border border-outline-variant">
+                        <span class="font-medium text-on-surface">Canal de exercício:</span>
+                        Para exercer estes direitos, o titular deve contatar o DPO pelo e-mail
+                        <a href="mailto:privacidade@seudominio.com.br" class="text-primary font-medium hover:underline">privacidade@seudominio.com.br</a>.
+                        O prazo de resposta é de até <strong>15 dias</strong> (Art. 19 da LGPD).
+                    </p>
+                </div>
+            </section>
+
+            <!-- ── Section 8 ── -->
+            <section id="sec8" class="section-anchor mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">8</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-on-surface">Propriedade Intelectual</h2>
+                </div>
+                <div class="pl-11 space-y-3 text-on-surface-variant leading-relaxed">
+                    <p>O Usuário mantém a <strong>propriedade total</strong> dos dados inseridos na plataforma, incluindo dados de clientes, propostas e documentos.</p>
+                    <p>O ServiceSaaS detém os direitos sobre o software, sua interface, código-fonte, marca e tecnologia subjacente.</p>
+                    <p>É vedada a engenharia reversa, cópia ou redistribuição não autorizada do software.</p>
+                </div>
+            </section>
+
+            <!-- ── Section 9 ── -->
+            <section id="sec9" class="section-anchor mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">9</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-on-surface">Limitação de Responsabilidade</h2>
+                </div>
+                <div class="pl-11 space-y-2 text-on-surface-variant">
+                    <div class="flex items-start gap-3 p-3 bg-surface-container-low rounded-xl border border-outline-variant">
+                        <span class="material-symbols-outlined text-error mt-0.5 text-sm flex-shrink-0" data-icon="warning">warning</span>
+                        <span class="text-sm">Dados inseridos incorretamente ou sem base legal pelo Usuário</span>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 bg-surface-container-low rounded-xl border border-outline-variant">
+                        <span class="material-symbols-outlined text-error mt-0.5 text-sm flex-shrink-0" data-icon="warning">warning</span>
+                        <span class="text-sm">Falhas de serviços de terceiros (Mercado Pago, WhatsApp, Cloudflare)</span>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 bg-surface-container-low rounded-xl border border-outline-variant">
+                        <span class="material-symbols-outlined text-error mt-0.5 text-sm flex-shrink-0" data-icon="warning">warning</span>
+                        <span class="text-sm">Uso indevido da plataforma pelo Usuário ou por terceiros não autorizados</span>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 bg-surface-container-low rounded-xl border border-outline-variant">
+                        <span class="material-symbols-outlined text-error mt-0.5 text-sm flex-shrink-0" data-icon="warning">warning</span>
+                        <span class="text-sm">Danos decorrentes de caso fortuito, força maior ou atos de terceiros</span>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 bg-surface-container-low rounded-xl border border-outline-variant">
+                        <span class="material-symbols-outlined text-error mt-0.5 text-sm flex-shrink-0" data-icon="warning">warning</span>
+                        <span class="text-sm">Danos indiretos, lucros cessantes ou perda de oportunidades de negócio</span>
+                    </div>
+                    <p class="text-xs text-on-surface-variant mt-2">
+                        A responsabilidade total do ServiceSaaS em qualquer hipótese está limitada ao valor total pago pelo Usuário nos 12 meses anteriores ao evento.
+                    </p>
+                </div>
+            </section>
+
+            <!-- ── Section 10 ── -->
+            <section id="sec10" class="section-anchor mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">10</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-on-surface">Prazo e Rescisão</h2>
+                </div>
+                <div class="pl-11 space-y-3 text-on-surface-variant leading-relaxed">
+                    <p>Vigência por prazo <strong>indeterminado</strong> a partir da aceitação destes Termos.</p>
+                    <p>O Usuário pode rescindir a qualquer momento, sem ônus, mediante solicitação de exclusão da conta.</p>
+                    <p>A plataforma pode rescindir o contrato em caso de violação grave destes Termos, mediante notificação prévia de 15 dias.</p>
+                    <p>Em caso de inatividade por mais de <strong>180 dias consecutivos</strong>, a conta poderá ser desativada com aviso prévio de 30 dias.</p>
+                </div>
+            </section>
+
+            <!-- ── Section 11 ── -->
+            <section id="sec11" class="section-anchor mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">11</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-on-surface">Lei Aplicável e Foro</h2>
+                </div>
+                <div class="pl-11 space-y-3 text-on-surface-variant leading-relaxed">
+                    <p>Estes Termos regem-se pela legislação brasileira, em especial:</p>
+                    <ul class="space-y-1">
+                        <li class="flex items-start gap-2"><span class="text-primary mt-1">•</span> Lei nº 13.709/2018 (<strong>LGPD</strong>)</li>
+                        <li class="flex items-start gap-2"><span class="text-primary mt-1">•</span> Lei nº 8.078/1990 (<strong>Código de Defesa do Consumidor</strong>)</li>
+                        <li class="flex items-start gap-2"><span class="text-primary mt-1">•</span> Lei nº 12.965/2014 (<strong>Marco Civil da Internet</strong>)</li>
+                        <li class="flex items-start gap-2"><span class="text-primary mt-1">•</span> Lei nº 10.406/2002 (<strong>Código Civil</strong>)</li>
+                    </ul>
+                    <p class="mt-3">Fica eleito o foro da Comarca de <strong>São Paulo — SP</strong> para dirimir quaisquer controvérsias, com renúncia a qualquer outro, por mais privilegiado que seja.</p>
+                </div>
+            </section>
+
+            <!-- ── Section 12 ── -->
+            <section id="sec12" class="section-anchor mb-8">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">12</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-on-surface">Contato e DPO</h2>
+                </div>
+                <div class="pl-11">
+                    <div class="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-6 border border-primary/20">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="font-semibold text-on-surface mb-3 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary" data-icon="mail">mail</span>
+                                    Encarregado (DPO)
+                                </h3>
+                                <p class="text-sm text-on-surface-variant">
+                                    <strong class="text-on-surface">E-mail:</strong>
+                                    <a href="mailto:privacidade@seudominio.com.br" class="text-primary hover:underline">privacidade@seudominio.com.br</a>
+                                </p>
+                                <p class="text-sm text-on-surface-variant mt-1">
+                                    <strong class="text-on-surface">Prazo de resposta:</strong> Até 15 dias úteis
+                                </p>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-on-surface mb-3 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary" data-icon="description">description</span>
+                                    Documentos Relacionados
+                                </h3>
+                                <ul class="space-y-1 text-sm">
+                                    <li>
+                                        <a href="politica-privacidade.md" target="_blank" rel="noopener" class="text-primary hover:underline flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-xs" data-icon="article">article</span>
+                                            Política de Privacidade
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="registro-operacoes.md" target="_blank" rel="noopener" class="text-primary hover:underline flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-xs" data-icon="article">article</span>
+                                            Registro de Operações LGPD
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="plano-resposta-incidentes.md" target="_blank" rel="noopener" class="text-primary hover:underline flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-xs" data-icon="article">article</span>
+                                            Plano de Resposta a Incidentes
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── Footer ── -->
+            <div class="border-t border-outline-variant pt-6 mt-8 text-center">
+                <p class="text-xs text-on-surface-variant">
+                    ServiceSaaS — v1.0 — Última atualização: 28 de Julho de 2026
+                </p>
+                <p class="text-xs text-on-surface-variant mt-1">
+                    © 2026 Bueno Tecnologia Ltda. Todos os direitos reservados.
+                </p>
+            </div>
+
+        </article>
+    </div>
+
+    <!-- ── Back to top ── -->
+    <button onclick="window.scrollTo({top:0,behavior:'smooth'})"
+            class="no-print fixed bottom-6 right-6 w-12 h-12 bg-primary text-white rounded-full shadow-lg
+                   hover:bg-primary-600 hover:scale-110 active:scale-95 transition-all
+                   flex items-center justify-center opacity-0 invisible"
+            id="backToTop">
+        <span class="material-symbols-outlined" data-icon="arrow_upward">arrow_upward</span>
+    </button>
+
+    <script>
+        // Back to top button visibility
+        window.addEventListener('scroll', function() {
+            const btn = document.getElementById('backToTop');
+            if (window.scrollY > 400) {
+                btn.classList.remove('opacity-0', 'invisible');
+                btn.classList.add('opacity-100', 'visible');
+            } else {
+                btn.classList.add('opacity-0', 'invisible');
+                btn.classList.remove('opacity-100', 'visible');
+            }
+        });
+    </script>
+
+</body>
+</html>
