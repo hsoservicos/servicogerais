@@ -51,6 +51,8 @@
                                 class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
                                 placeholder="000.000.000-00" maxlength="14"
                                 data-mask="cpf" data-validate="cpf">
+                            <span class="error-message text-xs text-danger mt-1 hidden" id="error-documentCpf">CPF inválido</span>
+                            <span class="valid-message text-xs text-success mt-1 hidden" id="valid-documentCpf">CPF válido</span>
                         </div>
 
                         <!-- CNPJ -->
@@ -60,6 +62,8 @@
                                 class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
                                 placeholder="00.000.000/0001-00" maxlength="18"
                                 data-mask="cnpj" data-validate="cnpj">
+                            <span class="error-message text-xs text-danger mt-1 hidden" id="error-documentCnpj">CNPJ inválido</span>
+                            <span class="valid-message text-xs text-success mt-1 hidden" id="valid-documentCnpj">CNPJ válido</span>
                         </div>
                     </div>
 
@@ -257,6 +261,22 @@
             }
             error.classList.add('hidden');
             document.getElementById('companyName').classList.remove('border-danger');
+
+            const cpfVal = document.getElementById('documentCpf').value.trim();
+            const cnpjVal = document.getElementById('documentCnpj').value.trim();
+            if (cpfVal && !AppValidation.validateCPF(cpfVal)) {
+                document.getElementById('documentCpf').classList.add('border-danger');
+                document.getElementById('error-documentCpf').classList.remove('hidden');
+                document.getElementById('valid-documentCpf').classList.add('hidden');
+                return;
+            }
+            if (cnpjVal && !AppValidation.validateCNPJ(cnpjVal)) {
+                document.getElementById('documentCnpj').classList.add('border-danger');
+                document.getElementById('error-documentCnpj').classList.remove('hidden');
+                document.getElementById('valid-documentCnpj').classList.add('hidden');
+                return;
+            }
+
             document.getElementById('step-1').classList.add('hidden');
             document.getElementById('step-2').classList.remove('hidden');
             document.querySelectorAll('.step-indicator')[0].classList.remove('bg-primary');
@@ -314,13 +334,17 @@
         const cpfVal = document.getElementById('documentCpf').value.trim();
         const cnpjVal = document.getElementById('documentCnpj').value.trim();
         if (cpfVal && !AppValidation.validateCPF(cpfVal)) {
-            showToast('CPF inválido', 'error');
             document.getElementById('documentCpf').classList.add('border-danger');
+            document.getElementById('error-documentCpf').classList.remove('hidden');
+            document.getElementById('valid-documentCpf').classList.add('hidden');
+            showToast('CPF inválido — verifique o campo', 'error');
             return;
         }
         if (cnpjVal && !AppValidation.validateCNPJ(cnpjVal)) {
-            showToast('CNPJ inválido', 'error');
             document.getElementById('documentCnpj').classList.add('border-danger');
+            document.getElementById('error-documentCnpj').classList.remove('hidden');
+            document.getElementById('valid-documentCnpj').classList.add('hidden');
+            showToast('CNPJ inválido — verifique o campo', 'error');
             return;
         }
 
@@ -364,6 +388,14 @@
             const data = await response.json();
 
             if (!response.ok) {
+                if (data.message === 'CPF inválido') {
+                    document.getElementById('documentCpf').classList.add('border-danger');
+                    document.getElementById('error-documentCpf').classList.remove('hidden');
+                }
+                if (data.message === 'CNPJ inválido') {
+                    document.getElementById('documentCnpj').classList.add('border-danger');
+                    document.getElementById('error-documentCnpj').classList.remove('hidden');
+                }
                 throw new Error(data.message || 'Erro ao cadastrar');
             }
 
@@ -394,3 +426,7 @@
         showToast(message, 'error');
     }
 </script>
+
+<style>
+    .border-success { border-color: #16A34A !important; }
+</style>

@@ -168,21 +168,42 @@ window.AppValidation = (() => {
     document.querySelectorAll('[data-validate]').forEach(input => {
       input.addEventListener('blur', function () {
         const types = this.dataset.validate.split(/\s+/);
+        if (!this.value) return;
+
         let valid = true;
         for (const type of types) {
           if (type === 'cpf' && !validateCPF(this.value)) { valid = false; break; }
           if (type === 'cnpj' && !validateCNPJ(this.value)) { valid = false; break; }
-          if (type === 'email' && this.value && !validateEmail(this.value)) { valid = false; break; }
+          if (type === 'email' && !validateEmail(this.value)) { valid = false; break; }
         }
-        if (!valid && this.value) {
+
+        const errId = 'error-' + this.id;
+        const validId = 'valid-' + this.id;
+        const errEl = document.getElementById(errId);
+        const validEl = document.getElementById(validId);
+
+        if (!valid) {
           this.classList.add('border-danger');
+          this.classList.remove('border-success');
+          if (errEl) errEl.classList.remove('hidden');
+          if (validEl) validEl.classList.add('hidden');
         } else {
           this.classList.remove('border-danger');
+          this.classList.add('border-success');
+          if (errEl) errEl.classList.add('hidden');
+          if (validEl) validEl.classList.remove('hidden');
         }
       });
 
       input.addEventListener('input', function () {
         this.classList.remove('border-danger');
+        this.classList.remove('border-success');
+        const errId = 'error-' + this.id;
+        const validId = 'valid-' + this.id;
+        const errEl = document.getElementById(errId);
+        const validEl = document.getElementById(validId);
+        if (errEl) errEl.classList.add('hidden');
+        if (validEl) validEl.classList.add('hidden');
       });
     });
   }
