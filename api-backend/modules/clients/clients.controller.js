@@ -4,6 +4,7 @@
 // Endpoints: list, create, read, update, delete (lógico)
 
 const { query } = require('../../config/database');
+const { validateCPF, validateCNPJ, validateEmail } = require('../../utils/validation');
 
 // ── GET /clients — Listar (paginado + busca) ─────────────
 async function list(req, res, next) {
@@ -34,7 +35,7 @@ async function list(req, res, next) {
       : [limit, offset];
     const clients = await query(
       `SELECT id, name, email, document_cpf, document_cnpj,
-              phone, whatsapp, address, city, state, notes, active,
+              zipcode, phone, whatsapp, address, city, state, notes, active,
               created_at, updated_at
        FROM clients
        WHERE ${whereClause}
@@ -66,7 +67,7 @@ async function read(req, res, next) {
 
     const clients = await query(
       `SELECT id, name, email, document_cpf, document_cnpj,
-              phone, whatsapp, address, city, state, notes, active,
+              zipcode, phone, whatsapp, address, city, state, notes, active,
               created_at, updated_at
        FROM clients
        WHERE id = ? AND ${tenantFilter}`,
@@ -102,7 +103,7 @@ async function create(req, res, next) {
 
     const {
       name, email, documentCpf, documentCnpj,
-      phone, whatsapp, address, city, state, notes,
+      zipcode, phone, whatsapp, address, city, state, notes,
     } = req.body;
 
     // Validações
@@ -114,16 +115,41 @@ async function create(req, res, next) {
       });
     }
 
+    if (email && !validateEmail(email)) {
+      return res.status(400).json({
+        error: 'ERR_VALIDATION',
+        message: 'Formato de e-mail inválido',
+        correlationId: req.correlationId,
+      });
+    }
+
+    if (documentCpf && !validateCPF(documentCpf)) {
+      return res.status(400).json({
+        error: 'ERR_VALIDATION',
+        message: 'CPF inválido',
+        correlationId: req.correlationId,
+      });
+    }
+
+    if (documentCnpj && !validateCNPJ(documentCnpj)) {
+      return res.status(400).json({
+        error: 'ERR_VALIDATION',
+        message: 'CNPJ inválido',
+        correlationId: req.correlationId,
+      });
+    }
+
     const result = await query(
       `INSERT INTO clients (tenant_id, name, email, document_cpf, document_cnpj,
-                            phone, whatsapp, address, city, state, notes, active)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE)`,
+                            zipcode, phone, whatsapp, address, city, state, notes, active)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE)`,
       [
         tenantId,
         name.trim(),
         email || null,
         documentCpf || null,
         documentCnpj || null,
+        zipcode || null,
         phone || null,
         whatsapp || null,
         address || null,
@@ -163,7 +189,7 @@ async function update(req, res, next) {
 
     const {
       name, email, documentCpf, documentCnpj,
-      phone, whatsapp, address, city, state, notes,
+      zipcode, phone, whatsapp, address, city, state, notes,
     } = req.body;
 
     // Validação de nome obrigatório (antes da checagem de existência)
@@ -171,6 +197,30 @@ async function update(req, res, next) {
       return res.status(400).json({
         error: 'ERR_VALIDATION',
         message: 'Nome é obrigatório',
+        correlationId: req.correlationId,
+      });
+    }
+
+    if (email && !validateEmail(email)) {
+      return res.status(400).json({
+        error: 'ERR_VALIDATION',
+        message: 'Formato de e-mail inválido',
+        correlationId: req.correlationId,
+      });
+    }
+
+    if (documentCpf && !validateCPF(documentCpf)) {
+      return res.status(400).json({
+        error: 'ERR_VALIDATION',
+        message: 'CPF inválido',
+        correlationId: req.correlationId,
+      });
+    }
+
+    if (documentCnpj && !validateCNPJ(documentCnpj)) {
+      return res.status(400).json({
+        error: 'ERR_VALIDATION',
+        message: 'CNPJ inválido',
         correlationId: req.correlationId,
       });
     }
@@ -195,6 +245,7 @@ async function update(req, res, next) {
         email = ?,
         document_cpf = ?,
         document_cnpj = ?,
+        zipcode = ?,
         phone = ?,
         whatsapp = ?,
         address = ?,
@@ -208,6 +259,7 @@ async function update(req, res, next) {
         email || null,
         documentCpf || null,
         documentCnpj || null,
+        zipcode || null,
         phone || null,
         whatsapp || null,
         address || null,

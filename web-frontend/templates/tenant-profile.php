@@ -49,15 +49,17 @@ require __DIR__ . '/partials/sidebar.php';
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-ink mb-1.5">Telefone</label>
-                                <input type="tel" id="profile-phone"
-                                    class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                                    placeholder="(11) 99999-9999">
+                                    <input type="tel" id="profile-phone"
+                                        class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+                                        placeholder="(11) 99999-9999"
+                                        data-mask="phone">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-ink mb-1.5">WhatsApp</label>
-                                <input type="tel" id="profile-whatsapp"
-                                    class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                                    placeholder="(11) 99999-9999">
+                                    <input type="tel" id="profile-whatsapp"
+                                        class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+                                        placeholder="(11) 99999-9999"
+                                        data-mask="phone">
                             </div>
                         </div>
 
@@ -68,7 +70,8 @@ require __DIR__ . '/partials/sidebar.php';
                                     <label class="block text-sm font-medium text-ink mb-1.5">CEP</label>
                                     <input type="text" id="profile-zipcode"
                                         class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                                        placeholder="00000-000" maxlength="9">
+                                        placeholder="00000-000" maxlength="9"
+                                        data-mask="cep" data-cep-target="profile-">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-ink mb-1.5">Bairro</label>

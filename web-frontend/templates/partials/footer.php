@@ -53,5 +53,8 @@
             }
         });
     </script>
+
+    <!-- Validation + Mask + CEP (deve vir após showToast) -->
+    <script src="/js/validation.js"></script>
 </body>
 </html>

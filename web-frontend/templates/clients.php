@@ -90,13 +90,15 @@ if (!isAuthenticated()) {
                         <label class="block text-sm font-medium text-ink mb-1.5">E-mail</label>
                         <input type="email" id="field-email"
                             class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                            placeholder="cliente@email.com">
+                            placeholder="cliente@email.com"
+                            data-validate="email">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-ink mb-1.5">Telefone</label>
                         <input type="tel" id="field-phone"
                             class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                            placeholder="(11) 99999-9999">
+                            placeholder="(11) 99999-9999"
+                            data-mask="phone">
                     </div>
                 </div>
 
@@ -107,7 +109,8 @@ if (!isAuthenticated()) {
                         <div class="relative">
                             <input type="tel" id="field-whatsapp"
                                 class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                                placeholder="(11) 99999-9999">
+                                placeholder="(11) 99999-9999"
+                                data-mask="phone">
                             <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-whatsapp font-medium">💬</span>
                         </div>
                     </div>
@@ -115,13 +118,21 @@ if (!isAuthenticated()) {
                         <label class="block text-sm font-medium text-ink mb-1.5">CPF</label>
                         <input type="text" id="field-cpf"
                             class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                            placeholder="000.000.000-00" maxlength="14">
+                            placeholder="000.000.000-00" maxlength="14"
+                            data-mask="cpf" data-validate="cpf">
                     </div>
                 </div>
 
                 <!-- Endereço -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="sm:col-span-3">
+                    <div>
+                        <label class="block text-sm font-medium text-ink mb-1.5">CEP</label>
+                        <input type="text" id="field-cep" maxlength="9"
+                            class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+                            placeholder="00000-000"
+                            data-mask="cep" data-cep-target="field-">
+                    </div>
+                    <div class="sm:col-span-2">
                         <label class="block text-sm font-medium text-ink mb-1.5">Endereço</label>
                         <input type="text" id="field-address"
                             class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
@@ -143,7 +154,8 @@ if (!isAuthenticated()) {
                         <label class="block text-sm font-medium text-ink mb-1.5">CNPJ</label>
                         <input type="text" id="field-cnpj"
                             class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                            placeholder="00.000.000/0001-00" maxlength="18">
+                            placeholder="00.000.000/0001-00" maxlength="18"
+                            data-mask="cnpj" data-validate="cnpj">
                     </div>
                 </div>
 
@@ -386,6 +398,27 @@ document.getElementById('client-form').addEventListener('submit', async (e) => {
         return;
     }
 
+    // Validações de documento e email
+    const email = document.getElementById('field-email').value.trim();
+    const cpf = document.getElementById('field-cpf').value.trim();
+    const cnpj = document.getElementById('field-cnpj').value.trim();
+
+    if (cpf && !AppValidation.validateCPF(cpf)) {
+        document.getElementById('field-cpf').classList.add('border-danger');
+        showToast('CPF inválido', 'error');
+        return;
+    }
+    if (cnpj && !AppValidation.validateCNPJ(cnpj)) {
+        document.getElementById('field-cnpj').classList.add('border-danger');
+        showToast('CNPJ inválido', 'error');
+        return;
+    }
+    if (email && !AppValidation.validateEmail(email)) {
+        document.getElementById('field-email').classList.add('border-danger');
+        showToast('E-mail inválido', 'error');
+        return;
+    }
+
     btn.disabled = true;
     btn.innerHTML = '<span class="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></span> Salvando...';
 
@@ -398,6 +431,7 @@ document.getElementById('client-form').addEventListener('submit', async (e) => {
             whatsapp: document.getElementById('field-whatsapp').value.trim() || null,
             documentCpf: document.getElementById('field-cpf').value.trim() || null,
             documentCnpj: document.getElementById('field-cnpj').value.trim() || null,
+            zipcode: document.getElementById('field-cep').value.trim() || null,
             address: document.getElementById('field-address').value.trim() || null,
             city: document.getElementById('field-city').value.trim() || null,
             state: document.getElementById('field-state').value.trim().toUpperCase() || null,

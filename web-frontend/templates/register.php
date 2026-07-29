@@ -49,7 +49,8 @@
                             <label for="documentCpf" class="block text-sm font-medium text-ink mb-1.5">CPF</label>
                             <input type="text" id="documentCpf" name="documentCpf"
                                 class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                                placeholder="000.000.000-00" maxlength="14">
+                                placeholder="000.000.000-00" maxlength="14"
+                                data-mask="cpf" data-validate="cpf">
                         </div>
 
                         <!-- CNPJ -->
@@ -57,7 +58,8 @@
                             <label for="documentCnpj" class="block text-sm font-medium text-ink mb-1.5">CNPJ</label>
                             <input type="text" id="documentCnpj" name="documentCnpj"
                                 class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                                placeholder="00.000.000/0001-00" maxlength="18">
+                                placeholder="00.000.000/0001-00" maxlength="18"
+                                data-mask="cnpj" data-validate="cnpj">
                         </div>
                     </div>
 
@@ -67,13 +69,15 @@
                             <label for="phone" class="block text-sm font-medium text-ink mb-1.5">Telefone</label>
                             <input type="tel" id="phone" name="phone"
                                 class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                                placeholder="(11) 99999-9999">
+                                placeholder="(11) 99999-9999"
+                                data-mask="phone">
                         </div>
                         <div>
                             <label for="whatsapp" class="block text-sm font-medium text-ink mb-1.5">WhatsApp</label>
                             <input type="tel" id="whatsapp" name="whatsapp"
                                 class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                                placeholder="(11) 99999-9999">
+                                placeholder="(11) 99999-9999"
+                                data-mask="phone">
                         </div>
                     </div>
 
@@ -85,7 +89,8 @@
                                 <label for="zipcode" class="block text-sm font-medium text-ink mb-1.5">CEP</label>
                                 <input type="text" id="zipcode" name="zipcode"
                                     class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                                    placeholder="00000-000" maxlength="9">
+                                    placeholder="00000-000" maxlength="9"
+                                    data-mask="cep" data-cep-target="">
                             </div>
                             <div>
                                 <label for="neighborhood" class="block text-sm font-medium text-ink mb-1.5">Bairro</label>
@@ -142,7 +147,8 @@
                             </label>
                             <input type="email" id="email" name="email" required
                                 class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                                placeholder="maria@exemplo.com">
+                                placeholder="maria@exemplo.com"
+                                data-validate="email">
                             <span class="error-message text-xs text-danger mt-1 hidden">E-mail é obrigatório</span>
                         </div>
 
@@ -296,12 +302,27 @@
         let hasError = false;
 
         if (!email) { showFieldError('email', 'E-mail é obrigatório'); hasError = true; }
+        else if (!AppValidation.validateEmail(email)) { showFieldError('email', 'Formato de e-mail inválido'); hasError = true; }
         if (password.length < 8) { showFieldError('password', 'Senha deve ter no mínimo 8 caracteres'); hasError = true; }
         if (password !== confirm) { showFieldError('confirmPassword', 'Senhas não conferem'); hasError = true; }
         if (!lgpdOptIn) { showToast('Você precisa autorizar o tratamento de dados (LGPD)', 'warning'); hasError = true; }
         if (!lgpdTerms) { showToast('Você precisa aceitar os Termos de Uso', 'warning'); hasError = true; }
 
         if (hasError) return;
+
+        // Validar CPF/CNPJ se preenchido
+        const cpfVal = document.getElementById('documentCpf').value.trim();
+        const cnpjVal = document.getElementById('documentCnpj').value.trim();
+        if (cpfVal && !AppValidation.validateCPF(cpfVal)) {
+            showToast('CPF inválido', 'error');
+            document.getElementById('documentCpf').classList.add('border-danger');
+            return;
+        }
+        if (cnpjVal && !AppValidation.validateCNPJ(cnpjVal)) {
+            showToast('CNPJ inválido', 'error');
+            document.getElementById('documentCnpj').classList.add('border-danger');
+            return;
+        }
 
         // Enviar requisição
         const btn = document.getElementById('submit-btn');

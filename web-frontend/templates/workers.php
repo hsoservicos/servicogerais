@@ -90,7 +90,8 @@ if (!isAuthenticated()) {
                         <label class="block text-sm font-medium text-ink mb-1.5">CPF <span class="text-danger">*</span></label>
                         <input type="text" id="worker-cpf" required maxlength="14"
                             class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                            placeholder="000.000.000-00">
+                            placeholder="000.000.000-00"
+                            data-mask="cpf" data-validate="cpf">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-ink mb-1.5">RG</label>
@@ -129,21 +130,24 @@ if (!isAuthenticated()) {
                         <label class="block text-sm font-medium text-ink mb-1.5">Telefone</label>
                         <input type="tel" id="worker-phone"
                             class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                            placeholder="(11) 99999-9999">
+                            placeholder="(11) 99999-9999"
+                            data-mask="phone">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-ink mb-1.5">WhatsApp</label>
                         <input type="tel" id="worker-whatsapp"
                             class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                            placeholder="(11) 99999-9999">
+                            placeholder="(11) 99999-9999"
+                            data-mask="phone">
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-ink mb-1.5">E-mail</label>
-                    <input type="email" id="worker-email"
-                        class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-                        placeholder="email@exemplo.com">
+                        <input type="email" id="worker-email"
+                            class="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+                            placeholder="email@exemplo.com"
+                            data-validate="email">
                 </div>
 
                 <div>
@@ -343,6 +347,21 @@ document.getElementById('worker-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const id = document.getElementById('worker-id').value;
     const isEdit = !!id;
+
+    // Validar CPF e email
+    const cpf = document.getElementById('worker-cpf').value.trim();
+    const email = document.getElementById('worker-email').value.trim();
+
+    if (!AppValidation.validateCPF(cpf)) {
+        showToast('CPF inválido', 'error');
+        document.getElementById('worker-cpf').classList.add('border-danger');
+        return;
+    }
+    if (email && !AppValidation.validateEmail(email)) {
+        showToast('E-mail inválido', 'error');
+        document.getElementById('worker-email').classList.add('border-danger');
+        return;
+    }
 
     const body = {
         name: document.getElementById('worker-name').value,

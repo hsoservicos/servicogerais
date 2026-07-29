@@ -200,7 +200,8 @@
                                         <label for="lead-zipcode" class="block text-xs text-ink-secondary mb-1">CEP</label>
                                         <input type="text" id="lead-zipcode" maxlength="9"
                                             class="input-field w-full px-4 py-2.5 rounded-xl border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 text-sm"
-                                            placeholder="00000-000">
+                                            placeholder="00000-000"
+                                            data-mask="cep" data-cep-target="lead-">
                                     </div>
                                     <div class="sm:col-span-2">
                                         <label for="lead-address" class="block text-xs text-ink-secondary mb-1">Endereço</label>
@@ -267,7 +268,8 @@
                                 </label>
                                 <input type="tel" id="lead-phone" maxlength="15"
                                     class="input-field w-full px-4 py-3 rounded-xl border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 text-sm"
-                                    placeholder="(11) 99999-0000">
+                                    placeholder="(11) 99999-0000"
+                                    data-mask="phone">
                             </div>
                             <div>
                                 <label for="lead-email" class="block text-sm font-medium text-ink mb-1.5">
@@ -275,7 +277,8 @@
                                 </label>
                                 <input type="email" id="lead-email"
                                     class="input-field w-full px-4 py-3 rounded-xl border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 text-sm"
-                                    placeholder="seu@email.com">
+                                    placeholder="seu@email.com"
+                                    data-validate="email">
                             </div>
                         </div>
 
@@ -1051,28 +1054,20 @@
         document.querySelectorAll('.error-message.visible').forEach(el => el.classList.remove('visible'));
     }
 
-    // ── Phone Mask ────────────────────────────────────────
-    document.getElementById('lead-phone').addEventListener('input', function() {
-        let value = this.value.replace(/\D/g, '');
-        if (value.length > 11) value = value.slice(0, 11);
-        if (value.length > 2) {
-            value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
-        }
-        if (value.length > 10) {
-            value = `${value.slice(0, 10)}-${value.slice(10)}`;
-        }
-        this.value = value;
-    });
-
-    // ── CEP Mask ──────────────────────────────────────────
-    document.getElementById('lead-zipcode').addEventListener('input', function() {
-        let value = this.value.replace(/\D/g, '');
-        if (value.length > 8) value = value.slice(0, 8);
-        if (value.length > 5) {
-            value = `${value.slice(0, 5)}-${value.slice(5)}`;
-        }
-        this.value = value;
-    });
+    // ── Email validation in step 3 ────────────────────────
+    const emailInput = document.getElementById('lead-email');
+    if (emailInput) {
+        emailInput.addEventListener('blur', function() {
+            if (this.value && !AppValidation.validateEmail(this.value)) {
+                showError('lead-email', 'E-mail inválido');
+            }
+        });
+        emailInput.addEventListener('input', function() {
+            this.classList.remove('error');
+            const err = document.getElementById('error-lead-email');
+            if (err) err.classList.remove('visible');
+        });
+    }
 
     // ── Use passed params ─────────────────────────────────
     const urlParams = new URLSearchParams(window.location.search);

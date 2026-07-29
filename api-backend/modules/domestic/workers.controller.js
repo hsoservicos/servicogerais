@@ -3,6 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 
 const workerService = require('./workers.service');
+const { validateCPF, validateEmail } = require('../../utils/validation');
 
 const VALID_CATEGORIES = [
   'EMPREGADO_DOMESTICO_GERAL', 'DIARISTA', 'BABA',
@@ -71,8 +72,12 @@ async function create(req, res, next) {
       errors.push('Nome é obrigatório');
     }
 
-    if (!cpf || cpf.trim().length < 11) {
-      errors.push('CPF é obrigatório (mínimo 11 dígitos)');
+    if (!cpf || !validateCPF(cpf)) {
+      errors.push('CPF inválido');
+    }
+
+    if (email && !validateEmail(email)) {
+      errors.push('E-mail inválido');
     }
 
     if (!cboCode || cboCode.trim().length === 0) {
@@ -140,6 +145,14 @@ async function update(req, res, next) {
 
     if (workerCategory && !VALID_CATEGORIES.includes(workerCategory)) {
       errors.push(`Categoria inválida. Valores: ${VALID_CATEGORIES.join(', ')}`);
+    }
+
+    if (email && !validateEmail(email)) {
+      errors.push('E-mail inválido');
+    }
+
+    if (cpf && !validateCPF(cpf)) {
+      errors.push('CPF inválido');
     }
 
     if (errors.length > 0) {

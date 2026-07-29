@@ -9,6 +9,7 @@ const { query, transaction } = require('../../config/database');
 const { jwt: jwtConfig } = require('../../config/auth');
 const { AppError, ERROR_CODES } = require('../../middlewares/error.middleware');
 const { sendResetPasswordEmail } = require('../../services/email.service');
+const { validateCPF, validateCNPJ, validateEmail } = require('../../utils/validation');
 
 // ── POST /auth/register ──────────────────────────────────
 async function register(req, res, next) {
@@ -41,6 +42,30 @@ async function register(req, res, next) {
       return res.status(400).json({
         error: 'ERR_VALIDATION',
         message: 'Senha deve ter no mínimo 8 caracteres',
+        correlationId: req.correlationId,
+      });
+    }
+
+    if (!validateEmail(email)) {
+      return res.status(400).json({
+        error: 'ERR_VALIDATION',
+        message: 'Formato de e-mail inválido',
+        correlationId: req.correlationId,
+      });
+    }
+
+    if (documentCpf && !validateCPF(documentCpf)) {
+      return res.status(400).json({
+        error: 'ERR_VALIDATION',
+        message: 'CPF inválido',
+        correlationId: req.correlationId,
+      });
+    }
+
+    if (documentCnpj && !validateCNPJ(documentCnpj)) {
+      return res.status(400).json({
+        error: 'ERR_VALIDATION',
+        message: 'CNPJ inválido',
         correlationId: req.correlationId,
       });
     }
