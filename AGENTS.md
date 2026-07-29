@@ -109,23 +109,40 @@ All tables reference `tenant_id` foreign key. The `tenants` table is the root of
 | LGPD Exportação + Consentimento | ✅ | ✅ | E13 |
 | Perfil + Busca por município | ✅ | ✅ | E14 |
 
-### 🧪 Testes — 95 testes escritos e passando (E15)
+### 🧪 Testes — 169 testes escritos e passando (E15)
 
-**Sprint 1 concluído** — 95 testes unitários para Auth, Tenants, Clients, Catalog, Health.
+**Sprints 1-3 concluídos** — 169 testes (22 suites) para todos os módulos exceto Payments.
 Setup completo: Jest + Supertest + banco de teste isolado + fixtures + helpers.
-Hardening: JWT secret, CORS parsing, helmet config, env vars.
+Hardening parcial: JWT secret, CORS, Helmet, Rate Limit, Email service.
+
+### 🔴 Épicos Não Construídos (3)
+
+| Épico | Descrição | Risco |
+|:------|:----------|:------|
+| **E10** 🕐 Ponto Eletrônico | GPS + foto + engine trabalhista | Passivo trabalhista |
+| **E11** 📋 eSocial Doméstico | Admissão, DAE, FGTS | Passivo fiscal |
+| **E12** 🚨 Incidentes & Emergência | SOS, CAT | Risco civil |
+
+### 🟡 Gaps Identificados na Auditoria
+
+| Gap | Épico | Ação |
+|:----|:------|:-----|
+| Payments sem testes | E15 | Escrever testes para payments module |
+| `schedules.service.js` tenantFilter ambíguo | E9 | Corrigir prefixo em queries JOIN |
+| `workers.service.js` AND ? com string | E8 | Corrigir prepared statement |
+| Email service em modo log | E17 | Ativar SendGrid |
 
 ### 📝 Próximos Sprints (por ordem)
 
 | Sprint | Foco | Épicos |
 |:-----:|:-----|:------:|
-| 2 | Testes Propostas + Dashboard + Payments | E15.3, E17.2, E17.3 |
-| 3 | Testes Public + Admin + Workers + Schedules | E15.4, E13.2 |
 | 4 | Ponto eletrônico (GPS + foto) | E10.1, E10.2 |
 | 5 | Engine trabalhista + eSocial | E10.3, E10.4, E11.1 |
 | 6 | DAE + Incidentes | E11.2, E11.3, E12.1, E12.2 |
 | 7 | CAT + Refatoração templates | E12.3, E16.1, E16.2 |
 | 8 | Refatoração controllers + CI/CD | E16.3, migration framework, CI |
+| — | Testes Payments | E15.3 (pendente) |
+| — | Hardening final (Email + Tunnel) | E17.2, E17.4 |
 
 ### 🔴 Gaps Críticos Ainda Não Construídos
 

@@ -12,20 +12,20 @@
 | E2 — Clientes & Catálogo | ✅ | 3 | 3 |
 | E3 — Propostas | ✅ | 6 | 6 |
 | E4 — Dashboard & Métricas | ✅ | 4 | 4 |
-| E5 — Pagamentos Mercado Pago | ✅ | 5 | 5 |
-| E6 — Presença Pública & Leads | ✅ | 4 | 4 |
-| E7 — Administração | ✅ | 4 | 4 |
-| E8 — Workers & Certificações | ✅ | 3 | 3 |
-| E9 — Frequência & Agendamento | ✅ | 3 | 3 |
-| E10 — Ponto Eletrônico | 📝 | 4 | 0 |
-| E11 — eSocial Doméstico | 📝 | 3 | 0 |
-| E12 — Incidentes & Emergência | 📝 | 3 | 0 |
-| E13 — LGPD & Privacidade | 🔶 | 3 | 2 |
-| E14 — Perfil & Proximidade | ✅ | 3 | 3 |
-| **E15 — Testes & Qualidade** | **📝** | **4** | **0** |
-| **E16 — Refatoração** | **📝** | **3** | **0** |
-| **E17 — Hardening Segurança** | **📝** | **4** | **0** |
-| **Total** | | **64** | **54** |
+| E5 — Pagamentos Mercado Pago | ✅ | 5 | 5 | 🔶 sem testes |
+| E6 — Presença Pública & Leads | ✅ | 4 | 4 | |
+| E7 — Administração | ✅ | 4 | 4 | |
+| E8 — Workers & Certificações | ✅ | 3 | 3 | |
+| E9 — Frequência & Agendamento | ✅ | 3 | 3 | |
+| E10 — Ponto Eletrônico | ❌ | 4 | 0 | 🔴 NÃO CONSTRUÍDO |
+| E11 — eSocial Doméstico | ❌ | 3 | 0 | 🔴 NÃO CONSTRUÍDO |
+| E12 — Incidentes & Emergência | ❌ | 3 | 0 | 🔴 NÃO CONSTRUÍDO |
+| E13 — LGPD & Privacidade | 🔶 | 3 | 3 | ✅ deleção real implementada |
+| E14 — Perfil & Proximidade | ✅ | 3 | 3 | |
+| **E15 — Testes & Qualidade** | 🔶 | **4** | **3** | **Payments sem testes** |
+| **E16 — Refatoração** | 🔶 | **3** | **0** | **Não iniciada** |
+| **E17 — Hardening Segurança** | 🔶 | **4** | **2** | **Email/Cloudflare pendentes** |
+| **Total** | | **64** | **54** | |
 
 ---
 
