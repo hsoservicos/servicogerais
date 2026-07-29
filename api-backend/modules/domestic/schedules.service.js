@@ -13,7 +13,8 @@ async function list({ tenantFilter, workerId, clientId, dateFrom, dateTo, status
   const limit = parseInt(perPage, 10);
   const params = [];
 
-  let whereClause = `${tenantFilter}`;
+  const prefixedFilter = tenantFilter.replace(/\btenant_id\b/g, 'ss.tenant_id');
+  let whereClause = `${prefixedFilter}`;
 
   if (workerId) { whereClause += ' AND ss.worker_id = ?'; params.push(workerId); }
   if (clientId) { whereClause += ' AND ss.client_id = ?'; params.push(clientId); }
@@ -49,6 +50,7 @@ async function list({ tenantFilter, workerId, clientId, dateFrom, dateTo, status
 }
 
 async function findById(id, tenantFilter) {
+  const prefixedFilter = tenantFilter.replace(/\btenant_id\b/g, 'ss.tenant_id');
   const rows = await query(
     `SELECT ${SCHEDULE_FIELDS},
             w.name as worker_name, w.cpf as worker_cpf, w.worker_category,
@@ -56,7 +58,7 @@ async function findById(id, tenantFilter) {
      FROM service_schedules ss
      LEFT JOIN workers w ON ss.worker_id = w.id
      LEFT JOIN clients c ON ss.client_id = c.id
-     WHERE ss.id = ? AND ${tenantFilter}`,
+     WHERE ss.id = ? AND ${prefixedFilter}`,
     [id]
   );
   return rows.length > 0 ? rows[0] : null;

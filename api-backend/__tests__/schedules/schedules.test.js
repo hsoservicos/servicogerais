@@ -18,17 +18,21 @@ describe('Schedules', () => {
     clientId = client.id;
   });
 
+  let workerSeq = 0;
   const createWorker = async () => {
+    workerSeq++;
+    const cpf = '52998224725';
     const res = await request(app)
       .post('/api/v1/workers')
       .set('Authorization', `Bearer ${token}`)
       .send({
         name: 'Maria Diarista',
-        cpf: String(Date.now()).slice(-11),
+        cpf,
         cboCode: '911105',
         workerCategory: 'DIARISTA',
         phone: '11977777777',
       });
+    if (!res.body.worker) return null;
     return res.body.worker.id;
   };
 
@@ -54,9 +58,9 @@ describe('Schedules', () => {
       const res = await request(app)
         .post('/api/v1/schedules')
         .set('Authorization', `Bearer ${token}`)
-        .send(await schedulePayload())
-        .expect(201);
+        .send(await schedulePayload());
 
+      expect(res.status).toBe(201);
       expect(res.body.schedule).toBeDefined();
     });
 
@@ -82,14 +86,16 @@ describe('Schedules', () => {
 
   describe('PATCH /api/v1/schedules/:id/status', () => {
     it('deve atualizar status do agendamento', async () => {
-      const schedule = await request(app)
+      const createRes = await request(app)
         .post('/api/v1/schedules')
         .set('Authorization', `Bearer ${token}`)
-        .send(await schedulePayload())
-        .expect(201);
+        .send(await schedulePayload());
+
+      expect(createRes.status).toBe(201);
+      expect(createRes.body.schedule).toBeDefined();
 
       await request(app)
-        .patch(`/api/v1/schedules/${schedule.body.schedule.id}/status`)
+        .patch(`/api/v1/schedules/${createRes.body.schedule.id}/status`)
         .set('Authorization', `Bearer ${token}`)
         .send({ status: 'confirmed' })
         .expect(200);

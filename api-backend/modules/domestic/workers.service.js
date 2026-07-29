@@ -137,7 +137,7 @@ async function remove(id, tenantFilter) {
 const CERT_FIELDS = 'id, worker_id, certification_type, title, issuer, issue_date, expiry_date, document_url, verified, created_at';
 
 async function listCertifications(workerId, tenantFilter) {
-  const worker = await query('SELECT id FROM workers WHERE id = ? AND ?', [workerId, tenantFilter.replace('1=1', '1')]);
+  const worker = await query('SELECT id FROM workers WHERE id = ? AND ' + tenantFilter.replace(/^1=1$/i, '1'), [workerId]);
   if (worker.length === 0) return null;
 
   const rows = await query(
@@ -148,7 +148,7 @@ async function listCertifications(workerId, tenantFilter) {
 }
 
 async function createCertification(workerId, tenantFilter, fields) {
-  const worker = await query('SELECT id FROM workers WHERE id = ? AND ?', [workerId, tenantFilter.replace('1=1', '1')]);
+  const worker = await query('SELECT id FROM workers WHERE id = ? AND ' + tenantFilter.replace(/^1=1$/i, '1'), [workerId]);
   if (worker.length === 0) throw Object.assign(new Error('Worker not found'), { statusCode: 404 });
 
   const { certificationType, title, issuer, issueDate, expiryDate, documentUrl } = fields;
@@ -171,7 +171,7 @@ async function createCertification(workerId, tenantFilter, fields) {
 }
 
 async function updateCertification(certId, workerId, tenantFilter, fields) {
-  const worker = await query('SELECT id FROM workers WHERE id = ? AND ?', [workerId, tenantFilter.replace('1=1', '1')]);
+  const worker = await query('SELECT id FROM workers WHERE id = ? AND ' + tenantFilter.replace(/^1=1$/i, '1'), [workerId]);
   if (worker.length === 0) throw Object.assign(new Error('Worker not found'), { statusCode: 404 });
 
   const existing = await query('SELECT id FROM worker_certifications WHERE id = ? AND worker_id = ?', [certId, workerId]);
@@ -200,7 +200,7 @@ async function updateCertification(certId, workerId, tenantFilter, fields) {
 }
 
 async function deleteCertification(certId, workerId, tenantFilter) {
-  const worker = await query('SELECT id FROM workers WHERE id = ? AND ?', [workerId, tenantFilter.replace('1=1', '1')]);
+  const worker = await query('SELECT id FROM workers WHERE id = ? AND ' + tenantFilter.replace(/^1=1$/i, '1'), [workerId]);
   if (worker.length === 0) return false;
 
   const result = await query(
@@ -211,7 +211,7 @@ async function deleteCertification(certId, workerId, tenantFilter) {
 
 async function runBackgroundCheck(workerId, tenantFilter) {
   const worker = await query(
-    `SELECT id, name, cpf FROM workers WHERE id = ? AND ?`, [workerId, tenantFilter.replace('1=1', '1')]
+    'SELECT id, name, cpf FROM workers WHERE id = ? AND ' + tenantFilter.replace(/^1=1$/i, '1'), [workerId]
   );
   if (worker.length === 0) throw Object.assign(new Error('Worker not found'), { statusCode: 404 });
 
