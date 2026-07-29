@@ -12,7 +12,8 @@ const rateLimit = require('express-rate-limit');
 const { requestId } = require('./middlewares/requestId.middleware');
 const { errorHandler } = require('./middlewares/error.middleware');
 const { testConnection } = require('./config/database');
-const { cors: corsConfig, rateLimit: rateConfig } = require('./config/auth');
+const authConfig = require('./config/auth');
+const { cors: corsConfig, rateLimit: rateConfig } = authConfig;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,7 +24,7 @@ const PORT = process.env.PORT || 3000;
 
 app.set('trust proxy', 1); // Trust first proxy (nginx)
 
-app.use(helmet());
+app.use(helmet(authConfig.helmet || {}));
 app.use(cors(corsConfig));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -121,6 +122,15 @@ app.use('/api/v1/public', require('./modules/public/public.routes'));
 // ── Domestic Workers Routes (Epic 8 — Story 8.1) ────────
 app.use('/api/v1/workers', require('./modules/domestic/workers.routes'));
 
+// ── Schedules Routes (Epic 9 — Story 9.1) ────────────────
+app.use('/api/v1/schedules', require('./modules/domestic/schedules.routes'));
+
+// ── Data Privacy Routes (Epic 13 — LGPD) ─────────────────
+app.use('/api/v1/data', require('./modules/data/data.routes'));
+
+// ── Domestic Operations Routes (Epic 9 — Story 9.2/9.3) ─
+app.use('/api/v1/domestic', require('./modules/domestic/domestic.routes'));
+
 // ── 404 Handler ──────────────────────────────────────────
 app.use((req, res) => {
   res.status(404).json({
@@ -170,6 +180,8 @@ async function start() {
   });
 }
 
-start();
+if (process.env.NODE_ENV !== 'test') {
+  start();
+}
 
 module.exports = app;

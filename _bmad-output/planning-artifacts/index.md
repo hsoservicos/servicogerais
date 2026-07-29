@@ -2,8 +2,8 @@
 
 **Projeto:** ServiceSaaS (Serviços Flex)
 **Stack:** PHP 8.2 · Node.js 20 · MySQL 8.0 · Docker Compose
-**Última atualização:** 28 de Julho de 2026
-**Documentado por:** Paige (Technical Writer)
+**Última atualização:** 29 de Julho de 2026
+**Documentado por:** Auditoria V2
 
 ---
 
@@ -11,11 +11,22 @@
 
 ```
 🎯 Plataforma SaaS multi-tenant para prestadores de serviços
-👥 Público-alvo: MEI e pequenos prestadores (Maria, a cabeleireira)
+👥 Público-alvo: MEI e pequenos prestadores
 🏗️ Arquitetura: Frontend PHP + API Node.js + MySQL
 🐳 Infraestrutura: 5 containers Docker
-📄 70+ arquivos de código | 7 épicos | 22 stories
+📄 86 endpoints API | 18 tabelas | 30 templates PHP | 17 épicos
 ```
+
+---
+
+## 📋 Planos de Desenvolvimento (ATUALIZADO 29/07)
+
+| Documento | Descrição |
+|:---|---|
+| [📄 PLANEJAMENTO_V2.md](../../docs/planning/PLANEJAMENTO_V2.md) | **NOVO — Plano estratégico pós-auditoria (fonte da verdade)** |
+| [📄 EPICOS_V2.md](../../docs/planning/EPICOS_V2.md) | **NOVO — 17 épicos, 64 stories detalhadas** |
+| [📄 SPRINT_PLAN_V2.md](../../docs/planning/SPRINT_PLAN_V2.md) | **NOVO — 8 sprints priorizados** |
+| [📄 PLANEJAMENTO_MODERNO_PROJETO.md](../../docs/planning/PLANEJAMENTO_MODERNO_PROJETO.md) | 📦 Arquivado — substituído pelo V2 |
 
 ---
 
@@ -34,10 +45,10 @@
 
 | Documento | Descrição |
 |:---|---|
-| [📊 epics.md](epics.md) | 7 épicos, 22 stories detalhadas |
-| [🔬 Pesquisa Técnica MP](research/technical-mercado-pago-integration-research.md) | Integração Mercado Pago — SDK, webhooks, Pix, estornos |
-| [🔍 Pesquisa Regulatória](research/domain-regulamentacao-profissionais-servicos-brasil-research.md) | MEI, LGPD, NFSe — regulamentação brasileira |
-| [📋 Project Scan](research/project-scan-servicos-20260728.md) | Scan completo do código-fonte (Mary) |
+| [📊 epics.md](epics.md) | Versão anterior (épicos E1-E14 apenas) |
+| [🔬 Pesquisa Técnica MP](research/technical-mercado-pago-integration-research.md) | Integração Mercado Pago |
+| [🔍 Pesquisa Regulatória](research/domain-regulamentacao-profissionais-servicos-brasil-research.md) | MEI, LGPD, NFSe |
+| [📋 Project Scan](research/project-scan-servicos-20260728.md) | Scan completo do código-fonte |
 
 ### 🏗️ Arquitetura e Design
 
@@ -80,8 +91,6 @@
 | Database | MySQL | 8.0 |
 | Proxy | Nginx | 1.25-alpine |
 | Container | Docker Compose | 3.8+ |
-| CDN/Security | Cloudflare Tunnel | Planejado |
-| Pagamentos | Mercado Pago SDK | 2.x (planejado) |
 
 ---
 
@@ -103,24 +112,28 @@ open http://localhost:8080
 
 ---
 
-## Mapa de Épicos
+## Mapa de Épicos V2
 
 ```
-Epic 1  🔐  Onboarding & Autenticação     [5 stories  ✅]
-Epic 2  👥  Gestão de Clientes e Catálogo  [pendente   📝]
-Epic 3  📄  Ciclo de Vida da Proposta      [pendente   📝]
-Epic 4  📊  Dashboard e Métricas           [4 stories  ✅]
-Epic 5  💳  Pagamentos Mercado Pago        [5 stories  ✅]
-Epic 6  🌐  Presença Pública e Leads       [4 stories  ✅]
-Epic 7  🏢  Administração da Plataforma    [4 stories  ✅]
-Epic 8  🏠  Workers e Cadastro Doméstico   [3 stories  📝 NOVO]
-Epic 9  ⏱️  Trava de Frequência            [3 stories  📝 NOVO]
-Epic 10 🕐  Ponto Eletrônico e Jornada     [4 stories  📝 NOVO]
-Epic 11 📋  Integração eSocial Doméstico   [3 stories  📝 NOVO]
-Epic 12 🚨  Incidentes, Seguro e Emergência[3 stories  📝 NOVO]
-Epic 13 🔐  LGPD Completo                  [3 stories  📝 NOVO]
+✅ E1   🔐  Autenticação & Onboarding              [5 stories  COMPLETO]
+✅ E2   👥  Clientes & Catálogo                    [3 stories  COMPLETO]
+✅ E3   📄  Ciclo de Vida da Proposta              [6 stories  COMPLETO]
+✅ E4   📊  Dashboard & Métricas                    [4 stories  COMPLETO]
+✅ E5   💳  Pagamentos Mercado Pago                 [5 stories  COMPLETO]
+✅ E6   🌐  Presença Pública & Leads                [4 stories  COMPLETO]
+✅ E7   🏢  Administração da Plataforma             [4 stories  COMPLETO]
+✅ E8   🏠  Workers & Certificações                 [3 stories  COMPLETO]
+✅ E9   ⏱️  Trava Frequência & Agendamento           [3 stories  COMPLETO]
+📝 E10  🕐  Ponto Eletrônico & Jornada              [4 stories  NOVO]
+📝 E11  📋  eSocial Doméstico                       [3 stories  NOVO]
+📝 E12  🚨  Incidentes & Emergência                 [3 stories  NOVO]
+🔶 E13  🔐  LGPD & Privacidade                      [3 stories  PARCIAL]
+✅ E14  📍  Perfil & Proximidade                    [3 stories  COMPLETO]
+📝 E15  🧪  Pipeline de Qualidade & Testes          [4 stories  PRIORIDADE #1]
+📝 E16  🏗️  Refatoração Técnica                     [3 stories  MÉDIO]
+📝 E17  🛡️  Hardening de Segurança                  [4 stories  ALTA]
 ```
 
 ---
 
-*Documentação gerada por Paige (Technical Writer) em 28 de Julho de 2026*
+*Documentação gerada em 29 de Julho de 2026 — Pós Auditoria V2*

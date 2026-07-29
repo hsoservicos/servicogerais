@@ -31,7 +31,7 @@ Source code is mounted as volumes — edit locally, changes reflected inside con
 ## API architecture
 
 Modular by domain under `api-backend/modules/`:
-- `auth/`, `tenants/`, `clients/`, `catalog/`, `proposals/`, `payments/`, `transactions/`, `leads/`, `public/`, `admin/`, `dashboard/`, `domestic/`
+- `auth/`, `tenants/`, `clients/`, `catalog/`, `proposals/`, `payments/`, `transactions/`, `leads/`, `public/`, `admin/`, `dashboard/`, `domestic/`, `data/`
 
 Each module typically contains: `*.routes.js`, `*.controller.js`, `*.service.js`
 
@@ -50,6 +50,7 @@ All tables reference `tenant_id` foreign key. The `tenants` table is the root of
 - **Jest** + **supertest** available in `api-backend`
 - Command: `npm test` (currently passes with `--passWithNoTests` — no tests written yet, `make npm-install` first)
 - No PHP test infrastructure exists
+- **PRIORIDADE #1 DO PLANO V2:** Escrever testes antes de qualquer nova feature
 
 ## Linting
 
@@ -64,13 +65,16 @@ All tables reference `tenant_id` foreign key. The `tenants` table is the root of
 | `Makefile` | All common commands |
 | `.env.example` | Required env vars template |
 | `api-backend/server.js` | API entry point, route registry |
-| `api-backend/modules/` | Domain modules |
+| `api-backend/modules/` | Domain modules (13 módulos) |
 | `scripts/init.sql` | Full DB schema + seed data |
 | `web-frontend/public/index.php` | Frontend router (query string based) |
-| `web-frontend/templates/` | PHP view templates |
+| `web-frontend/templates/` | PHP view templates (24 páginas + 6 parciais) |
 | `nginx/default.conf` | Reverse proxy: `/` → PHP, `/api/` → Node |
+| **`docs/planning/PLANEJAMENTO_V2.md`** | **NOVO — Planejamento Estratégico V2 (pós-auditoria)** |
+| **`docs/planning/EPICOS_V2.md`** | **NOVO — Épicos e Histórias V2** |
+| **`docs/planning/SPRINT_PLAN_V2.md`** | **NOVO — Sprint Plan V2** |
+| `docs/planning/PLANEJAMENTO_MODERNO_PROJETO.md` | Planejamento original (arquivado) |
 | `_bmad-output/planning-artifacts/architecture/` | Architecture decisions |
-| `docs/planning/PLANEJAMENTO_MODERNO_PROJETO.md` | Main planning doc |
 
 ## Codebase conventions
 
@@ -81,40 +85,72 @@ All tables reference `tenant_id` foreign key. The `tenants` table is the root of
 - Mercado Pago integration in `config/mercadopago.js` — API runs in degraded mode if `MP_ACCESS_TOKEN` not set
 - No migration framework — single `init.sql` executed at MySQL container init
 
-## Key audit findings (domestic compliance)
+## Project Status V2 (Jul 29, 2026) — Pós Auditoria Completa
 
-Full report: `docs/auditoria/AUDITORIA_COMPLIANCE_DOMESTICO.md`
+### ✅ Completos (86 endpoints, 18 tabelas, 30 templates PHP)
 
-**Current system only handles autonomous service proposals.** To support domestic employees (LC 150/2015), the following are **missing** and must be built:
+| Módulo | API | Frontend | Épico |
+|--------|:---:|:--------:|:-----:|
+| Autenticação (register/login/me/forgot/reset) | ✅ | ✅ | E1 |
+| Tenants (perfil + endereço) | ✅ | ✅ | E1/E14 |
+| Clientes (CRUD + soft-delete) | ✅ | ✅ | E2 |
+| Catálogo (categorias + serviços) | ✅ | ✅ | E2 |
+| Propostas (CRUD + itens + PDF + WhatsApp + aprovação pública) | ✅ | ✅ | E3 |
+| Dashboard (KPIs + gráfico Chart.js + follow-up) | ✅ | ✅ | E4 |
+| Pagamentos MP (preference + webhook + estorno) | ✅ | 🔶 Parcial | E5 |
+| Transações (histórico financeiro) | ✅ | ✅ | E4 |
+| Leads (captura + wizard 3 etapas + gestão) | ✅ | ✅ | E6 |
+| Público (landing page + busca + upload) | ✅ | ✅ | E6 |
+| Admin (dashboard + tenants + planos + relatórios CSV + auditoria) | ✅ | ✅ | E7 |
+| Workers (CRUD + CBO + 9 categorias LC 150) | ✅ | ✅ | E8 |
+| Agendamentos (CRUD + trava frequência) | ✅ | ✅ | E9 |
+| Cálculo CLT (INSS/FGTS/13º/férias) | ✅ | ✅ | E9 |
+| Acordos CLT (domestic_agreements + transição) | ✅ | ✅ | E9 |
+| LGPD Exportação + Consentimento | ✅ | ✅ | E13 |
+| Perfil + Busca por município | ✅ | ✅ | E14 |
 
-| Module | Status | Risk if absent |
-|--------|--------|----------------|
-| Workers table with CBO codes + 9 domestic categories | ✅ Built (migration 003 + 004) | Cannot onboard workers |
-| Frequency-lock algorithm (max 2d/week for diaristas) | ❌ Not built | CLT descaracterization lawsuit |
-| Electronic time tracking (GPS + photo) per Art. 12 LC 150 | ❌ Not built | Labor liability |
-| eSocial Doméstico integration (admission, DAE, FGTS) | ❌ Not built | Tax liability |
-| Labor calculation engine (overtime, night shift, 12×36) | ❌ Not built | Wage liability |
-| Worker certification & background check | ❌ Not built | Safety risk |
-| Incident/emergency reporting + insurance | ❌ Not built | Civil liability |
-| LGPD data portability & erasure flows | 🟡 Partial | Fine up to 2% revenue |
+### 🧪 Testes — 95 testes escritos e passando (E15)
 
-**Schema conflicts found:** `migrations/002_create_transactions_table.sql` duplicates `transactions` table already in `init.sql` (different schema). Remove the migration file.
+**Sprint 1 concluído** — 95 testes unitários para Auth, Tenants, Clients, Catalog, Health.
+Setup completo: Jest + Supertest + banco de teste isolado + fixtures + helpers.
+Hardening: JWT secret, CORS parsing, helmet config, env vars.
 
-**No tests exist** (`__tests__/` directory absent, Jest runs `--passWithNoTests`).
+### 📝 Próximos Sprints (por ordem)
 
-## Progress (Jul 29)
+| Sprint | Foco | Épicos |
+|:-----:|:-----|:------:|
+| 2 | Testes Propostas + Dashboard + Payments | E15.3, E17.2, E17.3 |
+| 3 | Testes Public + Admin + Workers + Schedules | E15.4, E13.2 |
+| 4 | Ponto eletrônico (GPS + foto) | E10.1, E10.2 |
+| 5 | Engine trabalhista + eSocial | E10.3, E10.4, E11.1 |
+| 6 | DAE + Incidentes | E11.2, E11.3, E12.1, E12.2 |
+| 7 | CAT + Refatoração templates | E12.3, E16.1, E16.2 |
+| 8 | Refatoração controllers + CI/CD | E16.3, migration framework, CI |
 
-### Completed this session
-- **Epic 3 — Ciclo de Vida da Proposta**: Stories 3.1 a 3.5 — **completo**
-  - 3.1: API CRUD proposals + items (mestre-detalhe, status lifecycle, número automático)
-  - 3.2: Frontend proposals.php (1142 linhas, filtros tabs, modal create/edit com itens, view modal)
-  - 3.3: WhatsApp wa.me com template + link público
-  - 3.4: Aprovação pública (public-proposal.php 713 linhas, publicProposals.controller.js)
-  - 3.5: Geração PDF (pdfService.js, 2 endpoints autenticado + público, botões frontend)
-- Bugfixes: services.read tenantFilter, services.update category_id COALESCE, WhatsApp prefix duplicado
+### 🔴 Gaps Críticos Ainda Não Construídos
 
-### Next priority
-- Epic 4 — Dashboard e Métricas (gráfico, follow-up, financeiro)
-- Epic 5 — Webhook MP, estorno
-- Epic 6 — Admin de leads (frontend)
-- Epic 7 — Frontend Admin PHP
+| Item | Épico | Risco |
+|:-----|:-----:|:------|
+| Testes automatizados | E15 | Qualidade geral |
+| Ponto eletrônico (GPS+foto) — Art. 12 LC 150 | E10 | Passivo trabalhista |
+| eSocial Doméstico (admissão, DAE, FGTS) | E11 | Passivo fiscal |
+| Motor trabalhista (HE, noturno, 12x36) | E10 | Passivo salarial |
+| Incidentes, SOS, CAT | E12 | Risco civil |
+| Deleção LGPD real (hoje só log) | E13 | Multa até 2% |
+
+### 🟡 Melhorias Planejadas
+
+| Item | Épico |
+|:-----|:-----:|
+| Hardening segurança (JWT, CORS, Email, Rate Limit) | E17 |
+| Refatoração templates grandes (proposals.php 1180L, solicitar.php 1087L) | E16 |
+| Migration framework | — |
+
+## Documentos de Planejamento V2
+
+| Documento | Descrição |
+|:----------|:----------|
+| `docs/planning/PLANEJAMENTO_V2.md` | Plano estratégico completo pós-auditoria |
+| `docs/planning/EPICOS_V2.md` | Épicos e histórias detalhadas (17 épicos, 64 stories) |
+| `docs/planning/SPRINT_PLAN_V2.md` | 8 sprints priorizados com durations e riscos |
+| `docs/planning/PLANEJAMENTO_MODERNO_PROJETO.md` | Versão anterior (arquivada) |
