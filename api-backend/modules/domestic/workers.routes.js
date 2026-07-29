@@ -17,4 +17,12 @@ router.get('/:id', controller.read);
 router.put('/:id', controller.update);
 router.delete('/:id', controller.remove);
 
+router.get('/:id/certifications', controller.listCertifications);
+router.post('/:id/certifications', controller.createCertification);
+router.put('/:id/certifications/:certId', controller.updateCertification);
+router.delete('/:id/certifications/:certId', controller.deleteCertification);
+
+router.post('/:id/background-check', controller.backgroundCheck);
+router.get('/:id/certification-required', controller.certificationRequiredCheck);
+
 module.exports = router;

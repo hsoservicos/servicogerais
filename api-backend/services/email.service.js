@@ -1,44 +1,55 @@
-// ═══════════════════════════════════════════════════════════════
-// services/email.service.js — Email Service (Stub MVP)
-// ═══════════════════════════════════════════════════════════════
-// MVP: Apenas console.log. Em produção: SendGrid, SES, etc.
-// ═══════════════════════════════════════════════════════════════
+require('dotenv').config();
 
-/**
- * Envia e-mail de recuperação de senha
- * @param {Object} params
- * @param {string} params.to - E-mail do destinatário
- * @param {string} params.name - Nome do usuário
- * @param {string} params.token - Token de reset (UUID)
- */
-async function sendResetPasswordEmail({ to, name, token }) {
-  const resetLink = `http://localhost:8080/?page=reset-password&token=${token}`;
+const EMAIL_PROVIDER = process.env.EMAIL_PROVIDER || 'log';
 
-  // ── MVP: apenas log no console ─────────────────────────
+async function sendEmail({ to, subject, html, text }) {
+  if (EMAIL_PROVIDER === 'sendgrid') {
+    try {
+      const sgMail = require('@sendgrid/mail');
+      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+      await sgMail.send({
+        to,
+        from: process.env.SENDGRID_FROM_EMAIL || 'noreply@servicesaas.com',
+        subject,
+        html,
+        text,
+      });
+      return { sent: true, provider: 'sendgrid', to };
+    } catch (err) {
+      console.error('[EMAIL] SendGrid error:', err.message);
+      return { sent: false, error: err.message };
+    }
+  }
+
   console.log('');
   console.log('═══════════════════════════════════════════════════════');
-  console.log('  📧 EMAIL SERVICE (MVP STUB)');
+  console.log('  📧 EMAIL SERVICE (' + EMAIL_PROVIDER + ')');
   console.log('═══════════════════════════════════════════════════════');
-  console.log(`  To:      ${to}`);
-  console.log(`  Name:    ${name}`);
-  console.log(`  Subject: Recuperação de Senha — ServiceSaaS`);
+  console.log('  To:      ' + to);
+  console.log('  Subject: ' + subject);
   console.log('─────────────────────────────────────────────────────');
-  console.log(`  Olá ${name},`);
-  console.log('');
-  console.log(`  Recebemos uma solicitação de recuperação de senha`);
-  console.log(`  para sua conta no ServiceSaaS.`);
-  console.log('');
-  console.log(`  👉 ${resetLink}`);
-  console.log('');
-  console.log(`  Este link expira em 1 hora.`);
-  console.log(`  Se você não solicitou esta recuperação, ignore`);
-  console.log(`  este e-mail.`);
-  console.log('─────────────────────────────────────────────────────');
-  console.log('  ServiceSaaS — Sua plataforma de serviços');
+  if (text) console.log('  ' + text);
   console.log('═══════════════════════════════════════════════════════');
   console.log('');
 
-  return { sent: true, to, resetLink };
+  return { sent: true, provider: 'log', to };
 }
 
-module.exports = { sendResetPasswordEmail };
+async function sendResetPasswordEmail({ to, name, token }) {
+  const resetLink = process.env.APP_URL
+    + '/?page=reset-password&token=' + token;
+  const subject = 'Recuperação de Senha — ServiceSaaS';
+  const text = 'Olá ' + name + ',\n\n'
+    + 'Recebemos uma solicitação de recuperação de senha.\n\n'
+    + 'Link: ' + resetLink + '\n\n'
+    + 'Este link expira em 1 hora.\n'
+    + 'Se você não solicitou, ignore este e-mail.';
+  const html = '<p>Olá <strong>' + name + '</strong>,</p>'
+    + '<p>Recebemos uma solicitação de recuperação de senha.</p>'
+    + '<p><a href="' + resetLink + '" style="padding:12px 24px;background:#10B981;color:#fff;text-decoration:none;border-radius:6px;">Redefinir Senha</a></p>'
+    + '<p>Este link expira em <strong>1 hora</strong>.</p>';
+
+  return sendEmail({ to, subject, html, text });
+}
+
+module.exports = { sendEmail, sendResetPasswordEmail };

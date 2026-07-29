@@ -217,4 +217,83 @@ async function remove(req, res, next) {
   }
 }
 
-module.exports = { list, read, create, update, remove };
+const VALID_CERT_TYPES = ['CUIDADOR_IDOSOS', 'APH', 'BABA', 'COZINHA', 'JARDINAGEM', 'PRIMEIROS_SOCORROS', 'OUTRO'];
+
+async function listCertifications(req, res, next) {
+  try {
+    const { id } = req.params;
+    const tenantFilter = req.tenantFilter || '1=1';
+    const certs = await workerService.listCertifications(id, tenantFilter);
+    if (certs === null) {
+      return res.status(404).json({ error: 'ERR_NOT_FOUND', message: 'Trabalhador não encontrado', correlationId: req.correlationId });
+    }
+    res.json({ certifications: certs, correlationId: req.correlationId });
+  } catch (err) { next(err); }
+}
+
+async function createCertification(req, res, next) {
+  try {
+    const { id } = req.params;
+    const tenantFilter = req.tenantFilter || '1=1';
+    const { certificationType, title, issuer, issueDate, expiryDate, documentUrl } = req.body;
+
+    const errors = [];
+    if (!certificationType || !VALID_CERT_TYPES.includes(certificationType)) errors.push(`Tipo inválido. Valores: ${VALID_CERT_TYPES.join(', ')}`);
+    if (!title || title.trim().length === 0) errors.push('Título é obrigatório');
+    if (errors.length > 0) {
+      return res.status(422).json({ error: 'ERR_VALIDATION', message: errors.join('; '), correlationId: req.correlationId });
+    }
+
+    const cert = await workerService.createCertification(id, tenantFilter, { certificationType, title, issuer, issueDate, expiryDate, documentUrl });
+    res.status(201).json({ message: 'Certificação cadastrada com sucesso!', ...cert, correlationId: req.correlationId });
+  } catch (err) {
+    if (err.statusCode) return res.status(err.statusCode).json({ error: 'ERR_VALIDATION', message: err.message, correlationId: req.correlationId });
+    next(err);
+  }
+}
+
+async function updateCertification(req, res, next) {
+  try {
+    const { id, certId } = req.params;
+    const tenantFilter = req.tenantFilter || '1=1';
+    await workerService.updateCertification(certId, id, tenantFilter, { ...req.body });
+    res.json({ message: 'Certificação atualizada com sucesso!', correlationId: req.correlationId });
+  } catch (err) {
+    if (err.statusCode) return res.status(err.statusCode).json({ error: 'ERR_VALIDATION', message: err.message, correlationId: req.correlationId });
+    next(err);
+  }
+}
+
+async function deleteCertification(req, res, next) {
+  try {
+    const { id, certId } = req.params;
+    const tenantFilter = req.tenantFilter || '1=1';
+    const deleted = await workerService.deleteCertification(certId, id, tenantFilter);
+    if (!deleted) {
+      return res.status(404).json({ error: 'ERR_NOT_FOUND', message: 'Certificação não encontrada', correlationId: req.correlationId });
+    }
+    res.json({ message: 'Certificação excluída com sucesso!', correlationId: req.correlationId });
+  } catch (err) { next(err); }
+}
+
+async function backgroundCheck(req, res, next) {
+  try {
+    const { id } = req.params;
+    const tenantFilter = req.tenantFilter || '1=1';
+    const result = await workerService.runBackgroundCheck(id, tenantFilter);
+    res.json({ ...result, correlationId: req.correlationId });
+  } catch (err) {
+    if (err.statusCode) return res.status(err.statusCode).json({ error: 'ERR_NOT_FOUND', message: err.message, correlationId: req.correlationId });
+    next(err);
+  }
+}
+
+async function certificationRequiredCheck(req, res, next) {
+  try {
+    const { id } = req.params;
+    const result = await workerService.checkCertificationRequired(id);
+    res.json({ ...result, correlationId: req.correlationId });
+  } catch (err) { next(err); }
+}
+
+module.exports = { list, read, create, update, remove, listCertifications, createCertification, updateCertification, deleteCertification, backgroundCheck, certificationRequiredCheck };

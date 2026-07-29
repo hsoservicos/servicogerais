@@ -47,6 +47,10 @@ $allowedPages = [
     'admin-planos', 'admin-relatorios',
     // Epic 9 — Profile / Settings
     'tenant-profile',
+    // Epic 9 — Scheduling
+    'schedules',
+    // Epic 13 — LGPD
+    'privacy',
 ];
 $page = in_array($page, $allowedPages) ? $page : 'home';
 
@@ -84,6 +88,8 @@ $pageTitle = match ($page) {
     'admin-relatorios' => 'Admin Relatórios — ' . APP_NAME,
     // Epic 9 — Profile
     'tenant-profile'  => 'Meu Perfil — ' . APP_NAME,
+    'schedules'       => 'Agendamentos — ' . APP_NAME,
+    'privacy'         => 'Privacidade — ' . APP_NAME,
 };
 
 require_once __DIR__ . '/../templates/partials/header.php';
