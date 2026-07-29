@@ -109,11 +109,18 @@ All tables reference `tenant_id` foreign key. The `tenants` table is the root of
 | LGPD Exportação + Consentimento | ✅ | ✅ | E13 |
 | Perfil + Busca por município | ✅ | ✅ | E14 |
 
-### 🧪 Testes — 169 testes escritos e passando (E15)
+### 🧪 Testes — 168 testes escritos e passando (E15)
 
-**Sprints 1-3 concluídos** — 169 testes (22 suites) para todos os módulos exceto Payments.
+**Sprints 1-3 concluídos** — 168 testes (22 suites) para todos os módulos exceto Payments.
 Setup completo: Jest + Supertest + banco de teste isolado + fixtures + helpers.
 Hardening parcial: JWT secret, CORS, Helmet, Rate Limit, Email service.
+
+### ✅ Bugs Corrigidos na Auditoria
+
+| Bug | Status | Correção |
+|:----|:------:|:---------|
+| `schedules.service.js` tenantFilter sem prefixo JOIN | ✅ FIXED | `replace(/\btenant_id\b/g, 'ss.tenant_id')` |
+| `workers.service.js` AND ? com string SQL | ✅ FIXED | Interpolação direta no SQL |
 
 ### 🔴 Épicos Não Construídos (3)
 
@@ -123,16 +130,18 @@ Hardening parcial: JWT secret, CORS, Helmet, Rate Limit, Email service.
 | **E11** 📋 eSocial Doméstico | Admissão, DAE, FGTS | Passivo fiscal |
 | **E12** 🚨 Incidentes & Emergência | SOS, CAT | Risco civil |
 
-### 🟡 Gaps Identificados na Auditoria
+### 🟡 Gaps Abertos
 
 | Gap | Épico | Ação |
 |:----|:------|:-----|
 | Payments sem testes | E15 | Escrever testes para payments module |
-| `schedules.service.js` tenantFilter ambíguo | E9 | Corrigir prefixo em queries JOIN |
-| `workers.service.js` AND ? com string | E8 | Corrigir prepared statement |
 | Email service em modo log | E17 | Ativar SendGrid |
+| JWT secret ainda com default | E17 | Gerar secret 64 caracteres |
+| CI/CD sem runner de testes | E15 | Adicionar `npm test` ao workflow |
+| Migration framework ausente | — | Criar `scripts/migrate.js` |
+| Docker test override ausente | E15 | Criar `docker-compose.test.yml` |
 
-### 📝 Próximos Sprints (por ordem)
+### 📝 Próximos Sprints
 
 | Sprint | Foco | Épicos |
 |:-----:|:-----|:------:|
@@ -142,26 +151,25 @@ Hardening parcial: JWT secret, CORS, Helmet, Rate Limit, Email service.
 | 7 | CAT + Refatoração templates | E12.3, E16.1, E16.2 |
 | 8 | Refatoração controllers + CI/CD | E16.3, migration framework, CI |
 | — | Testes Payments | E15.3 (pendente) |
-| — | Hardening final (Email + Tunnel) | E17.2, E17.4 |
+| — | Hardening final (Email, JWT, Tunnel) | E17.2, E17.4 |
 
 ### 🔴 Gaps Críticos Ainda Não Construídos
 
 | Item | Épico | Risco |
 |:-----|:-----:|:------|
-| Testes automatizados | E15 | Qualidade geral |
 | Ponto eletrônico (GPS+foto) — Art. 12 LC 150 | E10 | Passivo trabalhista |
 | eSocial Doméstico (admissão, DAE, FGTS) | E11 | Passivo fiscal |
 | Motor trabalhista (HE, noturno, 12x36) | E10 | Passivo salarial |
 | Incidentes, SOS, CAT | E12 | Risco civil |
-| Deleção LGPD real (hoje só log) | E13 | Multa até 2% |
 
 ### 🟡 Melhorias Planejadas
 
 | Item | Épico |
 |:-----|:-----:|
 | Hardening segurança (JWT, CORS, Email, Rate Limit) | E17 |
-| Refatoração templates grandes (proposals.php 1180L, solicitar.php 1087L) | E16 |
+| Refatoração templates grandes (proposals.php 1056L, solicitar.php 979L) | E16 |
 | Migration framework | — |
+| CI/CD test runner | E15 |
 
 ## Documentos de Planejamento V2
 

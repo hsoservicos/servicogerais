@@ -60,31 +60,42 @@
 
 ---
 
-## 🐛 Bugs Pré-existentes Encontrados
+## 🐛 Bugs Pré-existentes (Corrigidos)
 
-| Bug | Arquivo | Linha | Impacto |
-|:----|:--------|:-----:|:--------|
-| `tenantFilter` sem prefixo em JOIN | `schedules.service.js` | 32,52 | Schedules list/read quebram |
-| `AND ?` com string ao invés de SQL | `workers.service.js` | 151,174 | Certifications não encontram worker |
-| `email.service` console.log default | `config/auth.js` | 9 | Emails não são enviados |
+| Bug | Arquivo | Status | Correção |
+|:----|:--------|:------:|:---------|
+| `tenantFilter` sem prefixo em JOIN | `schedules.service.js` | ✅ FIXED | `replace(/\btenant_id\b/g, 'ss.tenant_id')` |
+| `AND ?` com string ao invés de SQL | `workers.service.js` | ✅ FIXED | Interpolação direta no SQL |
+
+## 🟡 Issues em Aberto (6 GitHub Issues)
+
+| # | Issue | Status | Prioridade |
+|:-:|:------|:------:|:----------:|
+| 10 | 💳 Configurar MP Produção | Aguardando credenciais | 🟡 Média |
+| 11 | 🔒 LGPD Completo | Parcial (6/10 NFRs) | 🟡 Média |
+| 12 | 🌐 Cloudflare Tunnel | ❌ Não iniciado | 🟢 Baixa |
+| 13 | 📊 Observabilidade (LGTM) | ❌ Não iniciado | 🟢 Baixa |
+| 14 | 🔧 CI/CD Pipeline | Parcial (só design gate) | 🟡 Média |
+| 15 | 🧪 Testes Automatizados | 168 testes (Payments falta) | 🟡 Média |
 
 ---
 
-## 📋 Ações Recomendadas
+## 📋 Ações Recomendadas Atualizadas
 
-### Imediatas (Sprint 4+)
-1. **Escrever testes para Payments** — único módulo sem testes
-2. **Corrigir bugs no schedules.service.js** — tenantFilter ambíguo
-3. **Corrigir workers.service.js** — AND ? com parâmetro string
+### Imediatas
+1. **Escrever testes para Payments** — único módulo sem testes (E15.3)
+2. **CI test runner** — adicionar `npm test` ao GitHub Actions (E15)
+3. **JWT secret hardening** — gerar secret 64 caracteres (E17.1)
 
 ### Próximos Sprints
-4. **E10** — Ponto eletrônico (GPS + foto) — prioridade #1 compliance
-5. **E11** — eSocial Doméstico — prioridade #2 compliance
-6. **E12** — Incidentes + CAT — prioridade #3 compliance
+4. **E10** 🕐 Ponto eletrônico (GPS + foto) — prioridade #1 compliance
+5. **E11** 📋 eSocial Doméstico — prioridade #2 compliance
+6. **E12** 🚨 Incidentes + CAT — prioridade #3 compliance
 
 ### Contínuo
-7. **E16** — Refatorar templates grandes (proposals.php, solicitar.php)
-8. **E17** — Email real + Cloudflare Tunnel + JWT hardening
+7. **E16** 🏗️ Refatorar templates grandes (proposals.php 1056L, solicitar.php 979L)
+8. **E17** 🛡️ Email real + Cloudflare Tunnel + JWT hardening
+9. **Migration framework** — `scripts/migrate.js`
 
 ---
 
