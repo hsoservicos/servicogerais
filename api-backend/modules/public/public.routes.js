@@ -47,6 +47,9 @@ router.post('/upload', rateLimit({ windowMs: 60 * 1000, max: 10 }), uploadContro
 // GET /api/v1/public/proposals/:token — Visualizar proposta pública
 router.get('/proposals/:token', publicProposalsController.getByToken);
 
+// GET /api/v1/public/proposals/:token/pdf — Download PDF (Story 3.5)
+router.get('/proposals/:token/pdf', publicProposalsController.downloadPdf);
+
 // GET /api/v1/public/proposals/:token/payment — Status do pagamento
 router.get('/proposals/:token/payment', publicProposalsController.getPaymentStatus);
 

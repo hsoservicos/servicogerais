@@ -19,6 +19,7 @@ router.use(injectTenant);
 router.get('/', controller.list);              // GET  /proposals?search=&status=&client_id=&page=
 router.post('/', controller.create);           // POST /proposals
 router.get('/:id', controller.read);           // GET  /proposals/:id  (inclui itens)
+router.get('/:id/pdf', controller.downloadPdf); // GET  /proposals/:id/pdf (Story 3.5)
 router.put('/:id', controller.update);         // PUT  /proposals/:id
 router.patch('/:id/status', controller.updateStatus); // PATCH /proposals/:id/status
 router.delete('/:id', controller.remove);      // DELETE /proposals/:id

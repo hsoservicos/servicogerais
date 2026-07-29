@@ -130,4 +130,95 @@ async function dashboard(req, res, next) {
   }
 }
 
-module.exports = { dashboard };
+// ── GET /dashboard/chart — Receita mensal (6 meses) ────
+async function chart(req, res, next) {
+  try {
+    const tenantFilter = req.tenantFilter || '1=1';
+
+    const monthlyRevenue = await query(
+      `SELECT DATE_FORMAT(paid_at, '%Y-%m') as month,
+              COALESCE(SUM(amount), 0) as revenue,
+              COUNT(*) as transactions
+       FROM transactions
+       WHERE ${tenantFilter}
+         AND status = 'completed'
+         AND paid_at >= DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH)
+       GROUP BY DATE_FORMAT(paid_at, '%Y-%m')
+       ORDER BY month ASC`
+    );
+
+    // Preencher meses sem transações com 0
+    const months = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date();
+      d.setMonth(d.getMonth() - i);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      const found = monthlyRevenue.find(m => m.month === key);
+      months.push({
+        month: key,
+        revenue: found ? parseFloat(found.revenue) : 0,
+        transactions: found ? found.transactions : 0,
+      });
+    }
+
+    res.json({ months, correlationId: req.correlationId });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ── GET /dashboard/followup — Propostas pendentes > 48h ─
+async function followup(req, res, next) {
+  try {
+    const tenantFilter = req.tenantFilter || '1=1';
+    const prefixedFilter = tenantFilter.replace(/\btenant_id\b/g, 'p.tenant_id');
+
+    const proposals = await query(
+      `SELECT p.id, p.number, p.title, p.status, p.total_amount,
+              p.created_at, p.sent_at,
+              c.name as client_name, c.whatsapp as client_whatsapp
+       FROM proposals p
+       LEFT JOIN clients c ON p.client_id = c.id
+       WHERE ${prefixedFilter}
+         AND p.status IN ('sent', 'viewed')
+         AND (p.sent_at IS NOT NULL AND p.sent_at < DATE_SUB(NOW(), INTERVAL 48 HOUR))
+       ORDER BY p.sent_at ASC
+       LIMIT 20`
+    );
+
+    const formatCurrency = (value) => {
+      const num = parseFloat(value) || 0;
+      return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    };
+
+    const formatTimeAgo = (dateStr) => {
+      if (!dateStr) return '';
+      const now = new Date();
+      const date = new Date(dateStr);
+      const diffMs = now - date;
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
+      if (diffDays > 0) return `${diffDays}d ${diffHours % 24}h`;
+      return `${diffHours}h`;
+    };
+
+    res.json({
+      proposals: proposals.map(p => ({
+        id: p.id,
+        number: p.number,
+        title: p.title,
+        status: p.status,
+        total_amount: formatCurrency(p.total_amount),
+        client_name: p.client_name || '—',
+        client_whatsapp: p.client_whatsapp,
+        sent_at: p.sent_at,
+        hours_ago: formatTimeAgo(p.sent_at || p.created_at),
+      })),
+      correlationId: req.correlationId,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { dashboard, chart, followup };

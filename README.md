@@ -25,11 +25,11 @@
 | **Auth Multi-Tenant** | Registro de prestador (2 passos), login JWT, recuperação de senha |
 | **Clientes** | CRUD com busca, soft-delete, dados de contato e endereço |
 | **Catálogo** | Categorias + Serviços/Produtos com preço e duração |
-| **Propostas** | Mestre-detalhe com itens, status workflow (draft→sent→viewed→accepted→paid) |
-| **Dashboard** | KPIs agregados, gráficos financeiros (Chart.js 6 meses), follow-ups |
+| **Propostas** | Mestre-detalhe com itens, status workflow (draft→sent→viewed→accepted→paid), PDF automático, WhatsApp, aprovação pública |
+| **Dashboard** | KPIs agregados, gráfico financeiro Chart.js (6 meses), follow-up de propostas pendentes |
 | **Financeiro** | Transações, estorno via Mercado Pago, resumo por status |
 | **Leads Públicos** | Captura de leads via wizard 3 passos na landing page |
-| **Admin Plataforma** | Super admin com visão global de tenants, transações e auditoria |
+| **Admin Plataforma** | Super admin com visão global (dashboard, tenants, transações, auditoria, planos CRUD, relatório financeiro com export CSV) |
 
 ### Módulos de Compliance Doméstico (LC 150/2015)
 
@@ -43,6 +43,16 @@
 | Certificação Obrigatória | ✅ Implementado | Cuidador/Babá precisam certificação |
 | Incidentes + SOS | 📋 Planejado | CAT, seguro |
 | LGPD Completo | 📋 Planejado | Portabilidade + eliminação |
+
+### Ciclo de Vida da Proposta (Epic 3)
+
+| Funcionalidade | Status | Detalhes |
+|--------|--------|------------|
+| CRUD Propostas mestre-detalhe | ✅ Completo | Itens vinculados, números automáticos, status workflow |
+| Frontend Propostas | ✅ Completo | 1142 linhas, filtros tabs, modal create/edit, view modal |
+| WhatsApp | ✅ Completo | Link wa.me com template + link público copiável |
+| Aprovação Pública | ✅ Completo | Landing page por token, aprovar/rejeitar, PDF público |
+| PDF | ✅ Completo | pdfkit, cabeçalho/tabela/totais, endpoints auth + público, botões frontend |
 
 ### Perfil do Prestador & Proximidade
 
@@ -126,9 +136,9 @@ servicos/
 │   │   ├── transactions/             # Histórico financeiro
 │   │   ├── leads/                    # Painel de leads capturados
 │   │   ├── public/                   # Landing Page (categorias, serviços, leads, proposals)
-│   │   ├── admin/                    # Super admin (dashboard, tenants, financeiro, auditoria)
+│   │   ├── admin/                    # Super admin (dashboard, tenants, planos, relatórios, financeiro, auditoria)
 │   │   └── domestic/                 # Workers domésticos (CRUD + certificações)
-│   ├── services/                     # Serviços transversais (email, whatsapp)
+│   ├── services/                     # Serviços transversais (email, whatsapp, pdf)
 │   └── uploads/                      # Uploads de fotos
 │
 ├── web-frontend/                     # 🟠 PHP Frontend (Templates)
@@ -147,9 +157,10 @@ servicos/
 │       ├── workers.php               # CRUD trabalhadores domésticos
 │       ├── transactions.php          # Financeiro
 │       ├── tenant-profile.php        # Perfil do prestador
-│       ├── admin-*.php               # Painel admin
+│       ├── admin-planos.php          # CRUD de planos (admin)
+│       ├── admin-relatorios.php      # Relatório financeiro (admin)
 │       ├── solicitar.php             # Wizard de solicitação (3 passos)
-│       ├── public-proposal.php       # Proposta pública por token
+│       ├── public-proposal.php       # Proposta pública por token + PDF
 │       └── partials/                 # Sidebar, topbar, header, footer
 │
 ├── scripts/                          # 🔵 Banco de Dados
@@ -158,7 +169,8 @@ servicos/
 │   └── migrations/                   # Migrações incrementais
 │       ├── 003_create_workers_tables.sql
 │       ├── 004_create_worker_categories_table.sql
-│       └── 005_add_tenant_address.sql
+│       ├── 005_add_tenant_address.sql
+│       └── 006_create_plans_table.sql
 │
 ├── nginx/                            # ⚪ Configuração do Proxy
 │   └── default.conf
@@ -303,6 +315,24 @@ POST   /api/v1/public/leads           # Criar lead (rate limit: 5/min)
 GET    /api/v1/public/proposals/:token # Visualizar proposta pública
 PATCH  /api/v1/public/proposals/:token/status  # Aprovar/rejeitar
 POST   /api/v1/public/proposals/:token/pay     # Pagar com Pix
+GET    /api/v1/public/proposals/:token/pdf     # Baixar PDF da proposta (público)
+```
+
+### Dashboard (prestador)
+```
+GET    /api/v1/dashboard/chart        # Receita mensal (6 meses) para Chart.js
+GET    /api/v1/dashboard/followup     # Propostas sent/viewed há >48h sem resposta
+```
+
+### Propostas
+```
+GET    /api/v1/proposals              # Listar propostas (filtros: status, cliente)
+POST   /api/v1/proposals              # Criar proposta mestre-detalhe
+GET    /api/v1/proposals/:id          # Detalhes + itens
+PUT    /api/v1/proposals/:id          # Atualizar proposta
+DELETE /api/v1/proposals/:id          # Excluir
+PATCH  /api/v1/proposals/:id/status   # Avançar status
+GET    /api/v1/proposals/:id/pdf      # Baixar PDF (autenticado)
 ```
 
 ### Admin (super_admin)
@@ -314,13 +344,19 @@ DELETE /api/v1/admin/tenants/:id      # Suspender/reativar
 GET    /api/v1/admin/transactions     # Transações cross-tenant
 POST   /api/v1/admin/transactions/:id/refund  # Estorno
 GET    /api/v1/admin/audit            # Auditoria de ações
+GET    /api/v1/admin/plans            # Listar planos
+POST   /api/v1/admin/plans            # Criar plano
+GET    /api/v1/admin/plans/:id        # Detalhes do plano
+PUT    /api/v1/admin/plans/:id        # Atualizar plano
+DELETE /api/v1/admin/plans/:id        # Excluir plano
+GET    /api/v1/admin/reports/financial # Relatório financeiro (?start_date=&end_date=&format=csv)
 ```
 
 ---
 
 ## 📊 Modelo de Dados
 
-**14 tabelas** no schema (`scripts/init.sql` + migrations):
+**17 tabelas** no schema (`scripts/init.sql` + migrations):
 
 | Tabela | Finalidade |
 |--------|-----------|
@@ -340,6 +376,7 @@ GET    /api/v1/admin/audit            # Auditoria de ações
 | `worker_certifications` | Certificações de workers |
 | `service_schedules` | Agendamentos com controle de frequência |
 | `worker_categories` | Categorias profissionais (9 tipos, extensível) |
+| `plans` | Planos de assinatura (free/basic/pro/enterprise) com limites e features |
 
 ---
 
@@ -356,21 +393,31 @@ Framework: **Jest + Supertest** (configurados, aguardando implementação dos te
 
 ## 🚀 Roadmap
 
-### Sprint 1 (atual)
+### Sprint 1 (concluído)
 - ✅ Workers + CBO (CRUD completo)
 - ✅ Endereço no cadastro do prestador
 - ✅ Perfil do prestador (tenant-profile)
 - ✅ Busca pública por município
 - ✅ Correção de tenant isolation (2 queries)
 
+### Sprint 2 (concluído)
+- ✅ Epic 3 — Ciclo de Vida da Proposta (CRUD, frontend, WhatsApp, aprovação pública, PDF)
+- ✅ Bugfixes: tenantFilter, category_id COALESCE, WhatsApp prefix
+
+### Sprint 3 (atual)
+- ✅ Epic 4 — Dashboard com Chart.js (gráfico 6 meses, follow-up de propostas)
+- ✅ Epic 5 — Webhook MP + estorno (Endpoint `POST /api/v1/payments/webhook`)
+- ✅ Epic 6 — Presença pública + leads (já completo)
+- ✅ Epic 7 — Admin planos CRUD + relatório financeiro com export CSV
+
 ### Próximos Sprints
-- Sprint 2: Trava de frequência + background check
-- Sprint 3: Fluxo CLT + certificações
-- Sprint 4: Ponto eletrônico com geolocalização
-- Sprint 5: eSocial Doméstico (admissão, DAE, FGTS)
-- Sprint 6: Cálculo trabalhista + dashboard compliance
-- Sprint 7: Incidentes, seguro, LGPD completo
-- Sprint 8: QA final, testes E2E, CI/CD
+- Sprint 4: Frontend Admin PHP (páginas pendentes)
+- Sprint 5: Trava de frequência + background check
+- Sprint 6: Fluxo CLT + certificações
+- Sprint 7: Ponto eletrônico com geolocalização
+- Sprint 8: eSocial Doméstico (admissão, DAE, FGTS)
+- Sprint 9: Incidentes, seguro, LGPD completo
+- Sprint 10: QA final, testes E2E, CI/CD
 
 ---
 

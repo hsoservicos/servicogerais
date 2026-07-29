@@ -16,4 +16,10 @@ router.use(injectTenant);
 // GET /api/v1/dashboard
 router.get('/', controller.dashboard);
 
+// GET /api/v1/dashboard/chart — Receita mensal (6 meses)
+router.get('/chart', controller.chart);
+
+// GET /api/v1/dashboard/followup — Propostas pendentes > 48h
+router.get('/followup', controller.followup);
+
 module.exports = router;

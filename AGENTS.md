@@ -89,7 +89,7 @@ Full report: `docs/auditoria/AUDITORIA_COMPLIANCE_DOMESTICO.md`
 
 | Module | Status | Risk if absent |
 |--------|--------|----------------|
-| Workers table with CBO codes + 9 domestic categories | ❌ Not modeled | Cannot onboard workers |
+| Workers table with CBO codes + 9 domestic categories | ✅ Built (migration 003 + 004) | Cannot onboard workers |
 | Frequency-lock algorithm (max 2d/week for diaristas) | ❌ Not built | CLT descaracterization lawsuit |
 | Electronic time tracking (GPS + photo) per Art. 12 LC 150 | ❌ Not built | Labor liability |
 | eSocial Doméstico integration (admission, DAE, FGTS) | ❌ Not built | Tax liability |
@@ -101,3 +101,20 @@ Full report: `docs/auditoria/AUDITORIA_COMPLIANCE_DOMESTICO.md`
 **Schema conflicts found:** `migrations/002_create_transactions_table.sql` duplicates `transactions` table already in `init.sql` (different schema). Remove the migration file.
 
 **No tests exist** (`__tests__/` directory absent, Jest runs `--passWithNoTests`).
+
+## Progress (Jul 29)
+
+### Completed this session
+- **Epic 3 — Ciclo de Vida da Proposta**: Stories 3.1 a 3.5 — **completo**
+  - 3.1: API CRUD proposals + items (mestre-detalhe, status lifecycle, número automático)
+  - 3.2: Frontend proposals.php (1142 linhas, filtros tabs, modal create/edit com itens, view modal)
+  - 3.3: WhatsApp wa.me com template + link público
+  - 3.4: Aprovação pública (public-proposal.php 713 linhas, publicProposals.controller.js)
+  - 3.5: Geração PDF (pdfService.js, 2 endpoints autenticado + público, botões frontend)
+- Bugfixes: services.read tenantFilter, services.update category_id COALESCE, WhatsApp prefix duplicado
+
+### Next priority
+- Epic 4 — Dashboard e Métricas (gráfico, follow-up, financeiro)
+- Epic 5 — Webhook MP, estorno
+- Epic 6 — Admin de leads (frontend)
+- Epic 7 — Frontend Admin PHP

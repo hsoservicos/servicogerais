@@ -218,13 +218,20 @@ if (!isAuthenticated()) {
                         <span id="view-client" class="text-ink font-medium">—</span>                         <span id="view-client-whatsapp" class="text-whatsapp text-xs block mt-0.5 hidden">
                              <a id="view-whatsapp-link" href="#" target="_blank" class="hover:underline">💬 Enviar WhatsApp</a>
                          </span>
-                         <span id="view-public-link" class="text-xs block mt-1 hidden">
-                             <button onclick="copyPublicLink()"
-                                 class="inline-flex items-center gap-1 text-primary hover:text-primary-600 font-medium transition-colors">
-                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-                                 Copiar Link Público
-                             </button>
-                         </span>
+                          <span id="view-public-link" class="text-xs block mt-1 hidden">
+                              <button onclick="copyPublicLink()"
+                                  class="inline-flex items-center gap-1 text-primary hover:text-primary-600 font-medium transition-colors">
+                                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                                  Copiar Link Público
+                              </button>
+                          </span>
+                          <span id="view-pdf-link" class="text-xs block mt-1 hidden">
+                              <button onclick="downloadPdf()"
+                                  class="inline-flex items-center gap-1 text-danger hover:text-danger/80 font-medium transition-colors">
+                                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                  Baixar PDF
+                              </button>
+                          </span>
                     </div>
                     <div>
                         <span class="text-ink-muted block text-xs uppercase tracking-wider font-semibold mb-1">Validade</span>
@@ -754,23 +761,26 @@ function renderViewModal(p) {
     document.getElementById('view-client').textContent = p.client_name || '—';
     document.getElementById('view-valid-until').textContent = p.valid_until ? formatDate(p.valid_until) : '—';
 
-    // WhatsApp + Link Público
+    // WhatsApp + Link Público + PDF
     const whatsappEl = document.getElementById('view-client-whatsapp');
     const whatsappLink = document.getElementById('view-whatsapp-link');
     const publicLinkEl = document.getElementById('view-public-link');
+    const pdfLinkEl = document.getElementById('view-pdf-link');
 
-    // Public link
+    // Public link + PDF
     if (p.public_token) {
         publicLinkEl.classList.remove('hidden');
+        pdfLinkEl.classList.remove('hidden');
     } else {
         publicLinkEl.classList.add('hidden');
+        pdfLinkEl.classList.add('hidden');
     }
 
     if (p.client_whatsapp) {
         const publicUrl = p.public_token ? `${window.location.origin}/?page=public-proposal&token=${p.public_token}` : '';
         const proposalMsg = `Olá! Tenho uma proposta do ServiceSaaS para você: ${p.number} - ${p.title}`;
         const fullMsg = publicUrl ? `${proposalMsg}\n\n📎 Link para visualizar e responder: ${publicUrl}` : proposalMsg;
-        whatsappLink.href = `https://wa.me/55${p.client_whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(fullMsg)}`;
+        whatsappLink.href = `https://wa.me/55${p.client_whatsapp.replace(/\D/g, '').replace(/^55/, '')}?text=${encodeURIComponent(fullMsg)}`;
         whatsappEl.classList.remove('hidden');
     } else {
         whatsappEl.classList.add('hidden');
@@ -896,6 +906,34 @@ function renderViewModal(p) {
 function closeViewModal() {
     document.getElementById('view-modal').classList.add('hidden');
     viewProposalData = null;
+}
+
+// ── Download PDF (Story 3.5) ───────────────────────
+function downloadPdf() {
+    if (!viewProposalData?.id) return;
+    const token = '<?= getToken() ?>';
+    const url = `${API_BASE}/proposals/${viewProposalData.id}/pdf`;
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+    xhr.responseType = 'blob';
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const blob = xhr.response;
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `proposta-${viewProposalData.number || viewProposalData.id}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+            showToast('📄 PDF baixado com sucesso!', 'success');
+        } else {
+            showToast('Erro ao baixar PDF', 'error');
+        }
+    };
+    xhr.onerror = () => showToast('Erro ao baixar PDF', 'error');
+    xhr.send();
 }
 
 // ── Copiar Link Público ──────────────────────────────

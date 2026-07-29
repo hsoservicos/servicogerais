@@ -178,7 +178,7 @@ async function loadLeads() {
 
         tbody.innerHTML = leadsData.map(l => {
             const statusBadge = getStatusBadge(l.status);
-            const phoneClean = l.customerPhone.replace(/\D/g, '');
+            const phoneClean = l.customerPhone.replace(/\D/g, '').replace(/^55/, '');
             const whatsappLink = phoneClean.length >= 10
                 ? `https://wa.me/55${phoneClean}?text=Olá%20${encodeURIComponent(l.customerName)}!%20Recebemos%20sua%20solicitação%20de%20orçamento%20para%20${encodeURIComponent(l.service)}.%20Vamos%20analisar!`
                 : '#';
@@ -291,7 +291,7 @@ function openLeadModal(id) {
     const lead = leadsData.find(l => l.id === id);
     if (!lead) return;
 
-    const phoneClean = lead.customerPhone?.replace(/\D/g, '') || '';
+    const phoneClean = (lead.customerPhone?.replace(/\D/g, '') || '').replace(/^55/, '');
     const whatsappLink = phoneClean.length >= 10
         ? `https://wa.me/55${phoneClean}?text=Olá%20${encodeURIComponent(lead.customerName)}!%20Recebemos%20sua%20solicitação%20de%20orçamento%20para%20${encodeURIComponent(lead.service)}.%20Vamos%20analisar!`
         : '#';

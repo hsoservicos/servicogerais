@@ -489,4 +489,59 @@ async function remove(req, res, next) {
   }
 }
 
-module.exports = { list, read, create, update, updateStatus, remove };
+// ── GET /proposals/:id/pdf — Download PDF da proposta ──
+async function downloadPdf(req, res, next) {
+  try {
+    const { id } = req.params;
+    const tenantFilter = req.tenantFilter || '1=1';
+    const prefixedFilter = tenantFilter.replace(/\btenant_id\b/g, 'p.tenant_id');
+
+    const rows = await query(
+      `SELECT p.id, p.number, p.title, p.description, p.total_amount,
+              p.status, p.valid_until, p.payment_terms, p.notes,
+              p.client_id, c.name as client_name, c.whatsapp as client_whatsapp,
+              t.name as tenant_name, t.whatsapp as tenant_whatsapp
+       FROM proposals p
+       LEFT JOIN clients c ON p.client_id = c.id
+       LEFT JOIN tenants t ON p.tenant_id = t.id
+       WHERE p.id = ? AND ${prefixedFilter}`,
+      [id]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({
+        error: 'ERR_NOT_FOUND',
+        message: 'Proposta não encontrada',
+        correlationId: req.correlationId,
+      });
+    }
+
+    const items = await query(
+      `SELECT description, quantity, unit_price, total_price, sort_order
+       FROM proposal_items
+       WHERE proposal_id = ?
+       ORDER BY sort_order ASC, id ASC`,
+      [id]
+    );
+
+    const proposal = {
+      ...rows[0],
+      items,
+      tenant: { name: rows[0].tenant_name, whatsapp: rows[0].tenant_whatsapp },
+    };
+
+    const { generateProposalPDF } = require('../../services/pdfService');
+    const pdfBuffer = await generateProposalPDF(proposal);
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="proposta-${rows[0].number}.pdf"`,
+      'Content-Length': pdfBuffer.length,
+    });
+    res.send(pdfBuffer);
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { list, read, create, update, updateStatus, remove, downloadPdf };

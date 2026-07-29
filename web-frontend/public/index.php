@@ -44,6 +44,7 @@ $allowedPages = [
     // Epic 7 — Admin
     'admin-login', 'admin-dashboard', 'admin-tenants',
     'admin-financeiro', 'admin-audit',
+    'admin-planos', 'admin-relatorios',
     // Epic 9 — Profile / Settings
     'tenant-profile',
 ];
@@ -74,11 +75,13 @@ $pageTitle = match ($page) {
     'reset-password'  => 'Redefinir Senha — ' . APP_NAME,
     'logout'    => 'Saindo... — ' . APP_NAME,
     // Epic 7 — Admin
-    'admin-login'     => 'Admin Login — ' . APP_NAME,
-    'admin-dashboard' => 'Admin Dashboard — ' . APP_NAME,
-    'admin-tenants'   => 'Admin Tenants — ' . APP_NAME,
+    'admin-login'      => 'Admin Login — ' . APP_NAME,
+    'admin-dashboard'  => 'Admin Dashboard — ' . APP_NAME,
+    'admin-tenants'    => 'Admin Tenants — ' . APP_NAME,
     'admin-financeiro' => 'Admin Financeiro — ' . APP_NAME,
-    'admin-audit'     => 'Admin Auditoria — ' . APP_NAME,
+    'admin-audit'      => 'Admin Auditoria — ' . APP_NAME,
+    'admin-planos'     => 'Admin Planos — ' . APP_NAME,
+    'admin-relatorios' => 'Admin Relatórios — ' . APP_NAME,
     // Epic 9 — Profile
     'tenant-profile'  => 'Meu Perfil — ' . APP_NAME,
 };

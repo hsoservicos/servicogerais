@@ -78,7 +78,7 @@ async function list(req, res, next) {
 async function read(req, res, next) {
   try {
     const { id } = req.params;
-    const tenantFilter = req.tenantFilter || '1=1';
+    const tenantFilter = (req.tenantFilter || '1=1').replace(/\btenant_id\b/g, 's.tenant_id');
 
     const rows = await query(
       `SELECT s.id, s.name, s.description, s.price, s.duration_minutes,
@@ -182,13 +182,13 @@ async function update(req, res, next) {
       });
     }
 
-    await query(
+await query(
       `UPDATE services SET
         name = COALESCE(?, name),
         description = COALESCE(?, description),
         price = COALESCE(?, price),
         duration_minutes = COALESCE(?, duration_minutes),
-        category_id = ?,
+        category_id = COALESCE(?, category_id),
         active = COALESCE(?, active),
         updated_at = NOW()
        WHERE id = ? AND ${tenantFilter}`,
@@ -197,7 +197,7 @@ async function update(req, res, next) {
         description ?? null,
         price !== undefined ? price : null,
         duration_minutes ?? null,
-        category_id !== undefined ? (category_id || null) : null, // pode remover categoria
+        category_id !== undefined ? (category_id || null) : null,
         active !== undefined ? (active ? 1 : 0) : null,
         id,
       ]

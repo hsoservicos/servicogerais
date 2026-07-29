@@ -610,6 +610,117 @@ async function listAudit(req, res, next) {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════
+// Story 7.3 — Relatório Financeiro
+// ═══════════════════════════════════════════════════════════════
+async function financialReport(req, res, next) {
+  try {
+    const { start_date, end_date, format } = req.query;
+
+    let dateFilter = '';
+    const params = [];
+    if (start_date && end_date) {
+      dateFilter = ' AND t.paid_at >= ? AND t.paid_at <= ?';
+      params.push(start_date, end_date + ' 23:59:59');
+    } else {
+      dateFilter = ' AND t.paid_at >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY)';
+    }
+
+    // Receita por período
+    const revenue = await query(
+      `SELECT DATE_FORMAT(t.paid_at, '%Y-%m-%d') as day,
+              COALESCE(SUM(t.amount), 0) as revenue,
+              COALESCE(SUM(t.fee), 0) as fees,
+              COUNT(*) as transactions
+       FROM transactions t
+       WHERE t.status = 'completed'${dateFilter}
+       GROUP BY DATE_FORMAT(t.paid_at, '%Y-%m-%d')
+       ORDER BY day ASC`,
+      params.length > 0 ? params : undefined
+    );
+
+    // Totais
+    const totals = await query(
+      `SELECT COUNT(*) as total_transactions,
+              COALESCE(SUM(t.amount), 0) as total_revenue,
+              COALESCE(SUM(t.fee), 0) as total_fees
+       FROM transactions t
+       WHERE t.status = 'completed'${dateFilter}`,
+      params.length > 0 ? params : undefined
+    );
+
+    // Receita por plano
+    const byPlan = await query(
+      `SELECT tn.plan, COALESCE(SUM(t.amount), 0) as revenue, COUNT(*) as count
+       FROM transactions t
+       JOIN tenants tn ON tn.id = t.tenant_id
+       WHERE t.status = 'completed'${dateFilter}
+       GROUP BY tn.plan
+       ORDER BY revenue DESC`,
+      params.length > 0 ? params : undefined
+    );
+
+    // Novos tenants no período
+    const newTenants = await query(
+      `SELECT DATE_FORMAT(created_at, '%Y-%m-%d') as day, COUNT(*) as count
+       FROM tenants
+       WHERE created_at >= ? AND created_at <= ?
+       GROUP BY DATE_FORMAT(created_at, '%Y-%m-%d')
+       ORDER BY day ASC`,
+      [start_date || '2000-01-01', end_date ? end_date + ' 23:59:59' : '2099-12-31 23:59:59']
+    );
+
+    const formatCurrency = (value) => {
+      const num = parseFloat(value) || 0;
+      return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    };
+
+    const response = {
+      period: { start: start_date || '30d', end: end_date || 'today' },
+      totals: {
+        transactions: totals[0]?.total_transactions || 0,
+        revenue: totals[0]?.total_revenue || 0,
+        fees: totals[0]?.total_fees || 0,
+        net: (totals[0]?.total_revenue || 0) - (totals[0]?.total_fees || 0),
+        formatted: {
+          revenue: formatCurrency(totals[0]?.total_revenue || 0),
+          fees: formatCurrency(totals[0]?.total_fees || 0),
+          net: formatCurrency((totals[0]?.total_revenue || 0) - (totals[0]?.total_fees || 0)),
+        },
+      },
+      byPlan: byPlan.map(p => ({
+        plan: p.plan,
+        revenue: parseFloat(p.revenue),
+        count: p.count,
+        formatted: formatCurrency(p.revenue),
+      })),
+      daily: revenue.map(r => ({
+        day: r.day,
+        revenue: parseFloat(r.revenue),
+        fees: parseFloat(r.fees),
+        transactions: r.transactions,
+      })),
+      newTenants: newTenants.map(t => ({ day: t.day, count: t.count })),
+      correlationId: req.correlationId,
+    };
+
+    // CSV export
+    if (format === 'csv') {
+      const csvLines = ['Data,Receita,Taxas,Transacoes'];
+      revenue.forEach(r => {
+        csvLines.push(`${r.day},${r.revenue},${r.fees},${r.transactions}`);
+      });
+      res.set({
+        'Content-Type': 'text/csv; charset=utf-8',
+        'Content-Disposition': `attachment; filename="relatorio-financeiro-${start_date || '30d'}-${end_date || 'hoje'}.csv"`,
+      });
+      return res.send(csvLines.join('\n'));
+    }
+
+    res.json(response);
+  } catch (err) { next(err); }
+}
+
 module.exports = {
   dashboard,
   listTenants,
@@ -619,4 +730,5 @@ module.exports = {
   listTransactions,
   refundTransaction,
   listAudit,
+  financialReport,
 };

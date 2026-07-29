@@ -7,6 +7,7 @@
 
 const { Router } = require('express');
 const controller = require('./admin.controller');
+const plansController = require('./plans.controller');
 const { authenticate } = require('../../middlewares/auth.middleware');
 const { adminAuth, auditLog } = require('./admin.middleware');
 
@@ -37,6 +38,20 @@ router.delete('/tenants/:id', controller.toggleTenantStatus); // audit interno (
 // FR-ADM-06: Transações, FR-ADM-07: Estorno, FR-ADM-08: Planos, FR-ADM-09: Relatório
 router.get('/transactions', controller.listTransactions);
 router.post('/transactions/:id/refund', controller.refundTransaction); // audit interno (action: refund_transaction, com detalhes enriquecidos)
+
+// ═══════════════════════════════════════════════════════════════
+// Story 7.3 — Planos (FR-ADM-08)
+// ═══════════════════════════════════════════════════════════════
+router.get('/plans', plansController.list);
+router.get('/plans/:id', plansController.read);
+router.post('/plans', auditLog('create_plan'), plansController.create);
+router.put('/plans/:id', auditLog('update_plan'), plansController.update);
+router.delete('/plans/:id', auditLog('delete_plan'), plansController.remove);
+
+// ═══════════════════════════════════════════════════════════════
+// Story 7.3 — Relatório Financeiro (FR-ADM-09)
+// ═══════════════════════════════════════════════════════════════
+router.get('/reports/financial', controller.financialReport);
 
 // ═══════════════════════════════════════════════════════════════
 // Story 7.4 — Auditoria
