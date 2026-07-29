@@ -4,9 +4,9 @@
 // Uso: Carregado VIA CDN (cdn.tailwindcss.com) nos layouts PHP/HTML
 // Config: Injetado via <script id="tailwind-config"> antes do CDN
 // ═══════════════════════════════════════════════════════════════
-// Paleta oficial (2026-07-27):
-//   Primary:       #10B981 (ação — botões, links, destaques)
-//   Primary-dark:  #006c49 (contraste — sidebar, headers)
+// Paleta oficial (2026-07-29):
+//   Primary:       #3B82F6 (ação — botões, links, destaques)
+//   Primary-dark:  #1D4ED8 (contraste — sidebar, headers)
 // ═══════════════════════════════════════════════════════════════
 
 tailwind.config = {
@@ -16,11 +16,17 @@ tailwind.config = {
       // ── CORES OFICIAIS ────────────────────────────────────
       colors: {
         // Escala primária
-        primary: '#10B981',
-        'primary-600': '#059669',
-        'primary-700': '#006c49',   // variante escura
-        'primary-900': '#064E3B',
-        'primary-50': '#ECFDF5',
+        primary: '#3B82F6',
+        'primary-50': '#EFF6FF',
+        'primary-100': '#DBEAFE',
+        'primary-200': '#BFDBFE',
+        'primary-300': '#93C5FD',
+        'primary-400': '#60A5FA',
+        'primary-500': '#3B82F6',
+        'primary-600': '#2563EB',
+        'primary-700': '#1D4ED8',
+        'primary-800': '#1E40AF',
+        'primary-900': '#1E3A8A',
 
         // Sidebar
         sidebar: '#0F172A',

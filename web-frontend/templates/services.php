@@ -239,7 +239,7 @@ function renderTable(services, pagination) {
                         <tr class="hover:bg-surface/50 transition-colors">
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold" style="background: ${s.category_color || '#10B981'}">
+                                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold" style="background: ${s.category_color || '#2563EB'}">
                                         ${(s.name.charAt(0) || '?').toUpperCase()}
                                     </div>
                                     <div>
@@ -249,7 +249,7 @@ function renderTable(services, pagination) {
                                 </div>
                             </td>
                             <td class="px-6 py-4 hidden md:table-cell">
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium" style="background: ${s.category_color || '#10B981'}15; color: ${s.category_color || '#10B981'}">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium" style="background: ${s.category_color || '#2563EB'}15; color: ${s.category_color || '#2563EB'}">
                                     ${escapeHtml(s.category_name || '—')}
                                 </span>
                             </td>

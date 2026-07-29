@@ -192,7 +192,7 @@ function renderCharts(data) {
         data: {
             labels: data.monthlyRevenue.map(m => m.month),
             datasets: [
-                { label: 'Receita', data: data.monthlyRevenue.map(m => m.revenue), backgroundColor: '#10B981', borderRadius: 6 },
+                { label: 'Receita', data: data.monthlyRevenue.map(m => m.revenue), backgroundColor: '#2563EB', borderRadius: 6 },
                 { label: 'Taxas', data: data.monthlyRevenue.map(m => m.fees), backgroundColor: '#F59E0B', borderRadius: 6 },
             ],
         },
@@ -231,7 +231,7 @@ function renderCharts(data) {
     // Proposal Chart
     const propCtx = document.getElementById('proposalChart').getContext('2d');
     if (charts.proposals) charts.proposals.destroy();
-    const statusColors = { draft: '#94A3B8', sent: '#3B82F6', viewed: '#F59E0B', accepted: '#10B981', rejected: '#EF4444', cancelled: '#6B7280' };
+    const statusColors = { draft: '#94A3B8', sent: '#3B82F6', viewed: '#F59E0B', accepted: '#2563EB', rejected: '#EF4444', cancelled: '#6B7280' };
     charts.proposals = new Chart(propCtx, {
         type: 'doughnut',
         data: {

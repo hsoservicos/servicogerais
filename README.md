@@ -204,9 +204,9 @@ O design system é definido via Tailwind Config custom em `web-frontend/template
 
 | Token | Hex | Uso |
 |-------|-----|-----|
-| `primary` | `#10B981` | Botões, links, ações primárias |
-| `primary-600` | `#059669` | Hover de botões primários |
-| `primary-700` | `#006c49` | Sidebars, headers, contraste |
+| `primary` | `#2563EB` | Botões, links, ações primárias |
+| `primary-600` | `#2563EB` | Hover de botões primários |
+| `primary-700` | `#1D4ED8` | Sidebars, headers, contraste |
 | `sidebar` | `#0F172A` | Sidebar (dark) |
 | `surface` | `#F8FAFC` | Fundo da página |
 | `ink` | `#0F172A` | Texto principal |

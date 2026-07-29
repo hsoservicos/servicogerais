@@ -27,8 +27,11 @@ const leadLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-// GET /api/v1/public/categories — Categorias disponíveis
+// GET /api/v1/public/categories — Categorias de serviços
 router.get('/categories', controller.listCategories);
+
+// GET /api/v1/public/worker-categories — Categorias de trabalhadores domésticos (LC 150)
+router.get('/worker-categories', controller.listWorkerCategories);
 
 // GET /api/v1/public/services — Busca pública de serviços
 router.get('/services', controller.listServices);

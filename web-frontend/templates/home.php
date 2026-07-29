@@ -79,14 +79,37 @@
     <div class="absolute bottom-1/4 right-1/3 w-6 h-6 bg-primary/15 rounded-full"></div>
 </section>
 
-<!-- ── Category Grid ───────────────────────────────────── -->
+<!-- ── Category Grid: Serviços ──────────────────────────── -->
 <section id="categorias" class="py-12 sm:py-16 md:py-20 bg-surface">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-8 sm:mb-12">
-            <h2 class="text-h1 text-ink mb-3 sm:mb-4">Nossas Categorias</h2>
-            <p class="text-ink-secondary max-w-lg mx-auto text-sm sm:text-base">Explore os serviços disponíveis e encontre o que você precisa.</p>
+            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-6 h-6 sm:w-7 sm:h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+            </div>
+            <h2 class="text-h1 text-ink mb-3 sm:mb-4">Serviços Profissionais</h2>
+            <p class="text-ink-secondary max-w-2xl mx-auto text-sm sm:text-base">Encontre cabeleireiros, manicures, maquiadores e profissionais de estética perto de você.</p>
         </div>
         <div id="categories-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+</section>
+
+<!-- ── Category Grid: Trabalhadores Domésticos ─────────── -->
+<section id="categorias-domesticas" class="py-12 sm:py-16 md:py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-8 sm:mb-12">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-6 h-6 sm:w-7 sm:h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+            </div>
+            <h2 class="text-h1 text-ink mb-3 sm:mb-4">Profissionais Domésticos</h2>
+            <p class="text-ink-secondary max-w-2xl mx-auto text-sm sm:text-base">Contrate profissionais para sua casa com toda segurança — diaristas, babás, cuidadores, cozinheiros e muito mais.</p>
+        </div>
+        <div id="worker-categories-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             <!-- Populated by JS -->
         </div>
     </div>
@@ -257,8 +280,8 @@ async function loadCategories() {
         }
 
         grid.innerHTML = data.categories.map(c => `
-            <div class="group cursor-pointer bg-white rounded-xl p-4 sm:p-5 md:p-6 shadow-card border border-border hover:border-${c.color.replace('#', '')}/30 hover:shadow-modal transition-all duration-200"
-                 onclick="searchByCategory('${c.name}')">
+            <div class="group cursor-pointer bg-white rounded-xl p-4 sm:p-5 md:p-6 shadow-card border border-border hover:shadow-modal transition-all duration-200"
+                 onclick="searchByCategory('${c.name}')" style="--cat-color: ${c.color}">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mb-3 sm:mb-4 transition-transform group-hover:scale-110 duration-200"
                      style="background-color: ${c.color}15">
                     <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: ${c.color}">
@@ -394,6 +417,47 @@ function selectService(tenant, serviceName) {
     window.location.href = `?page=solicitar&servico=${encodeURIComponent(serviceName)}`;
 }
 
+// ── Load Worker Categories ──────────────────────────────
+async function loadWorkerCategories() {
+    try {
+        const response = await fetch('/api/v1/public/worker-categories');
+        if (!response.ok) throw new Error('Erro ao carregar categorias domésticas');
+        const data = await response.json();
+
+        const grid = document.getElementById('worker-categories-grid');
+        if (!data.categories || data.categories.length === 0) {
+            document.getElementById('categorias-domesticas')?.remove();
+            return;
+        }
+
+        const regimeBadge = (regime, maxFreq) => {
+            if (regime === 'AUTONOMO_DIARISTA') {
+                return `<span class="text-xs font-medium px-2 py-0.5 rounded-full bg-warning/10 text-warning">Até ${maxFreq}x/sem</span>`;
+            }
+            return `<span class="text-xs font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">CLT</span>`;
+        };
+
+        grid.innerHTML = data.categories.map(c => `
+            <div class="group bg-white rounded-xl p-4 sm:p-5 md:p-6 shadow-card border border-border hover:shadow-modal transition-all duration-200">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3 sm:mb-4 transition-transform group-hover:scale-110 duration-200">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="${c.iconSvg}"/>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-ink text-sm sm:text-base mb-1">${c.name}</h3>
+                <p class="text-xs text-ink-muted mb-2 line-clamp-2">${c.description || c.legalRegimeLabel || ''}</p>
+                <div>
+                    ${regimeBadge(c.legalRegime, c.maxWeeklyFrequency)}
+                    <span class="text-xs text-ink-muted ml-1">CBO ${c.cboCode}</span>
+                </div>
+            </div>
+        `).join('');
+    } catch (err) {
+        console.warn('[Landing] Erro worker categories:', err.message);
+        document.getElementById('categorias-domesticas')?.remove();
+    }
+}
+
 // ── Search Button ───────────────────────────────────────
 document.getElementById('search-btn')?.addEventListener('click', () => {
     const query = document.getElementById('search-input').value.trim();
@@ -404,6 +468,7 @@ document.getElementById('search-btn')?.addEventListener('click', () => {
 // ── Init ────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     loadCategories();
+    loadWorkerCategories();
     setupSearch();
 });
 </script>

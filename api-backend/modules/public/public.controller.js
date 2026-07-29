@@ -50,7 +50,7 @@ async function listCategories(req, res, next) {
         description: c.description,
         icon: c.icon,
         iconSvg: iconMap[c.icon] || iconMap.star,
-        color: c.color || '#10B981',
+        color: c.color || '#2563EB',
         serviceCount: c.service_count || 0,
         tenantName: c.tenant_name,
       })),
@@ -118,7 +118,7 @@ async function listServices(req, res, next) {
         priceValue: parseFloat(s.price),
         duration: s.duration_minutes ? `${s.duration_minutes} min` : null,
         category: s.category_name,
-        categoryColor: s.category_color || '#10B981',
+        categoryColor: s.category_color || '#2563EB',
         tenant: s.tenant_name,
         tenantSlug: s.tenant_slug,
         tenantCity: s.tenant_city,
@@ -226,4 +226,52 @@ async function createLead(req, res, next) {
   }
 }
 
-module.exports = { listCategories, listServices, createLead };
+// ═══════════════════════════════════════════════════════════════
+// GET /api/v1/public/worker-categories — Categorias Domésticas
+// ═══════════════════════════════════════════════════════════════
+async function listWorkerCategories(req, res, next) {
+  try {
+    const categories = await query(
+      `SELECT wc.id, wc.code, wc.name, wc.description,
+              wc.cbo_code, wc.legal_regime, wc.max_weekly_frequency
+       FROM worker_categories wc
+       WHERE wc.active = TRUE
+       ORDER BY wc.name ASC`
+    );
+
+    const iconMap = {
+      DIARISTA: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z',
+      BABA: 'M12 9v2m0 0h3m-3 0H9m3 0V9m0 2v3M4 6h16M4 10h16M4 14h16M4 18h16',
+      CUIDADOR_IDOSOS: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
+      COZINHEIRO: 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4',
+      MOTORISTA: 'M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0zM3 5h18l-2 8H5L3 5z',
+      JARDINEIRO: 'M3 3l6 6m0 0l-3 3m3-3l3 3m-3-3V9m3-6l-6 6M6 21V9m12 12V9M6 3h12',
+      CASEIRO: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
+      GOVERNANTA: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
+    };
+
+    const regimeLabels = {
+      LC_150_CLT: 'CLT (carteira assinada)',
+      AUTONOMO_DIARISTA: 'Autônomo (sem vínculo)',
+    };
+
+    res.json({
+      categories: categories.map(c => ({
+        id: c.id,
+        code: c.code,
+        name: c.name,
+        description: c.description,
+        cboCode: c.cbo_code,
+        legalRegime: c.legal_regime,
+        legalRegimeLabel: regimeLabels[c.legal_regime] || c.legal_regime,
+        maxWeeklyFrequency: c.max_weekly_frequency,
+        iconSvg: iconMap[c.code] || iconMap.DIARISTA,
+      })),
+      correlationId: req.correlationId,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { listCategories, listServices, createLead, listWorkerCategories };

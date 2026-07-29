@@ -1,13 +1,16 @@
 ---
 name: 'ServiceSaaS'
-description: 'Plataforma SaaS multi-tenant de gestão de serviços, propostas e pagamentos. Profissional, acolhedor, verde-esmeralda.'
+description: 'Plataforma SaaS multi-tenant de gestão de serviços, propostas e pagamentos. Profissional, confiável, azul.'
 implementation: 'tailwind-css'
 colors:
-  primary-500: '#10B981'
-  primary-600: '#059669'
-  primary-700: '#006c49'
-  primary-900: '#064E3B'
-  primary-50: '#ECFDF5'
+  primary-500: '#3B82F6'
+  primary-600: '#2563EB'
+  primary-700: '#1D4ED8'
+  primary-800: '#1E40AF'
+  primary-900: '#1E3A8A'
+  primary-50: '#EFF6FF'
+  primary-100: '#DBEAFE'
+  primary-200: '#BFDBFE'
   sidebar: '#0F172A'
   surface: '#F8FAFC'
   surface-raised: '#FFFFFF'
@@ -20,170 +23,89 @@ colors:
   info: '#0284C7'
   danger: '#DC2626'
   whatsapp: '#25D366'
+  status-draft: { bg: '#F3F4F6', text: '#374151' }
+  status-sent: { bg: '#DBEAFE', text: '#1D4ED8' }
+  status-viewed: { bg: '#F3E8FF', text: '#7E22CE' }
+  status-accepted: { bg: '#DCFCE7', text: '#15803D' }
+  status-rejected: { bg: '#FEE2E2', text: '#B91C1C' }
+  status-cancelled: { bg: '#F3F4F6', text: '#6B7280' }
+  tx-completed: { bg: '#DCFCE7', text: '#15803D' }
+  tx-pending: { bg: '#FEF3C7', text: '#B45309' }
+  tx-processing: { bg: '#DBEAFE', text: '#1D4ED8' }
+  tx-refunded: { bg: '#FEE2E2', text: '#B91C1C' }
+  dark-sidebar: '#0F172A'
+  dark-surface: '#1E293B'
+  dark-ink: '#F8FAFC'
+  dark-ink-secondary: '#94A3B8'
+  dark-border: '#334155'
 typography:
-  base:
-    fontFamily: "'Poppins', sans-serif"
   display:
-    fontSize: '30px'
-    fontWeight: '800'
+    fontFamily: "'Poppins', sans-serif"
+    fontSize: '2.5rem'
+    fontWeight: '700'
+    lineHeight: '1.2'
   heading-1:
-    fontSize: '24px'
+    fontFamily: "'Poppins', sans-serif"
+    fontSize: '1.75rem'
     fontWeight: '700'
+    lineHeight: '1.3'
   heading-2:
-    fontSize: '20px'
-    fontWeight: '700'
-  heading-3:
-    fontSize: '18px'
+    fontFamily: "'Poppins', sans-serif"
+    fontSize: '1.5rem'
     fontWeight: '600'
+    lineHeight: '1.4'
+  heading-3:
+    fontFamily: "'Poppins', sans-serif"
+    fontSize: '1.25rem'
+    fontWeight: '600'
+    lineHeight: '1.5'
   body:
-    fontSize: '16px'
+    fontFamily: "'Poppins', sans-serif"
+    fontSize: '1rem'
     fontWeight: '400'
+    lineHeight: '1.6'
   body-small:
-    fontSize: '14px'
+    fontFamily: "'Poppins', sans-serif"
+    fontSize: '0.875rem'
     fontWeight: '400'
+    lineHeight: '1.5'
   caption:
-    fontSize: '12px'
-    fontWeight: '400'
+    fontFamily: "'Poppins', sans-serif"
+    fontSize: '0.75rem'
+    fontWeight: '500'
+    lineHeight: '1.4'
   mono:
-    fontFamily: "'JetBrains Mono', monospace"
-    fontSize: '13px'
+    fontFamily: "'JetBrains Mono', 'Fira Code', monospace"
+    fontSize: '0.8125rem'
+    fontWeight: '400'
+    lineHeight: '1.4'
 rounded:
-  DEFAULT: '6px'
-  lg: '12px'
-  xl: '16px'
-  full: '9999px'
+  sm: 4px
+  md: 8px
+  lg: 12px
+  xl: 16px
+  '2xl': 20px
+  full: 9999px
 spacing:
-  unit: '4px'
-  sidebar-width: '260px'
-  topbar-height: '64px'
+  '1': 4px
+  '2': 8px
+  '3': 12px
+  '4': 16px
+  '5': 20px
+  '6': 24px
+  '8': 32px
+  '10': 40px
+  '12': 48px
+  sidebar-width: 256px
+  topbar-height: 64px
+elevation:
+  '1': '0 1px 2px 0 rgb(0 0 0 / 0.05)'
+  '2': '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)'
+  '3': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)'
+  '4': '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)'
+  '5': '0 25px 50px -12px rgb(0 0 0 / 0.25)'
+motion:
+  fast: 150ms
+  normal: 300ms
+  slow: 500ms
 ---
-
-# ServiceSaaS — Design System
-
-**Ultima atualizacao:** 2026-07-28
-**Implementacao:** Tailwind CSS (CDN via web-frontend/public/index.php + tailwind.config.js inline)
-
-## Brand Voice
-
-ServiceSaaS e a plataforma que profissionais autonomos e pequenas empresas usam para criar propostas profissionais com 1 clique. A identidade visual traduz essa promessa: **crescimento profissional com solidez**.
-
-Tom: **Profissional, direto e otimista.** Nada de jargao. Nada de frescura. Como um bom prestador de servico que entrega o que promete.
-
-## Color System
-
-### Primary: Verde Esmeralda
-
-| Token | Cor | Uso |
-|:---|:---:|:---|
-| `primary` | `#10B981` | Acoes principais, botoes, links, indicadores de sucesso |
-| `primary-700` | `#006c49` | Sidebar, headers escuros, contrastes profundos |
-| `primary-50` | `#ECFDF5` | Fundo sutil para cards destacados |
-
-### Neutrals: Slate
-
-| Token | Cor | Uso |
-|:---|:---:|:---|
-| `sidebar` | `#0F172A` | Sidebar fixa, fundo escuro de navegacao |
-| `surface` | `#F8FAFC` | Fundo geral da aplicacao |
-| `ink` | `#0F172A` | Titulos, valores KPI |
-| `ink-secondary` | `#64748B` | Textos de apoio |
-| `ink-muted` | `#94A3B8` | Placeholders, desabilitados |
-
-### Status Colors
-
-| Status | Cor | Uso |
-|:---|:---:|:---|
-| Success | `#16A34A` | Proposta aprovada, pagamento confirmado |
-| Warning | `#D97706` | Pendente, aguardando acao |
-| Info | `#0284C7` | Em andamento, processando |
-| Danger | `#DC2626` | Rejeitado, cancelado, erros |
-| WhatsApp | `#25D366` | Botao exclusivo WhatsApp |
-
-## Typography
-
-**Primary font:** Poppins (Google Fonts) — moderna, arredondada, legivel.
-
-**Monospace:** JetBrains Mono — para codigos, IDs, valores de transacao.
-
-| Token | Size | Weight | Uso |
-|:---|:---:|:---:|:---|
-| Display | 30px | 800 | KPIs, numeros grandes |
-| H1 | 24px | 700 | Titulos de pagina |
-| H2 | 20px | 700 | Titulos de cards |
-| H3 | 18px | 600 | Subtitulos, modais |
-| Body | 16px | 400 | Texto corrido |
-| Small | 14px | 400 | Tabelas, inputs, labels |
-| Caption | 12px | 400 | Badges, metadados |
-| Mono | 13px | 400 | Codigos, props numbers |
-
-## Components
-
-### Primary Button
-`bg-primary text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-600 active:scale-95 disabled:opacity-50 transition-all`
-
-### Secondary Button
-`border-2 border-border text-ink font-medium px-4 py-2.5 rounded-lg hover:bg-surface transition-all`
-
-### WhatsApp Button
-`bg-[#25D366] text-white px-4 py-2.5 rounded-lg font-medium flex items-center gap-2 hover:brightness-110 transition-all`
-
-### KPI Card
-`bg-white p-5 rounded-xl border border-border shadow-sm`
-
-### Input
-`w-full px-4 py-2.5 rounded-lg border border-border bg-white text-ink focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all outline-none`
-
-### Badge
-`px-2 py-0.5 rounded text-xs font-semibold` + color variant
-
-### Status Badge Variants
-- Draft: `bg-gray-100 text-gray-700`
-- Sent: `bg-blue-100 text-blue-700`
-- Viewed: `bg-purple-100 text-purple-700`
-- Accepted: `bg-green-100 text-green-700`
-- Rejected: `bg-red-100 text-red-700`
-- Paid: `bg-green-100 text-green-700`
-
-### Sidebar
-`w-64 h-screen bg-[#0F172A] text-white fixed left-0 top-0 z-30`
-
-### Table
-`w-full` + `thead bg-surface/80 border-b` + `tbody divide-y divide-border` + `tr hover:bg-surface/50`
-
-### Modal
-`bg-white rounded-xl shadow-modal max-w-2xl w-full` + backdrop `bg-black/30 backdrop-blur-sm`
-
-## Layout
-
-- **Sidebar:** 260px, fixa a esquerda, fundo #0F172A, texto branco
-- **Topbar:** 64px, branca com borda inferior, sticky
-- **Main content:** `ml-64` (desktop), padding `p-6`
-- **Cards:** Padding `p-5`, borda sutil, sombra leve
-- **Responsivo:** Desktop sidebar visivel, tablet icones, mobile hamburguer
-
-## Elevation
-
-| Level | Shadow | Use |
-|:---|:---|:---|
-| Card | `shadow-sm` | KPI cards, tables |
-| Dropdown | `shadow-md` | Menus, selects |
-| Modal | `shadow-xl` | Modals, panels |
-
-## Motion
-
-- **Transitions:** `duration-200` para hovers, `duration-300` para modals
-- **Scale:** `active:scale-95` em botoes para feedback tactil
-- **Fade:** `animate-fade-in` para modals e toasts
-- **No bounce/elastic easing** (evitar efeitos datados)
-
-## Anti-Patterns (Do Not)
-
-- ❌ Nao usar Inter, Arial, ou system-ui (usar Poppins)
-- ❌ Nao usar texto cinza em fundo colorido
-- ❌ Nao usar preto/cinza puro (sempre tintar)
-- ❌ Nao empilhar cards dentro de cards
-- ❌ Nao usar bounce/elastic easing
-- ❌ Nao usar gradients roxo-azul (estetica SaaS generica)
-- ❌ Nao usar bordas laterais em abas
-- ❌ Nao usar sombras escuras em dark mode (glow suave)
-- ❌ Nao usar azul como cor primaria (verde esmeralda e a identidade)

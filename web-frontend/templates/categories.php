@@ -94,9 +94,9 @@ if (!isAuthenticated()) {
                     <div>
                         <label class="block text-sm font-medium text-ink mb-1.5">Cor</label>
                         <div class="flex gap-2">
-                            <input type="color" id="field-color" value="#10B981"
+                            <input type="color" id="field-color" value="#2563EB"
                                 class="w-12 h-10 rounded-lg border border-border bg-surface cursor-pointer">
-                            <input type="text" id="field-color-hex" value="#10B981" maxlength="7"
+                            <input type="text" id="field-color-hex" value="#2563EB" maxlength="7"
                                 class="flex-1 px-4 py-2.5 rounded-lg border border-border bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all">
                         </div>
                     </div>
@@ -198,7 +198,7 @@ function renderTable(categories, pagination) {
                     <tr class="hover:bg-surface/50 transition-colors">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold" style="background: ${c.color || '#10B981'}">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold" style="background: ${c.color || '#2563EB'}">
                                     ${(c.name.charAt(0) || '?').toUpperCase()}
                                 </div>
                                 <div>
@@ -209,7 +209,7 @@ function renderTable(categories, pagination) {
                         </td>
                         <td class="px-6 py-4 text-sm text-ink-secondary hidden md:table-cell">${escapeHtml(c.description || '—')}</td>
                         <td class="px-6 py-4 text-center">
-                            <span class="inline-block w-6 h-6 rounded-full border-2 border-white shadow-sm" style="background: ${c.color || '#10B981'}"></span>
+                            <span class="inline-block w-6 h-6 rounded-full border-2 border-white shadow-sm" style="background: ${c.color || '#2563EB'}"></span>
                         </td>
                         <td class="px-6 py-4 text-right">
                             <div class="flex items-center justify-end gap-1">
@@ -266,8 +266,8 @@ function openCreateModal() {
     document.getElementById('modal-submit-btn').textContent = 'Salvar Categoria';
     document.getElementById('category-form').reset();
     document.getElementById('category-id').value = '';
-    document.getElementById('field-color').value = '#10B981';
-    document.getElementById('field-color-hex').value = '#10B981';
+    document.getElementById('field-color').value = '#2563EB';
+    document.getElementById('field-color-hex').value = '#2563EB';
     document.getElementById('category-modal').classList.remove('hidden');
 }
 
@@ -287,8 +287,8 @@ async function openEditModal(categoryId) {
         document.getElementById('field-name').value = c.name || '';
         document.getElementById('field-description').value = c.description || '';
         document.getElementById('field-icon').value = c.icon || '';
-        document.getElementById('field-color').value = c.color || '#10B981';
-        document.getElementById('field-color-hex').value = c.color || '#10B981';
+        document.getElementById('field-color').value = c.color || '#2563EB';
+        document.getElementById('field-color-hex').value = c.color || '#2563EB';
 
         document.getElementById('category-modal').classList.remove('hidden');
     } catch (err) {

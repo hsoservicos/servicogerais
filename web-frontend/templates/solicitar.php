@@ -409,11 +409,11 @@
         background-color: #E2E8F0;
     }
     .step-dot.active {
-        background-color: #10B981;
-        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+        background-color: #2563EB;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
     }
     .step-dot.completed {
-        background-color: #10B981;
+        background-color: #2563EB;
     }
     .step-number {
         @apply text-xs font-bold;
@@ -430,17 +430,17 @@
         transition: background-color 0.3s ease;
     }
     .step-line.active {
-        background-color: #10B981;
+        background-color: #2563EB;
     }
     .step-label {
         @apply text-xs font-medium transition-colors duration-300;
         color: #94A3B8;
     }
     .step-label.active {
-        color: #10B981;
+        color: #2563EB;
     }
     .step-label.completed {
-        color: #10B981;
+        color: #2563EB;
     }
     .step-content {
         display: none;

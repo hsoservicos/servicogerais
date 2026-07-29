@@ -26,7 +26,7 @@ Web application (PHP + Node.js REST API), responsive (mobile-first), multi-tenan
 ## Design Principles
 
 1. **Ação sobre Informação** — Cada tela tem um propósito claro e um próximo passo óbvio. Nada de dashboards contemplativos.
-2. **Profissional sem ser Frio** — Verde esmeralda (#10B981) como cor primária. Acolhedor, brasileiro, otimista.
+2. **Profissional sem ser Frio** — Azul (#2563EB) como cor primária. Confiável, moderno, profissional.
 3. **Mobile-First** — O profissional está na rua, no celular. Tudo funciona em qualquer tela.
 4. **Confiança com Solidez** — Sidebar escura (#0F172A) ancora o sistema com autoridade. Dados financeiros com tratamento sério.
 5. **Velocidade é Feature** — Criar proposta em < 2 min. Pagamento Pix confirmado em segundos. Sem carregamentos desnecessários.

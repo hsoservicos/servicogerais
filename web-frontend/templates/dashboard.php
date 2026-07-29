@@ -270,7 +270,7 @@ function formatMoney(value) {
                             label: 'Receita',
                             data: values,
                             backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                            borderColor: '#10B981',
+                            borderColor: '#2563EB',
                             borderWidth: 2,
                             borderRadius: 4,
                             borderSkipped: false,

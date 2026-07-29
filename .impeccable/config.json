@@ -5,8 +5,8 @@
     "description": "Plataforma SaaS multi-tenant para gestão de serviços, propostas e pagamentos"
   },
   "design": {
-    "primary": "#10B981",
-    "primaryDark": "#006c49",
+    "primary": "#2563EB",
+    "primaryDark": "#1D4ED8",
     "font": "Poppins",
     "implementation": "tailwind"
   },

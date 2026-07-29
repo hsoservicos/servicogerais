@@ -19,7 +19,7 @@ function generateProposalPDF(proposal) {
 
     const { tenant, items } = proposal;
     const pageWidth = doc.page.width - doc.page.margins.left - doc.page.margins.right;
-    const primary = '#10B981';
+    const primary = '#2563EB';
 
     doc.font('Helvetica-Bold').fontSize(20).fillColor(primary).text(proposal.number || 'PROPOSTA', { continued: false });
     doc.moveDown(0.3);
