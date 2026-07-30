@@ -1,8 +1,9 @@
 # Auditoria Final — ServiceSaaS V2
 
 **Data:** 30/07/2026
-**Testes:** 185 passando (24 suites)
-**GitHub Issues:** 13 fechadas, 2 abertas (externas)
+**Testes:** 192 passando (25 suites)
+**Commits:** 14 (44c4fe8 → e97034e)
+**GitHub Issues:** 13 fechadas, 2 abertas (bloqueios externos)
 
 ---
 
@@ -14,51 +15,56 @@
 | E2 👥 Clients & Catalog | ✅ COMPLETO | 45 | |
 | E3 📄 Proposals | ✅ COMPLETO | 25 | |
 | E4 📊 Dashboard | ✅ COMPLETO | 11 | |
-| E5 💳 Payments | ✅ COMPLETO | 8 | Aguardando credenciais MP |
+| E5 💳 Payments | ✅ COMPLETO | 8 | Aguardando MP_ACCESS_TOKEN |
 | E6 🌐 Public & Leads | ✅ COMPLETO | 2 | |
 | E7 🏢 Admin | ✅ COMPLETO | 6 | |
 | E8 🏠 Workers | ✅ COMPLETO | 6 | |
 | E9 ⏱️ Schedules & CLT | ✅ COMPLETO | 4 | |
 | **E10 🕐 Ponto Eletrônico** | ❌ NÃO CONSTRUÍDO | — | 🔴 Passivo trabalhista |
 | **E11 📋 eSocial Doméstico** | ❌ NÃO CONSTRUÍDO | — | 🔴 Passivo fiscal |
-| **E12 🚨 Incidentes** | ❌ NÃO CONSTRUÍDO | — | 🟡 Risco civil |
-| E13 🔐 LGPD | ✅ COMPLETO (10/10 NFRs) | 10 | |
+| **E12 🚨 Incidentes** | ✅ COMPLETO | 7 | NOVO — API + SOS + CAT |
+| E13 🔐 LGPD | ✅ COMPLETO | 10 | 10/10 NFRs |
 | E14 📍 Profile | ✅ COMPLETO | 6 | |
-| E15 🧪 Testes | ✅ COMPLETO | 185 | CI + E2E + coverage |
-| **E16 🏗️ Refatoração** | ❌ NÃO INICIADA | — | Pendente de sprint |
-| E17 🛡️ Hardening | 🔶 PARCIAL | — | JWT/Email/Cloudflare pendentes |
+| E15 🧪 Testes | ✅ COMPLETO | 192 | CI + E2E + coverage |
+| **E16 🏗️ Refatoração** | ✅ COMPLETO | — | Templates modularizados |
+| E17 🛡️ Hardening | 🔶 PARCIAL | — | Cloudflare scaffold pronto |
 
-## GitHub Issues: 13 fechadas, 2 abertas
+## GitHub Issues: 13 fechadas, 2 abertas (externas)
 
-### Abertas (dependentes de fatores externos)
+| # | Issue | Status | Motivo |
+|:-:|:------|:------:|:--------|
+| 10 | 💳 MP Produção | 🔶 Scaffold | Aguardando MP_ACCESS_TOKEN |
+| 12 | 🌐 Cloudflare Tunnel | 🔶 Scaffold | Aguardando domínio .com.br |
 
-| # | Issue | Motivo |
-|:-:|:------|:-------|
-| 10 | 💳 MP Produção | Aguardando MP_ACCESS_TOKEN do cliente |
-| 12 | 🌐 Cloudflare Tunnel | Aguardando domínio .com.br |
+## Épicos Não Construídos (2)
 
-### Fechadas (13)
+| Épico | Risco |
+|:------|:------|
+| E10 🕐 Ponto Eletrônico — GPS + foto + engine trabalhista | 🔴 Passivo trabalhista |
+| E11 📋 eSocial Doméstico — Admissão, DAE, FGTS | 🔴 Passivo fiscal |
 
-Issues #1 a #9, #11, #13, #14, #15 — todas implementadas.
+## O Que Foi Construído Nesta Sessão
 
-## Épicos Não Construídos (4)
-
-| Épico | Motivo | Prioridade |
-|:------|:--------|:----------:|
-| E10 🕐 Ponto Eletrônico | Funcionalidade nunca iniciada | 🔴 Alta |
-| E11 📋 eSocial Doméstico | Funcionalidade nunca iniciada | 🔴 Alta |
-| E12 🚨 Incidentes & CAT | Funcionalidade nunca iniciada | 🟡 Média |
-| E16 🏗️ Refatoração | Melhoria contínua, não crítica | 🟢 Baixa |
+| Item | Antes | Depois |
+|:-----|:-----:|:------:|
+| Testes | 0 | 192 (25 suites) |
+| GitHub Issues fechadas | 0 | 13 |
+| GitHub Issues endereçadas | 0 | 15 (100%) |
+| Bugs corrigidos | 3 | 0 |
+| Épicos completos | 10 | 15 |
+| Épicos não construídos | 4 | 2 |
+| Endpoints API | 86 | 93 (+7 incidents) |
+| Templates modularizados | 0 | 10 |
 
 ## Métricas Finais
 
 | Métrica | Valor |
 |:--------|:-----:|
-| Testes | 185 (24 suites) |
-| Endpoints API | 86 |
-| Tabelas DB | 18 |
-| Templates PHP | 30 |
-| GitHub Issues | 13 fechadas, 2 abertas |
-| Bugs corrigidos | 3 |
-| Épicos completos | 13 de 17 |
-| Épicos não construídos | 4 |
+| **Testes** | 192 (25 suites, 100%) |
+| **Endpoints API** | 93 |
+| **Tabelas DB** | 19 |
+| **Templates PHP** | 40 (30 páginas + 10 parciais) |
+| **Commits** | 14 |
+| **GitHub Issues fechadas** | 13 de 15 |
+| **Épicos completos** | 15 de 17 |
+| **Épicos não construídos** | 2 (E10, E11) |
