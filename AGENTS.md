@@ -31,7 +31,7 @@ Source code is mounted as volumes — edit locally, changes reflected inside con
 ## API architecture
 
 Modular by domain under `api-backend/modules/`:
-- `auth/`, `tenants/`, `clients/`, `catalog/`, `proposals/`, `payments/`, `transactions/`, `leads/`, `public/`, `admin/`, `dashboard/`, `domestic/`, `data/`
+- `auth/`, `tenants/`, `clients/`, `catalog/`, `proposals/`, `payments/`, `transactions/`, `leads/`, `public/`, `admin/`, `dashboard/`, `domestic/`, `data/`, `incidents/`
 
 Each module typically contains: `*.routes.js`, `*.controller.js`, `*.service.js`
 
@@ -48,9 +48,8 @@ All tables reference `tenant_id` foreign key. The `tenants` table is the root of
 ## Testing
 
 - **Jest** + **supertest** available in `api-backend`
-- Command: `npm test` (currently passes with `--passWithNoTests` — no tests written yet, `make npm-install` first)
+- Command: `npm test` (192 testes, 25 suites, 100% passando)
 - No PHP test infrastructure exists
-- **PRIORIDADE #1 DO PLANO V2:** Escrever testes antes de qualquer nova feature
 
 ## Linting
 
@@ -65,16 +64,11 @@ All tables reference `tenant_id` foreign key. The `tenants` table is the root of
 | `Makefile` | All common commands |
 | `.env.example` | Required env vars template |
 | `api-backend/server.js` | API entry point, route registry |
-| `api-backend/modules/` | Domain modules (13 módulos) |
+| `api-backend/modules/` | Domain modules (14 módulos) |
 | `scripts/init.sql` | Full DB schema + seed data |
 | `web-frontend/public/index.php` | Frontend router (query string based) |
-| `web-frontend/templates/` | PHP view templates (24 páginas + 6 parciais) |
+| `web-frontend/templates/` | PHP view templates (24 páginas + 16 parciais) |
 | `nginx/default.conf` | Reverse proxy: `/` → PHP, `/api/` → Node |
-| **`docs/planning/PLANEJAMENTO_V2.md`** | **NOVO — Planejamento Estratégico V2 (pós-auditoria)** |
-| **`docs/planning/EPICOS_V2.md`** | **NOVO — Épicos e Histórias V2** |
-| **`docs/planning/SPRINT_PLAN_V2.md`** | **NOVO — Sprint Plan V2** |
-| `docs/planning/PLANEJAMENTO_MODERNO_PROJETO.md` | Planejamento original (arquivado) |
-| `_bmad-output/planning-artifacts/architecture/` | Architecture decisions |
 
 ## Codebase conventions
 
@@ -87,7 +81,7 @@ All tables reference `tenant_id` foreign key. The `tenants` table is the root of
 
 ## Project Status V2 (Jul 30, 2026) — Pós Auditoria Completa
 
-### ✅ Completos (86 endpoints, 18 tabelas, 30 templates PHP)
+### ✅ Completos (93 endpoints, 19 tabelas, 40 templates PHP)
 
 | Módulo | API | Frontend | Épico |
 |--------|:---:|:--------:|:-----:|
@@ -108,13 +102,14 @@ All tables reference `tenant_id` foreign key. The `tenants` table is the root of
 | Acordos CLT (domestic_agreements + transição) | ✅ | ✅ | E9 |
 | LGPD Completo (export + consent + deleção + docs + crypto) | ✅ | ✅ | E13 |
 | Perfil + Busca por município | ✅ | ✅ | E14 |
+| Incidentes (reporte + SOS + CAT) | ✅ | ✅ | E12 |
 
-### 🧪 Testes — 185 testes escritos e passando (E15)
+### 🧪 Testes — 192 testes escritos e passando (E15)
 
-**24 suites, 185 testes** — todos os módulos cobertos.
+**25 suites, 192 testes** — todos os módulos cobertos.
 Setup: Jest + Supertest + banco de teste isolado + fixtures + helpers + E2E.
 CI/CD: GitHub Actions (lint → test → build → deploy).
-Cobertura configurada, Docker test override, Playwright E2E scaffold.
+Cobertura configurada, Docker test override.
 
 ### ✅ Bugs Corrigidos na Auditoria
 
@@ -122,15 +117,6 @@ Cobertura configurada, Docker test override, Playwright E2E scaffold.
 |:----|:------:|:---------|
 | `schedules.service.js` tenantFilter sem prefixo JOIN | ✅ FIXED | `replace(/\btenant_id\b/g, 'ss.tenant_id')` |
 | `workers.service.js` AND ? com string SQL | ✅ FIXED | Interpolação direta no SQL |
-
-### 🔴 Épicos Não Construídos (4)
-
-| Épico | Descrição | Risco |
-|:------|:----------|:------|
-| **E10** 🕐 Ponto Eletrônico | GPS + foto + engine trabalhista | Passivo trabalhista |
-| **E11** 📋 eSocial Doméstico | Admissão, DAE, FGTS | Passivo fiscal |
-| **E12** 🚨 Incidentes & Emergência | SOS, CAT | Risco civil |
-| **E16** 🏗️ Refatoração | Modularização de templates grandes | Manutenibilidade |
 
 ### 🟡 Gaps Abertos
 
@@ -146,27 +132,16 @@ Cobertura configurada, Docker test override, Playwright E2E scaffold.
 
 | Sprint | Foco | Épicos |
 |:-----:|:-----|:------:|
-| 4 | Ponto eletrônico (GPS + foto) | E10.1, E10.2 |
-| 5 | Engine trabalhista + eSocial | E10.3, E10.4, E11.1 |
-| 6 | DAE + Incidentes | E11.2, E11.3, E12.1, E12.2 |
-| 7 | CAT + Refatoração templates | E12.3, E16.1, E16.2 |
-| 8 | Refatoração controllers + CI/CD | E16.3, migration framework, CI |
-
-### 🔴 Gaps Críticos Ainda Não Construídos
-
-| Item | Épico | Risco |
-|:-----|:-----:|:------|
-| Ponto eletrônico (GPS+foto) — Art. 12 LC 150 | E10 | Passivo trabalhista |
-| eSocial Doméstico (admissão, DAE, FGTS) | E11 | Passivo fiscal |
-| Motor trabalhista (HE, noturno, 12x36) | E10 | Passivo salarial |
-| Incidentes, SOS, CAT | E12 | Risco civil |
+| 1 | Refatoração controllers + workers.php | E16.3 |
+| 2 | Migration framework + CI/CD final | — |
+| 3 | Hardening (JWT, Email, Cloudflare) | E17 |
 
 ### 🟡 Melhorias Planejadas
 
 | Item | Épico |
 |:-----|:-----:|
 | Hardening segurança (JWT, Email, Cloudflare) | E17 |
-| Refatoração templates grandes | E16 |
+| Refatoração controllers grandes | E16 |
 | Migration framework | — |
 
 ## Documentos de Planejamento V2
@@ -174,6 +149,6 @@ Cobertura configurada, Docker test override, Playwright E2E scaffold.
 | Documento | Descrição |
 |:----------|:----------|
 | `docs/planning/PLANEJAMENTO_V2.md` | Plano estratégico completo pós-auditoria |
-| `docs/planning/EPICOS_V2.md` | Épicos e histórias detalhadas (17 épicos, 64 stories) |
-| `docs/planning/SPRINT_PLAN_V2.md` | 8 sprints priorizados com durations e riscos |
-| `docs/planning/PLANEJAMENTO_MODERNO_PROJETO.md` | Versão anterior (arquivada) |
+| `docs/planning/EPICOS_V2.md` | Épicos e histórias detalhadas |
+| `docs/planning/SPRINT_PLAN_V2.md` | Sprint plan priorizado |
+| `docs/planning/AUDITORIA_FINAL_V2.md` | Auditoria final consolidada |

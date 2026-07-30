@@ -97,9 +97,9 @@ O ServiceSaaS já possui uma base operacional completa:
 | Módulo | Descrição | Prioridade |
 |--------|-----------|:----------:|
 | Testes Automatizados | Jest + Supertest instalados, 0 testes escritos | 🔴 Crítica |
-| Ponto Eletrônico | Clock-in/out com GPS + foto (Art. 12 LC 150) | 🔴 Alta |
-| eSocial Doméstico | Admissão, DAE, FGTS via job queue | 🔴 Alta |
-| Motor Trabalhista | Horas extras, noturno, escala 12x36 | 🟡 Média |
+| Ponto Eletrônico | Clock-in/out com GPS + foto | ⛔ FORA DE ESCOPO |
+| eSocial Doméstico | Admissão, DAE, FGTS | ⛔ FORA DE ESCOPO |
+| Motor Trabalhista | Horas extras, noturno, escala 12x36 | ⛔ FORA DE ESCOPO |
 | Incidentes/Seguro | Reporte, botão SOS, emissão CAT | 🟡 Média |
 | Serviço de Email | Hoje é stub (console.log) | 🟡 Média |
 | Migration Framework | SQL manual sem version tracking | 🟢 Baixa |
@@ -260,23 +260,16 @@ Sprint 1: Setup testes + Auth/Clients/Catalog tests (E15.1 + E15.2)
 Sprint 2: Proposals/Dashboard/Payments tests (E15.3 + E15.4)
 ```
 
-### Fase 2: Compliance Doméstico (Sprints 3-6)
-**Módulos obrigatórios LC 150/2015**
+### Fase 2: Incidentes + Refatoração (Sprints 4-5)
+**Funcionalidades complementares + qualidade de código**
 
 ```
-Sprint 3: Ponto Eletrônico — GPS + foto + intervalo (E10.1 + E10.2)
-Sprint 4: Motor Trabalhista — HE, noturno, 12x36 (E10.3 + E10.4)
-Sprint 5: eSocial — Admissão + DAE + Dashboard (E11.1 + E11.2 + E11.3)
-Sprint 6: Incidentes + SOS + CAT + LGPD Deleção (E12 + E13.2)
+Sprint 4: Refatoração Controllers + Migration framework (E16.3)
+Sprint 5: Hardening — Email, Cloudflare, JWT (E17)
 ```
 
-### Fase 3: Hardening & Refatoração (Sprint 7-8)
-**Qualidade de código e segurança**
-
-```
-Sprint 7: Hardening — JWT, CORS, Email, Rate Limit (E17)
-Sprint 8: Refatoração — Templates grandes (E16)
-```
+> ⛔ **Nota:** E10 (Ponto Eletrônico) e E11 (eSocial Doméstico) foram removidos do escopo.
+> O ServiceSaaS não realiza funções de Departamento Pessoal ou Controladoria Contábil.
 
 ---
 
