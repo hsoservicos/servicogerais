@@ -1,28 +1,5 @@
 require('dotenv').config();
-
-const EMAIL_PROVIDER = process.env.EMAIL_PROVIDER || 'log';
-
-async function sendEmail({ to, subject, html, text }) {
-  if (EMAIL_PROVIDER === 'sendgrid') {
-    try {
-      const sgMail = require('@sendgrid/mail');
-      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-      await sgMail.send({ to, from: process.env.SENDGRID_FROM_EMAIL || 'noreply@servicesaas.com', subject, html, text });
-      return { sent: true, provider: 'sendgrid', to };
-    } catch (err) {
-      console.error('[EMAIL] SendGrid error:', err.message);
-      return { sent: false, error: err.message };
-    }
-  }
-
-  console.log('\n═══════════════════════════════════════════════════════');
-  console.log('  📧 EMAIL (' + EMAIL_PROVIDER + ') — To: ' + to);
-  console.log('  Subject: ' + subject);
-  console.log('─────────────────────────────────────────────────────');
-  if (text) console.log(text);
-  console.log('═══════════════════════════════════════════════════════\n');
-  return { sent: true, provider: 'log', to };
-}
+const { getProvider } = require('./email/provider');
 
 function buildTemplate(title, bodyHtml) {
   return '<div style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;">'
@@ -33,6 +10,17 @@ function buildTemplate(title, bodyHtml) {
     + bodyHtml
     + '<hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;">'
     + '<p style="color:#9ca3af;font-size:12px;">ServiceSaaS — Sua plataforma de serviços</p></div></div>';
+}
+
+async function sendEmail({ to, subject, html, text }) {
+  const provider = getProvider();
+  try {
+    return await provider.send({ to, subject, html, text });
+  } catch (err) {
+    console.error('[EMAIL] Provider error:', err.message);
+    const logProvider = getProvider('log');
+    return logProvider.send({ to, subject, html, text });
+  }
 }
 
 async function sendResetPasswordEmail({ to, name, token }) {
