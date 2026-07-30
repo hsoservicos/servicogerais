@@ -146,6 +146,9 @@ app.use('/api/v1/data', require('./modules/data/data.routes'));
 // ── Domestic Operations Routes (Epic 9 — Story 9.2/9.3) ─
 app.use('/api/v1/domestic', require('./modules/domestic/domestic.routes'));
 
+// ── Notifications Routes ─────────────────────────────────
+app.use('/api/v1/notifications', require('./modules/notifications/notifications.routes'));
+
 // ── Incidents Routes (Epic 12) ───────────────────────────
 app.use('/api/v1/incidents', require('./modules/incidents/incidents.routes'));
 

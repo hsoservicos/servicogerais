@@ -8,7 +8,7 @@ const { v4: uuidv4 } = require('uuid');
 const { query, transaction } = require('../../config/database');
 const { jwt: jwtConfig } = require('../../config/auth');
 const { AppError, ERROR_CODES } = require('../../middlewares/error.middleware');
-const { sendResetPasswordEmail } = require('../../services/email.service');
+const { sendResetPasswordEmail, sendWelcomeEmail } = require('../../services/email.service');
 const { validateCPF, validateCNPJ, validateEmail } = require('../../utils/validation');
 
 // ── POST /auth/register ──────────────────────────────────
@@ -103,6 +103,8 @@ async function register(req, res, next) {
       jwtConfig.secret,
       { expiresIn: jwtConfig.expiresIn, algorithm: jwtConfig.algorithm }
     );
+
+    sendWelcomeEmail({ to: email, name: companyName }).catch(() => {});
 
     res.status(201).json({
       message: 'Cadastro realizado com sucesso!',

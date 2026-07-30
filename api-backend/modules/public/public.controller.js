@@ -7,6 +7,7 @@
 // ═══════════════════════════════════════════════════════════════
 
 const { query } = require('../../config/database');
+const comm = require('../../services/communication.service');
 
 // ═══════════════════════════════════════════════════════════════
 // GET /api/v1/public/categories — Listar Categorias Públicas
@@ -212,6 +213,11 @@ async function createLead(req, res, next) {
         lgpd_consent_terms ? 1 : 0,
       ]
     );
+
+    comm.onLeadCreated({
+      lead: { customer_name, service_name },
+      tenantId: tenant_id,
+    }).catch(() => {});
 
     res.status(201).json({
       message: 'Solicitação enviada com sucesso!',

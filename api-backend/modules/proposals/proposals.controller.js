@@ -5,6 +5,7 @@
 
 const { v4: uuidv4 } = require('uuid');
 const { query } = require('../../config/database');
+const comm = require('../../services/communication.service');
 
 // ── Helpers ──────────────────────────────────────────────
 
@@ -440,6 +441,13 @@ async function updateStatus(req, res, next) {
        WHERE id = ? AND ${tenantFilter}`,
       [status, ...extraParams, id]
     );
+
+    comm.onProposalStatusChange({
+      proposal: { number: rows[0].number },
+      newStatus: status,
+      tenantId: req.tenantId,
+      clientId: rows[0].client_id,
+    }).catch(() => {});
 
     res.json({
       message: `Status atualizado para "${status}" com sucesso!`,

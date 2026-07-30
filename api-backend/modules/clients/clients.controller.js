@@ -101,72 +101,33 @@ async function create(req, res, next) {
       });
     }
 
-    const {
-      name, email, documentCpf, documentCnpj,
-      zipcode, phone, whatsapp, address, city, state, notes,
-    } = req.body;
+    const c = req.body;
+    const cName = c.name?.trim();
+    if (!cName) return res.status(400).json({ error: 'ERR_VALIDATION', message: 'Nome é obrigatório', correlationId: req.correlationId });
+    if (c.email && !validateEmail(c.email)) return res.status(400).json({ error: 'ERR_VALIDATION', message: 'E-mail inválido', correlationId: req.correlationId });
+    if (c.documentCpf && !validateCPF(c.documentCpf)) return res.status(400).json({ error: 'ERR_VALIDATION', message: 'CPF inválido', correlationId: req.correlationId });
+    if (c.documentCnpj && !validateCNPJ(c.documentCnpj)) return res.status(400).json({ error: 'ERR_VALIDATION', message: 'CNPJ inválido', correlationId: req.correlationId });
 
-    // Validações
-    if (!name || name.trim().length === 0) {
-      return res.status(400).json({
-        error: 'ERR_VALIDATION',
-        message: 'Nome é obrigatório',
-        correlationId: req.correlationId,
-      });
-    }
-
-    if (email && !validateEmail(email)) {
-      return res.status(400).json({
-        error: 'ERR_VALIDATION',
-        message: 'Formato de e-mail inválido',
-        correlationId: req.correlationId,
-      });
-    }
-
-    if (documentCpf && !validateCPF(documentCpf)) {
-      return res.status(400).json({
-        error: 'ERR_VALIDATION',
-        message: 'CPF inválido',
-        correlationId: req.correlationId,
-      });
-    }
-
-    if (documentCnpj && !validateCNPJ(documentCnpj)) {
-      return res.status(400).json({
-        error: 'ERR_VALIDATION',
-        message: 'CNPJ inválido',
-        correlationId: req.correlationId,
-      });
-    }
-
+    const fields = ['tenant_id', 'name', 'email', 'document_cpf', 'document_cnpj',
+      'zipcode', 'phone', 'whatsapp', 'address', 'city', 'state', 'notes', 'active',
+      'notify_email', 'notify_whatsapp', 'notify_telegram', 'telegram_chat_id'];
+    const values = [
+      tenantId, cName, c.email || null, c.documentCpf || null, c.documentCnpj || null,
+      c.zipcode || null, c.phone || null, c.whatsapp || null, c.address || null,
+      c.city || null, c.state || null, c.notes || null, true,
+      c.notifyEmail !== undefined ? (c.notifyEmail ? 1 : 0) : 1,
+      c.notifyWhatsapp !== undefined ? (c.notifyWhatsapp ? 1 : 0) : 1,
+      c.notifyTelegram !== undefined ? (c.notifyTelegram ? 1 : 0) : 0,
+      c.telegramChatId || null,
+    ];
     const result = await query(
-      `INSERT INTO clients (tenant_id, name, email, document_cpf, document_cnpj,
-                            zipcode, phone, whatsapp, address, city, state, notes, active)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE)`,
-      [
-        tenantId,
-        name.trim(),
-        email || null,
-        documentCpf || null,
-        documentCnpj || null,
-        zipcode || null,
-        phone || null,
-        whatsapp || null,
-        address || null,
-        city || null,
-        state || null,
-        notes || null,
-      ]
+      `INSERT INTO clients (${fields.join(', ')}) VALUES (${fields.map(() => '?').join(', ')})`,
+      values
     );
 
     res.status(201).json({
       message: 'Cliente cadastrado com sucesso!',
-      client: {
-        id: result.insertId,
-        name: name.trim(),
-        email: email || null,
-        tenantId,
-      },
+      client: { id: result.insertId, name: cName, email: c.email || null, tenantId },
       correlationId: req.correlationId,
     });
   } catch (err) {

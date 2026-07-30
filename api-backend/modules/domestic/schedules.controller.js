@@ -1,4 +1,5 @@
 const scheduleService = require('./schedules.service');
+const comm = require('../../services/communication.service');
 
 async function list(req, res, next) {
   try {
@@ -104,6 +105,12 @@ async function create(req, res, next) {
     const alertMessage = frequencyCheck.currentCount === 1
       ? 'Atenção: Esta é a segunda diária desta diarista na semana. O limite é 2 dias/semana.'
       : null;
+
+    comm.onScheduleCreated({
+      schedule: { scheduled_date: scheduledDate },
+      tenantId,
+      clientId,
+    }).catch(() => {});
 
     res.status(201).json({
       message: 'Agendamento criado com sucesso!',

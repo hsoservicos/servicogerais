@@ -40,6 +40,14 @@ module.exports = async function globalSetup() {
     ALTER TABLE tenants ADD COLUMN latitude DECIMAL(10,8) NULL;
     ALTER TABLE tenants ADD COLUMN longitude DECIMAL(11,8) NULL;
     ALTER TABLE clients ADD COLUMN zipcode VARCHAR(9) NULL;
+    ALTER TABLE clients ADD COLUMN notify_email BOOLEAN DEFAULT TRUE;
+    ALTER TABLE clients ADD COLUMN notify_whatsapp BOOLEAN DEFAULT TRUE;
+    ALTER TABLE clients ADD COLUMN notify_telegram BOOLEAN DEFAULT FALSE;
+    ALTER TABLE clients ADD COLUMN telegram_chat_id VARCHAR(100) NULL;
+    ALTER TABLE tenants ADD COLUMN notify_email BOOLEAN DEFAULT TRUE;
+    ALTER TABLE tenants ADD COLUMN notify_whatsapp BOOLEAN DEFAULT TRUE;
+    ALTER TABLE tenants ADD COLUMN notify_telegram BOOLEAN DEFAULT FALSE;
+    ALTER TABLE tenants ADD COLUMN telegram_chat_id VARCHAR(100) NULL;
 
     CREATE TABLE IF NOT EXISTS workers (
       id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
