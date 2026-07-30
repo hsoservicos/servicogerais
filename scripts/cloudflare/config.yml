@@ -1,0 +1,9 @@
+tunnel: servicos-flex
+credentials-file: /home/nonroot/.cloudflared/credentials.json
+
+ingress:
+  - hostname: app.seudominio.com.br
+    service: http://nginx:80
+  - hostname: admin.seudominio.com.br
+    service: http://nginx:80
+  - service: http_status:404

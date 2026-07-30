@@ -85,7 +85,7 @@ All tables reference `tenant_id` foreign key. The `tenants` table is the root of
 - Mercado Pago integration in `config/mercadopago.js` — API runs in degraded mode if `MP_ACCESS_TOKEN` not set
 - No migration framework — single `init.sql` executed at MySQL container init
 
-## Project Status V2 (Jul 29, 2026) — Pós Auditoria Completa
+## Project Status V2 (Jul 30, 2026) — Pós Auditoria Completa
 
 ### ✅ Completos (86 endpoints, 18 tabelas, 30 templates PHP)
 
@@ -106,14 +106,15 @@ All tables reference `tenant_id` foreign key. The `tenants` table is the root of
 | Agendamentos (CRUD + trava frequência) | ✅ | ✅ | E9 |
 | Cálculo CLT (INSS/FGTS/13º/férias) | ✅ | ✅ | E9 |
 | Acordos CLT (domestic_agreements + transição) | ✅ | ✅ | E9 |
-| LGPD Exportação + Consentimento | ✅ | ✅ | E13 |
+| LGPD Completo (export + consent + deleção + docs + crypto) | ✅ | ✅ | E13 |
 | Perfil + Busca por município | ✅ | ✅ | E14 |
 
-### 🧪 Testes — 177 testes escritos e passando (E15)
+### 🧪 Testes — 185 testes escritos e passando (E15)
 
-**Sprints 1-3 concluídos** — 177 testes (23 suites) para todos os módulos.
-Setup completo: Jest + Supertest + banco de teste isolado + fixtures + helpers.
-Hardening parcial: JWT secret, CORS, Helmet, Rate Limit, Email service.
+**24 suites, 185 testes** — todos os módulos cobertos.
+Setup: Jest + Supertest + banco de teste isolado + fixtures + helpers + E2E.
+CI/CD: GitHub Actions (lint → test → build → deploy).
+Cobertura configurada, Docker test override, Playwright E2E scaffold.
 
 ### ✅ Bugs Corrigidos na Auditoria
 
@@ -122,13 +123,14 @@ Hardening parcial: JWT secret, CORS, Helmet, Rate Limit, Email service.
 | `schedules.service.js` tenantFilter sem prefixo JOIN | ✅ FIXED | `replace(/\btenant_id\b/g, 'ss.tenant_id')` |
 | `workers.service.js` AND ? com string SQL | ✅ FIXED | Interpolação direta no SQL |
 
-### 🔴 Épicos Não Construídos (3)
+### 🔴 Épicos Não Construídos (4)
 
 | Épico | Descrição | Risco |
 |:------|:----------|:------|
 | **E10** 🕐 Ponto Eletrônico | GPS + foto + engine trabalhista | Passivo trabalhista |
 | **E11** 📋 eSocial Doméstico | Admissão, DAE, FGTS | Passivo fiscal |
 | **E12** 🚨 Incidentes & Emergência | SOS, CAT | Risco civil |
+| **E16** 🏗️ Refatoração | Modularização de templates grandes | Manutenibilidade |
 
 ### 🟡 Gaps Abertos
 
@@ -136,9 +138,9 @@ Hardening parcial: JWT secret, CORS, Helmet, Rate Limit, Email service.
 |:----|:------|:-----|
 | Email service em modo log | E17 | Ativar SendGrid |
 | JWT secret ainda com default | E17 | Gerar secret 64 caracteres |
-| Deploy automático CI/CD | E15 | Adicionar deploy ao workflow |
+| MP_ACCESS_TOKEN não configurado | E5 | Obter credenciais de produção |
+| Cloudflare Tunnel não ativo | E17 | Configurar domínio + tunnel |
 | Migration framework ausente | — | Criar `scripts/migrate.js` |
-| Docker test override ausente | E15 | Criar `docker-compose.test.yml` |
 
 ### 📝 Próximos Sprints
 
@@ -163,10 +165,9 @@ Hardening parcial: JWT secret, CORS, Helmet, Rate Limit, Email service.
 
 | Item | Épico |
 |:-----|:-----:|
-| Hardening segurança (JWT, CORS, Email, Rate Limit) | E17 |
-| Refatoração templates grandes (proposals.php 1056L, solicitar.php 979L) | E16 |
+| Hardening segurança (JWT, Email, Cloudflare) | E17 |
+| Refatoração templates grandes | E16 |
 | Migration framework | — |
-| Deploy automático | E15 |
 
 ## Documentos de Planejamento V2
 
