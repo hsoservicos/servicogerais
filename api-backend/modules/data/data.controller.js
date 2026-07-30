@@ -85,4 +85,17 @@ async function updateConsent(req, res, next) {
   }
 }
 
-module.exports = { exportData, requestDeletion, listConsents, updateConsent };
+async function processDeletion(req, res, next) {
+  try {
+    const userId = req.user?.id || req.user?.sub;
+    if (!userId) {
+      return res.status(401).json({ error: 'ERR_UNAUTHORIZED', message: 'Usuário não autenticado', correlationId: req.correlationId });
+    }
+    const count = await dataService.processDeletionQueue();
+    res.json({ message: `${count} deleções processadas.`, processed: count, correlationId: req.correlationId });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { exportData, requestDeletion, processDeletion, listConsents, updateConsent };

@@ -42,12 +42,29 @@ async function exportUserData(userId, tenantId) {
   };
 }
 
-async function requestDataDeletion(userId, tenantId) {
-  const user = await query('SELECT id, name, email FROM users WHERE id = ?', [userId]);
-  if (user.length === 0) throw Object.assign(new Error('User not found'), { statusCode: 404 });
+const DELETION_QUEUE_TABLE = 'deletion_queue';
 
+async function ensureQueueTable() {
+  try {
+    await query(
+      `CREATE TABLE IF NOT EXISTS ${DELETION_QUEUE_TABLE} (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        user_id INT UNSIGNED NOT NULL,
+        tenant_id INT UNSIGNED NOT NULL,
+        status ENUM('pending','processing','completed','cancelled') DEFAULT 'pending',
+        requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        scheduled_for DATETIME NOT NULL,
+        processed_at TIMESTAMP NULL,
+        metadata JSON NULL,
+        INDEX idx_queue_status (status),
+        INDEX idx_queue_scheduled (scheduled_for)
+      ) ENGINE=InnoDB`
+    );
+  } catch (_) { }
+}
+
+async function executeDeletion(userId, tenantId) {
   const ANONYMIZED = '[ANONYMIZED]';
-
   await transaction(async (conn) => {
     await conn.execute(
       `UPDATE users SET
@@ -68,43 +85,85 @@ async function requestDataDeletion(userId, tenantId) {
       [tenantId]
     );
 
-    const clientsData = await conn.execute(
-      `SELECT id, name, email, document_cpf, document_cnpj, phone, whatsapp,
-              address, city, state, notes
-       FROM clients WHERE tenant_id = ?`,
+    const [clientsData] = await conn.execute(
+      'SELECT id, name, email, document_cpf, document_cnpj, phone, whatsapp FROM clients WHERE tenant_id = ?',
       [tenantId]
     );
+    for (const c of clientsData || []) {
+      await conn.execute(
+        `UPDATE clients SET name = CONCAT(SUBSTRING(name, 1, 2), '...DELETED'),
+         email = NULL, document_cpf = NULL, document_cnpj = NULL,
+         phone = NULL, whatsapp = NULL WHERE id = ?`, [c.id]
+      );
+    }
 
-    if (clientsData[0] && clientsData[0].length > 0) {
-      for (const client of clientsData[0]) {
-        await conn.execute(
-          `UPDATE clients SET
-            name = CONCAT(SUBSTRING(name, 1, 2), '...DELETED'),
-            email = NULL, document_cpf = NULL, document_cnpj = NULL,
-            phone = NULL, whatsapp = NULL, notes = NULL
-           WHERE id = ?`,
-          [client.id]
-        );
-      }
+    const [propsData] = await conn.execute(
+      'SELECT id, title, notes, client_id FROM proposals WHERE tenant_id = ?', [tenantId]
+    );
+    for (const p of propsData || []) {
+      await conn.execute(
+        `UPDATE proposals SET title = CONCAT(SUBSTRING(title, 1, 3), '...DEL'),
+         description = NULL, notes = NULL, client_id = NULL WHERE id = ?`, [p.id]
+      );
     }
 
     await conn.execute(
-      `UPDATE lgpd_consent SET granted = FALSE, revoked_at = NOW()
-       WHERE user_id = ? AND granted = TRUE`,
+      'UPDATE lgpd_consent SET granted = FALSE, revoked_at = NOW() WHERE user_id = ? AND granted = TRUE',
       [userId]
     );
   });
+}
+
+async function requestDataDeletion(userId, tenantId) {
+  const user = await query('SELECT id, name, email FROM users WHERE id = ?', [userId]);
+  if (user.length === 0) throw Object.assign(new Error('User not found'), { statusCode: 404 });
+
+  await ensureQueueTable();
+
+  const scheduledFor = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
+  await query(
+    `INSERT INTO ${DELETION_QUEUE_TABLE} (user_id, tenant_id, status, scheduled_for, metadata)
+     VALUES (?, ?, 'pending', ?, ?)`,
+    [userId, tenantId, scheduledFor, JSON.stringify({ requestedAt: new Date().toISOString() })]
+  );
 
   await query(
     `INSERT INTO audit_log (tenant_id, user_id, action, entity_type, entity_id, metadata)
-     VALUES (?, ?, 'data_deletion_executed', 'user', ?, ?)`,
+     VALUES (?, ?, 'data_deletion_requested', 'user', ?, ?)`,
     [tenantId, userId, userId, JSON.stringify({
-      executedAt: new Date().toISOString(),
-      type: 'full_anonymization',
+      requestedAt: new Date().toISOString(),
+      scheduledFor: scheduledFor.toISOString(),
+      type: 'scheduled_anonymization',
     })]
   );
 
-  return { message: 'Seus dados foram anonimizados com sucesso. Concluído em 15 dias úteis.' };
+  return { message: 'Solicitação de eliminação registrada. Seus dados serão anonimizados em até 15 dias úteis.', scheduledFor: scheduledFor.toISOString() };
+}
+
+async function processDeletionQueue() {
+  await ensureQueueTable();
+  const pending = await query(
+    `SELECT id, user_id, tenant_id FROM ${DELETION_QUEUE_TABLE}
+     WHERE status = 'pending' AND scheduled_for <= NOW()
+     ORDER BY scheduled_for ASC LIMIT 50`
+  );
+  for (const item of pending) {
+    try {
+      await query(`UPDATE ${DELETION_QUEUE_TABLE} SET status = 'processing' WHERE id = ?`, [item.id]);
+      await executeDeletion(item.user_id, item.tenant_id);
+      await query(
+        `UPDATE ${DELETION_QUEUE_TABLE} SET status = 'completed', processed_at = NOW() WHERE id = ?`,
+        [item.id]
+      );
+    } catch (err) {
+      await query(
+        `UPDATE ${DELETION_QUEUE_TABLE} SET status = 'cancelled',
+         metadata = JSON_SET(COALESCE(metadata, '{}'), '$.error', ?) WHERE id = ?`,
+        [err.message, item.id]
+      );
+    }
+  }
+  return pending.length;
 }
 
 async function getConsents(userId) {
@@ -143,4 +202,4 @@ async function setConsent(userId, consentType, granted, ipAddress) {
   return { id: result.insertId, consentType, granted };
 }
 
-module.exports = { exportUserData, requestDataDeletion, getConsents, setConsent };
+module.exports = { exportUserData, requestDataDeletion, processDeletionQueue, getConsents, setConsent };

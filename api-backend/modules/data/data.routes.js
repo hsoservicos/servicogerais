@@ -9,6 +9,7 @@ router.use(authenticate, injectTenant);
 
 router.get('/export', controller.exportData);
 router.post('/delete-request', controller.requestDeletion);
+router.post('/process-deletion', controller.processDeletion);
 router.get('/consent', controller.listConsents);
 router.post('/consent', controller.updateConsent);
 
