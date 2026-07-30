@@ -52,7 +52,21 @@ services:
     env_file:
       - .env
     depends_on:
-      mysql:
+  # ── CLOUDFLARE TUNNEL (Produção) ─────────────────────────
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: flex_cloudflared
+    command: tunnel --config /etc/cloudflared/config.yml run
+    volumes:
+      - ./scripts/cloudflare/config.yml:/etc/cloudflared/config.yml:ro
+      - cloudflared_data:/home/nonroot/.cloudflared
+    networks:
+      - flex-network
+    restart: unless-stopped
+    profiles:
+      - production
+
+  mysql:
         condition: service_healthy
     networks:
       - flex-network
@@ -99,6 +113,7 @@ services:
 
 volumes:
   mysql_data:
+  cloudflared_data:
 
 networks:
   flex-network:

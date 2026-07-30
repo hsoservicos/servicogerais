@@ -79,8 +79,8 @@ npm-dev: ## 🔄 Watch mode da API (nodemon)
 
 # ── Database ─────────────────────────────────────────────
 
-migrate: ## 🗄️ Executa migrations no MySQL
-	$(DOCKER_COMPOSE) exec -T mysql mysql -u root -p$(MYSQL_ROOT_PASSWORD) $(MYSQL_DATABASE) < scripts/init.sql
+migrate: ## 🗄️ Executa migrations via migrate.js
+	$(DOCKER_COMPOSE) exec api node scripts/migrate.js up
 
 seed: ## 🌱 Insere dados de teste
 	$(DOCKER_COMPOSE) exec -T mysql mysql -u root -p$(MYSQL_ROOT_PASSWORD) $(MYSQL_DATABASE) < scripts/seed.sql
@@ -92,6 +92,12 @@ db-reset: ## 🔄 Recria o banco de dados do zero
 
 db-shell: ## 🐚 Abre shell interativo do MySQL
 	$(DOCKER_COMPOSE) exec mysql mysql -u root -p$(MYSQL_ROOT_PASSWORD) $(MYSQL_DATABASE)
+
+migration-status: ## 📋 Lista status das migrations
+	$(DOCKER_COMPOSE) exec api node scripts/migrate.js status
+
+migration-create: ## 🆕 Cria novo arquivo de migration (make migration-create name=<nome>)
+	$(DOCKER_COMPOSE) exec api node scripts/migrate.js create $(name)
 
 # ── Health Check ─────────────────────────────────────────
 
