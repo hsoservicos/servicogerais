@@ -109,9 +109,9 @@ All tables reference `tenant_id` foreign key. The `tenants` table is the root of
 | LGPD Exportação + Consentimento | ✅ | ✅ | E13 |
 | Perfil + Busca por município | ✅ | ✅ | E14 |
 
-### 🧪 Testes — 168 testes escritos e passando (E15)
+### 🧪 Testes — 177 testes escritos e passando (E15)
 
-**Sprints 1-3 concluídos** — 168 testes (22 suites) para todos os módulos exceto Payments.
+**Sprints 1-3 concluídos** — 177 testes (23 suites) para todos os módulos.
 Setup completo: Jest + Supertest + banco de teste isolado + fixtures + helpers.
 Hardening parcial: JWT secret, CORS, Helmet, Rate Limit, Email service.
 
@@ -134,10 +134,9 @@ Hardening parcial: JWT secret, CORS, Helmet, Rate Limit, Email service.
 
 | Gap | Épico | Ação |
 |:----|:------|:-----|
-| Payments sem testes | E15 | Escrever testes para payments module |
 | Email service em modo log | E17 | Ativar SendGrid |
 | JWT secret ainda com default | E17 | Gerar secret 64 caracteres |
-| CI/CD sem runner de testes | E15 | Adicionar `npm test` ao workflow |
+| Deploy automático CI/CD | E15 | Adicionar deploy ao workflow |
 | Migration framework ausente | — | Criar `scripts/migrate.js` |
 | Docker test override ausente | E15 | Criar `docker-compose.test.yml` |
 
@@ -150,8 +149,6 @@ Hardening parcial: JWT secret, CORS, Helmet, Rate Limit, Email service.
 | 6 | DAE + Incidentes | E11.2, E11.3, E12.1, E12.2 |
 | 7 | CAT + Refatoração templates | E12.3, E16.1, E16.2 |
 | 8 | Refatoração controllers + CI/CD | E16.3, migration framework, CI |
-| — | Testes Payments | E15.3 (pendente) |
-| — | Hardening final (Email, JWT, Tunnel) | E17.2, E17.4 |
 
 ### 🔴 Gaps Críticos Ainda Não Construídos
 
@@ -169,7 +166,7 @@ Hardening parcial: JWT secret, CORS, Helmet, Rate Limit, Email service.
 | Hardening segurança (JWT, CORS, Email, Rate Limit) | E17 |
 | Refatoração templates grandes (proposals.php 1056L, solicitar.php 979L) | E16 |
 | Migration framework | — |
-| CI/CD test runner | E15 |
+| Deploy automático | E15 |
 
 ## Documentos de Planejamento V2
 
