@@ -10,4 +10,15 @@ module.exports = {
   verbose: true,
   maxConcurrency: 1,
   roots: ['<rootDir>/__tests__'],
+  collectCoverageFrom: [
+    'modules/**/*.js',
+    'services/**/*.js',
+    'middlewares/**/*.js',
+    'config/**/*.js',
+    'utils/**/*.js',
+    '!**/node_modules/**',
+  ],
+  coveragePathIgnorePatterns: ['/node_modules/', '/__tests__/'],
+  coverageReporters: ['text', 'lcov', 'clover'],
+  coverageDirectory: '<rootDir>/coverage',
 };

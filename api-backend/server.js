@@ -43,19 +43,34 @@ app.use(rateLimit({
 }));
 
 // ── Request Logger Estruturado ───────────────────────────
+const LOG_LEVELS = { silent: 0, error: 1, warn: 2, info: 3, debug: 4 };
+const currentLevel = LOG_LEVELS[process.env.LOG_LEVEL] || LOG_LEVELS.info;
+
+function shouldLog(level) {
+  const levelNum = LOG_LEVELS[level] || LOG_LEVELS.info;
+  return levelNum <= currentLevel;
+}
+
 app.use((req, res, next) => {
   const start = Date.now();
   res.on('finish', () => {
-    const duration = Date.now() - start;
-    console.log(JSON.stringify({
-      level: 'info',
+    if (!shouldLog('info')) return;
+    const logData = {
+      level: res.statusCode >= 500 ? 'error' : res.statusCode >= 400 ? 'warn' : 'info',
       timestamp: new Date().toISOString(),
       method: req.method,
       path: req.path,
       status: res.statusCode,
-      duration_ms: duration,
+      duration_ms: Date.now() - start,
       correlationId: req.correlationId,
-    }));
+    };
+    if (logData.level === 'error') {
+      console.error(JSON.stringify(logData));
+    } else if (logData.level === 'warn') {
+      console.warn(JSON.stringify(logData));
+    } else {
+      console.log(JSON.stringify(logData));
+    }
   });
   next();
 });

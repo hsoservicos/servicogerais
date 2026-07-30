@@ -1,0 +1,45 @@
+services:
+  mysql-test:
+    image: mysql:8.0
+    container_name: flex_mysql_test
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: servicos_flex_test
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    tmpfs: /var/lib/mysql
+    networks:
+      - test-network
+
+  api-test:
+    image: node:20-alpine
+    container_name: flex_api_test
+    working_dir: /usr/src/app
+    volumes:
+      - ./api-backend:/usr/src/app
+    environment:
+      NODE_ENV: test
+      DB_HOST: mysql-test
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: servicos_flex_test
+      TEST_DB_USER: root
+      TEST_DB_PASSWORD: root
+      JWT_SECRET: test-jwt-secret-for-testing
+      RATE_LIMIT_AUTH_MAX: 100
+    depends_on:
+      mysql-test:
+        condition: service_healthy
+    command: sh -c "npm install && npm test"
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge

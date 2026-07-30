@@ -1,0 +1,35 @@
+{
+  "title": "ServiceSaaS — Service Overview",
+  "uid": "service-overview",
+  "version": 1,
+  "schemaVersion": 38,
+  "panels": [
+    {
+      "title": "API Requests per Minute",
+      "type": "graph",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [{
+        "expr": "sum(rate({job=\"api\"} [1m]))",
+        "legendFormat": "Requests"
+      }]
+    },
+    {
+      "title": "Error Rate",
+      "type": "graph",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [{
+        "expr": "sum(rate({job=\"api\"} | json | status=~\"5..\" [1m]))",
+        "legendFormat": "5xx Errors"
+      }]
+    },
+    {
+      "title": "Response Time p95",
+      "type": "graph",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [{
+        "expr": "quantile_over_time(0.95, {job=\"api\"} | json | unwrap duration_ms [1m])",
+        "legendFormat": "p95"
+      }]
+    }
+  ]
+}

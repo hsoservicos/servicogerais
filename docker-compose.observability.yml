@@ -1,0 +1,52 @@
+services:
+  loki:
+    image: grafana/loki:3.0
+    container_name: flex_loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - flex-network
+
+  promtail:
+    image: grafana/promtail:3.0
+    container_name: flex_promtail
+    volumes:
+      - ./api-backend/logs:/var/log/api:ro
+      - ./nginx/logs:/var/log/nginx:ro
+      - ./docker/promtail-config.yml:/etc/promtail/config.yml:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    networks:
+      - flex-network
+
+  grafana:
+    image: grafana/grafana:11.0
+    container_name: flex_grafana
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_INSTALL_PLUGINS: grafana-piechart-panel
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./docker/grafana-dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./docker/grafana-datasources:/etc/grafana/provisioning/datasources:ro
+    depends_on:
+      - loki
+    networks:
+      - flex-network
+
+  tempo:
+    image: grafana/tempo:2.4
+    container_name: flex_tempo
+    ports:
+      - "3200:3200"
+      - "4317:4317"
+    command: -config.file=/etc/tempo/config.yaml
+    networks:
+      - flex-network
+
+volumes:
+  grafana_data:
