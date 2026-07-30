@@ -146,6 +146,9 @@ app.use('/api/v1/data', require('./modules/data/data.routes'));
 // ── Domestic Operations Routes (Epic 9 — Story 9.2/9.3) ─
 app.use('/api/v1/domestic', require('./modules/domestic/domestic.routes'));
 
+// ── Incidents Routes (Epic 12) ───────────────────────────
+app.use('/api/v1/incidents', require('./modules/incidents/incidents.routes'));
+
 // ── 404 Handler ──────────────────────────────────────────
 app.use((req, res) => {
   res.status(404).json({

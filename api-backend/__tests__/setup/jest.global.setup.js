@@ -133,6 +133,26 @@ module.exports = async function globalSetup() {
       CONSTRAINT fk_agreement_worker FOREIGN KEY (worker_id) REFERENCES workers(id) ON DELETE CASCADE,
       CONSTRAINT fk_agreement_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
     ) ENGINE=InnoDB;
+
+    CREATE TABLE IF NOT EXISTS incidents (
+      id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      tenant_id INT UNSIGNED NOT NULL,
+      worker_id INT UNSIGNED NULL,
+      type ENUM('ACCIDENT','EMERGENCY','DAMAGE','HEALTH','SECURITY','OTHER') NOT NULL,
+      severity ENUM('LOW','MEDIUM','HIGH','CRITICAL') DEFAULT 'MEDIUM',
+      status ENUM('OPEN','INVESTIGATING','RESOLVED','CLOSED') DEFAULT 'OPEN',
+      description TEXT NOT NULL,
+      gps_latitude DECIMAL(10,8) NULL, gps_longitude DECIMAL(11,8) NULL,
+      occurred_at DATETIME NULL, protocol VARCHAR(30) NOT NULL UNIQUE,
+      cat_number VARCHAR(30) NULL, cat_type VARCHAR(20) NULL,
+      cat_issuing_agency VARCHAR(100) NULL, cat_issued_at DATETIME NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      INDEX idx_inc_tenant (tenant_id), INDEX idx_inc_status (status),
+      INDEX idx_inc_type (type), INDEX idx_inc_severity (severity),
+      CONSTRAINT fk_inc_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+      CONSTRAINT fk_inc_worker FOREIGN KEY (worker_id) REFERENCES workers(id) ON DELETE SET NULL
+    ) ENGINE=InnoDB;
   `;
   await queryPromise(migrationSql);
 
